@@ -5,6 +5,7 @@ interface InputFormProps {
     items: Item[];
     vehicles: string[];
     setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+    handleHideInputForm: () => void;
 }
 
 const initialValues: Item = {
@@ -17,13 +18,14 @@ const initialValues: Item = {
 };
 
 
-function InputForm({ items, vehicles, setItems }: InputFormProps) {
+function InputForm({ items, vehicles, setItems, handleHideInputForm }: InputFormProps) {
     const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues, vehicle: vehicles[0] });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setItems([...items, currentItem]);
         setCurrentItem({ ...initialValues, vehicle: vehicles[0] });
+        handleHideInputForm();
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,6 +49,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleChange} required />
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
             <button type="submit">Add</button>
+            <button onClick={handleHideInputForm}>Cancel</button>
         </form>
     );
 }

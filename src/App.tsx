@@ -7,15 +7,27 @@ import { Item } from './types';
 function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [vehicles, setVehicles] = useState(["Vehicle One", "Vehicle Two", "Vehicle Three"]);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   useEffect(() => {
     console.log("All Items:", items);
   }, [items]);
 
+  const handleShowInputForm = () => {
+    setIsFormVisible(true)
+  }
+
+  const handleHideInputForm = () => {
+    setIsFormVisible(false)
+  }
+
   return (
     <>
-      <InputForm items={items} setItems={setItems} vehicles={vehicles} />
-      <ItemsList items={items} setItems={setItems} vehicles={vehicles} />
+      <button onClick={handleShowInputForm}>Add item</button>
+      {isFormVisible && (
+        <InputForm items={items} setItems={setItems} vehicles={vehicles} handleHideInputForm={handleHideInputForm} />
+      )}
+      <ItemsList items={items} setItems={setItems} vehicles={vehicles}  />
     </>
   );
 }
