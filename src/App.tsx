@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <InputForm items={items} setItems={setItems} vehicles={vehicles} />
-      <ItemsList items={items} />
+      <ItemsList items={items} setItems={setItems} vehicles={vehicles} />
     </>
   );
 }
