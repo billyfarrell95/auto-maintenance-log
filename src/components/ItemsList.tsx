@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Item } from "../types";
   
 interface ItemsListProps {
@@ -7,6 +8,7 @@ interface ItemsListProps {
 }
 
 function ItemsList({ items, vehicles, setItems }: ItemsListProps) {
+    const [isItemSelected, setIsItemSelected] = useState(false)
 
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
@@ -26,12 +28,18 @@ function ItemsList({ items, vehicles, setItems }: ItemsListProps) {
         setItems(updatedItems);
     }
 
+    const handleItemSelect = (index: number) => {
+        setIsItemSelected(true)
+        console.log(isItemSelected, "is item selected", index)
+    }
+
     return (
         <>
             {sortedItems.map((item, index) => ( 
-                <div key={index}>
+                <div key={index} onClick={() => handleItemSelect(index)}>
+                    <input type="checkbox" />
                     <input type="date" value={item.date} name={`date-${index}`} onChange={(e) => handleChange(e, index)} />
-                    <select name={`vehicle-${index}`} value={item.vehicle} onChange={(e) => handleChange(e, index)}>
+                    <select name={`vehicle-${index}`} value={item.vehicle} onChange={(e) => handleChange(e, index)} >
                         {vehicles.map((vehicle, vIndex) => (
                             <option key={vIndex} value={vehicle}>{vehicle}</option>
                         ))}
