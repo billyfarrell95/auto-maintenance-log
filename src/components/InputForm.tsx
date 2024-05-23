@@ -38,12 +38,12 @@ function InputForm({ items, vehicles, setItems, handleHideInputForm }: InputForm
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />
-            <select name="vehicle" id="vehicles" value={currentItem.vehicle} onChange={handleChange}>
+            <select name="vehicle" id="vehicles" value={currentItem.vehicle} onChange={handleChange} autoFocus>
                 {vehicles.map((item, index) => (
                     <option key={index} value={item}>{item}</option>
                 ))}
             </select>
+            <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />
             <input type="text" name="description" placeholder="Description" value={currentItem.description} onChange={handleChange} required />
             <input type="text" name="shop" placeholder="Shop" value={currentItem.shop} onChange={handleChange} required />
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleChange} required />
