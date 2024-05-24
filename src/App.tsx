@@ -64,6 +64,7 @@ function App() {
 
   return (
     <>
+      <h1>Auto Maintenance Log</h1>
       <button onClick={handleShowInputForm}>Add item</button>
 
       {isFormVisible && (
@@ -79,7 +80,7 @@ function App() {
         />
 
       {selectedItems.length > 0 && (
-        <button onClick={handleDeleteItems}>Delete selected ({selectedItems.length})</button>
+        <button onClick={handleDeleteItems}>Delete selected items ({selectedItems.length})</button>
       )}
     </>
   );

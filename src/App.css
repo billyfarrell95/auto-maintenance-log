@@ -1,18 +1,32 @@
+body {
+    position: relative;
+}
+
+.main-wrapper {
+    max-width: calc(100vw - 4rem);
+    margin-inline: auto;
+}
+
 form {
     width: 100%;
     display: flex;
 }
 
-.data-item, form {
+.data-item form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+form, .data-item__input-wrapper {
     width: 100%;
     display: flex;
     gap: 0.5rem;
     padding-block: 0.2rem;
-    background-color: rgba(206, 206, 206, 0.511);
 }
 
-.data-item:hover {
-    background: lightgray;
+.data-item__button-wrapper {
+    align-self: flex-end;
 }
 
 .data-item input, form input {
@@ -26,4 +40,9 @@ form {
 .data-item input[type=checkbox]{
     width: auto;
     cursor: pointer;
+}
+
+input {
+    border: 1px solid lightgray;
+    padding: 0.5rem;
 }
