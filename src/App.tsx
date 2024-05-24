@@ -8,34 +8,37 @@ function App() {
   // const [items, setItems] = useState<Item[]>([]);
   const [items, setItems] = useState<Item[]>([
     {
-        "date": "2024-05-23",
-        "vehicle": "Vehicle Three",
-        "description": "Oil Change",
-        "shop": "Shop name 123",
-        "mileage": "123222",
-        "memo": "Need new brakes next oil change"
+      id: crypto.randomUUID(),
+      "date": "2024-05-23",
+      "vehicle": "Vehicle Three",
+      "description": "Oil Change",
+      "shop": "Shop name 123",
+      "mileage": "123222",
+      "memo": "Need new brakes next oil change"
     },
     {
-        "date": "2024-05-02",
-        "vehicle": "Vehicle One",
-        "description": "Tire rotation",
-        "shop": "Shop name 123",
-        "mileage": "126123",
-        "memo": "Need new tires soon"
+      id: crypto.randomUUID(),
+      "date": "2024-05-02",
+      "vehicle": "Vehicle One",
+      "description": "Tire rotation",
+      "shop": "Shop name 123",
+      "mileage": "126123",
+      "memo": "Need new tires soon"
     },
     {
-        "date": "2023-05-02",
-        "vehicle": "Vehicle Two",
-        "description": "New brakes",
-        "shop": "Shop name 123",
-        "mileage": "126123",
-        "memo": "Replace air filter soon"
+      id: crypto.randomUUID(),
+      "date": "2023-05-02",
+      "vehicle": "Vehicle Two",
+      "description": "New brakes",
+      "shop": "Shop name 123",
+      "mileage": "126123",
+      "memo": "Replace air filter soon"
     }
   ]);
   const [vehicles, setVehicles] = useState(["Vehicle One", "Vehicle Two", "Vehicle Three"]);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [isItemSelected, setIsItemSelected] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  // const [isItemSelected, setIsItemSelected] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleShowInputForm = () => {
     setIsFormVisible(true)
@@ -45,12 +48,11 @@ function App() {
     setIsFormVisible(false)
   }
 
-  // @todo: fix - there is an issue when deleting, where the expected item isn't what is deleted
-  const handleDeleteItems = (selectedItemIndexes: number[]) => {
-    const newArr = items.filter((_, index) => !selectedItemIndexes.includes(index));
+  const handleDeleteItems = () => {
+    const newArr = items.filter(item => !selectedItems.includes(item.id));
     setItems(newArr);
     setSelectedItems([]);
-  }
+  };
 
   useEffect(() => {
     console.log("ALL ITEMS:", items)
@@ -68,16 +70,16 @@ function App() {
         <InputForm items={items} setItems={setItems} vehicles={vehicles} handleHideInputForm={handleHideInputForm} />
       )}
 
-      <ItemsList items={items}
-        setItems={setItems} 
-        vehicles={vehicles} 
-        setIsItemSelected={setIsItemSelected}
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
+      <ItemsList
+          items={items}
+          setItems={setItems}
+          vehicles={vehicles}
+          setSelectedItems={setSelectedItems}
+          selectedItems={selectedItems}
         />
 
       {selectedItems.length > 0 && (
-        <button onClick={() => {handleDeleteItems(selectedItems)}}>Delete selected ({selectedItems.length})</button>
+        <button onClick={handleDeleteItems}>Delete selected ({selectedItems.length})</button>
       )}
     </>
   );

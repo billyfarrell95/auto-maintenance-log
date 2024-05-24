@@ -3,66 +3,55 @@ import "./ItemList.css"
   
 interface ItemsListProps {
     items: Item[];
-    selectedItems: number[];
+    selectedItems: string[];
     vehicles: string[];
-    setItems: React.Dispatch<React.SetStateAction<Item[]>>;  
-    setSelectedItems: React.Dispatch<React.SetStateAction<number[]>>;  
-    setIsItemSelected: React.Dispatch<React.SetStateAction<boolean>>;  
-}
+    setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+    setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+  }
 
-function ItemsList({ items, vehicles, setItems, setIsItemSelected, selectedItems, setSelectedItems }: ItemsListProps) {
+function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems }: ItemsListProps) {
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateB.getTime() - dateA.getTime();
     }
 
-    const sortedItems = [...items].sort(sortByDate);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>, index: number) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
-        const updatedItems = [...sortedItems];
-        updatedItems[index] = {
-            ...updatedItems[index],
-            [name.split('-')[0]]: value,
-        };
+        const updatedItems = items.map(item => item.id === id ? { ...item, [name.split('-')[0]]: value } : item);
         setItems(updatedItems);
-    }
+    };
 
-    const handleItemSelect = (index: number) => {
-        const selectedIndex = selectedItems.indexOf(index);
-        let updatedSelection: number[];
+    const handleItemSelect = (id: string) => {
+        setSelectedItems(prevSelected => {
+          if (prevSelected.includes(id)) {
+            return prevSelected.filter(itemId => itemId !== id);
+          } else {
+            return [...prevSelected, id];
+          }
+        });
+    };
 
-        if (selectedIndex === -1) {
-            updatedSelection = [...selectedItems, index];
-        } else {
-            updatedSelection = [...selectedItems.slice(0, selectedIndex), ...selectedItems.slice(selectedIndex + 1)];
-        }
-
-        setSelectedItems(updatedSelection);
-        setIsItemSelected(true);
-    }
- 
-    return (
+    return (    
         <>
-            {sortedItems.map((item, index) => ( 
-                <div key={index} className="data-item">
+            {items.sort(sortByDate).map((item) =>( 
+                <div key={item.id} className="data-item">
                     <input 
                         type="checkbox" 
-                        checked={selectedItems.includes(index)} 
-                        onClick={() => handleItemSelect(index)}
+                        checked={selectedItems.includes(item.id)} 
+                        onClick={() => handleItemSelect(item.id)}
                         onChange={() => {}}
                     />
-                    <select name={`vehicle-${index}`} value={item.vehicle} onChange={(e) => handleChange(e, index)}  >
+                    <select name={`vehicle-${item.id}`} value={item.vehicle} onChange={(e) => handleChange(e, item.id)}  >
                         {vehicles.map((vehicle, vIndex) => (
                             <option key={vIndex} value={vehicle}>{vehicle}</option>
                         ))}
                     </select>
-                    <input type="date" value={item.date} name={`date-${index}`} onChange={(e) => handleChange(e, index)}  />
-                    <input type="text" value={item.description} name={`description-${index}`} onChange={(e) => handleChange(e, index)}  />
-                    <input type="text" value={item.shop} name={`shop-${index}`} onChange={(e) => handleChange(e, index)}  />
-                    <input type="text" value={item.mileage} name={`mileage-${index}`} onChange={(e) => handleChange(e, index)}  />
-                    <input type="text" value={item.memo} name={`memo-${index}`} onChange={(e) => handleChange(e, index)}  />
+                    <input type="date" value={item.date} name={`date-${item.id}`} onChange={(e) => handleChange(e, item.id)} />
+                    <input type="text" value={item.description} name={`description-${item.id}`} onChange={(e) => handleChange(e, item.id)} />
+                    <input type="text" value={item.shop} name={`shop-${item.id}`} onChange={(e) => handleChange(e, item.id)} />
+                    <input type="text" value={item.mileage} name={`mileage-${item.id}`} onChange={(e) => handleChange(e, item.id)} />
+                    <input type="text" value={item.memo} name={`memo-${item.id}`} onChange={(e) => handleChange(e, item.id)} />
                 </div>
             ))}
         </>

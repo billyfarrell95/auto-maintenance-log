@@ -9,6 +9,7 @@ interface InputFormProps {
 }
 
 const initialValues: Item = {
+    id: "",
     date: "",
     vehicle: "",
     description: "",
@@ -33,6 +34,7 @@ function InputForm({ items, vehicles, setItems, handleHideInputForm }: InputForm
         setCurrentItem({
             ...currentItem,
             [name]: value,
+            id: crypto.randomUUID()
         });
     };
 
