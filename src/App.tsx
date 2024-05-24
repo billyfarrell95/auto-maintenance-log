@@ -36,17 +36,8 @@ function App() {
     }
   ]);
   const [vehicles, setVehicles] = useState(["Vehicle One", "Vehicle Two", "Vehicle Three"]);
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  // const [isItemSelected, setIsItemSelected] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
-  const handleShowInputForm = () => {
-    setIsFormVisible(true)
-  }
-
-  const handleHideInputForm = () => {
-    setIsFormVisible(false)
-  }
 
   const handleDeleteItems = () => {
     const newArr = items.filter(item => !selectedItems.includes(item.id));
@@ -65,11 +56,8 @@ function App() {
   return (
     <>
       <h1>Auto Maintenance Log</h1>
-      <button onClick={handleShowInputForm}>Add item</button>
 
-      {isFormVisible && (
-        <InputForm items={items} setItems={setItems} vehicles={vehicles} handleHideInputForm={handleHideInputForm} />
-      )}
+      <InputForm items={items} setItems={setItems} vehicles={vehicles} />
 
       <ItemsList
           items={items}
