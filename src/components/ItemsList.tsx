@@ -80,39 +80,39 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
 
                             </select>
                             <input 
-                            type="date" 
-                            value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
-                            name={`date-${item.id}`} 
-                            onChange={(e) => handleChange(e, item.id)} 
-                            onFocus={() => handleFocus(item.id)} />
+                                type="date" 
+                                value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
+                                name={`date-${item.id}`} 
+                                onChange={(e) => handleChange(e, item.id)} 
+                                onFocus={() => handleFocus(item.id)} />
 
                             <input 
-                            type="text" 
-                            value={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description} 
-                            name={`description-${item.id}`} 
-                            onChange={(e) => handleChange(e, item.id)} 
-                            onFocus={() => handleFocus(item.id)} />
+                                type="text" 
+                                value={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description} 
+                                name={`description-${item.id}`} 
+                                onChange={(e) => handleChange(e, item.id)} 
+                                onFocus={() => handleFocus(item.id)} />
 
                             <input 
-                            type="text" 
-                            value={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop} 
-                            name={`shop-${item.id}`} 
-                            onChange={(e) => handleChange(e, item.id)} 
-                            onFocus={() => handleFocus(item.id)} />
+                                type="text" 
+                                value={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop} 
+                                name={`shop-${item.id}`} 
+                                onChange={(e) => handleChange(e, item.id)} 
+                                onFocus={() => handleFocus(item.id)} />
 
                             <input 
-                            type="text" 
-                            value={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage} 
-                            name={`mileage-${item.id}`} 
-                            onChange={(e) => handleChange(e, item.id)} 
-                            onFocus={() => handleFocus(item.id)} />
+                                type="text" 
+                                value={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage} 
+                                name={`mileage-${item.id}`} 
+                                onChange={(e) => handleChange(e, item.id)} 
+                                onFocus={() => handleFocus(item.id)} />
 
                             <input 
-                            type="text" 
-                            value={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo} 
-                            name={`memo-${item.id}`} 
-                            onChange={(e) => handleChange(e, item.id)} 
-                            onFocus={() => handleFocus(item.id)} />
+                                type="text" 
+                                value={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo} 
+                                name={`memo-${item.id}`} 
+                                onChange={(e) => handleChange(e, item.id)} 
+                                onFocus={() => handleFocus(item.id)} />
                         </div>
 
                         {focusedItemId === item.id && (
