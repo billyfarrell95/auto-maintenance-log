@@ -38,7 +38,9 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
 
     const handleFocus = (id: string) => {
         setFocusedItemId(id);
-        setEditingItems(items); 
+        if (!editingItems.length) {
+            setEditingItems(items);
+        }
     };
 
     const handleBlur = () => {
@@ -71,19 +73,18 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                             />
                             <select name={`vehicle-${item.id}`} 
                                 value={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
-                                onChange={(e) => handleChange(e, item.id)} 
-                                onFocus={() => handleFocus(item.id)}>
+                                onChange={(e) => handleChange(e, item.id)}
+                                onFocus={() => handleFocus(item.id)} >
 
                                 {vehicles.map((vehicle, vIndex) => (
                                     <option key={vIndex} value={vehicle}>{vehicle}</option>
                                 ))}
-
                             </select>
                             <input 
                                 type="date" 
                                 value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
                                 name={`date-${item.id}`} 
-                                onChange={(e) => handleChange(e, item.id)} 
+                                onChange={(e) => handleChange(e, item.id)}
                                 onFocus={() => handleFocus(item.id)} />
 
                             <input 
