@@ -3,38 +3,11 @@ import './App.css'
 import ItemsList from './components/ItemsList';
 import InputForm from './components/InputForm';
 import { Item } from './types';
+import testData from './data/testData';
 
 function App() {
   // const [items, setItems] = useState<Item[]>([]);
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: crypto.randomUUID(),
-      "date": "2024-05-23",
-      "vehicle": "Vehicle Three",
-      "description": "Oil Change",
-      "shop": "Shop name 123",
-      "mileage": "123222",
-      "memo": "Need new brakes next oil change"
-    },
-    {
-      id: crypto.randomUUID(),
-      "date": "2024-05-02",
-      "vehicle": "Vehicle One",
-      "description": "Tire rotation",
-      "shop": "Shop name 123",
-      "mileage": "126123",
-      "memo": "Need new tires soon"
-    },
-    {
-      id: crypto.randomUUID(),
-      "date": "2023-05-02",
-      "vehicle": "Vehicle Two",
-      "description": "New brakes",
-      "shop": "Shop name 123",
-      "mileage": "126123",
-      "memo": "Replace air filter soon"
-    }
-  ]);
+  const [items, setItems] = useState<Item[]>(testData);
   const [vehicles, setVehicles] = useState(["Vehicle One", "Vehicle Two", "Vehicle Three"]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -56,7 +29,7 @@ function App() {
   return (
     <>
       <h1>Auto Maintenance Log</h1>
-
+      <p>Total items: {items.length}</p>
       <InputForm items={items} setItems={setItems} vehicles={vehicles} />
 
       <ItemsList
