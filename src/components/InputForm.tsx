@@ -44,7 +44,21 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
                 ))}
             </select>
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />
-            <input type="text" name="description" placeholder="Description" value={currentItem.description} onChange={handleChange} required />
+            {/* <input type="text" name="description" placeholder="Description" value={currentItem.description} onChange={handleChange} required /> */}
+            
+            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
+            <datalist id="description-options">
+                <option value="Oil change"></option>
+                <option value="Wheel alignment/balance"></option>
+                <option value="Tire rotation"></option>
+                <option value="New battery"></option>
+                <option value="Coolant flush"></option>
+                <option value="Spark plug replacement"></option>
+                <option value="Air filter replacement"></option>
+                <option value="New brakes"></option>
+                <option value="Engine tune-up"></option>
+                <option value="New brakes/rotors"></option>
+            </datalist>
             <input type="text" name="shop" placeholder="Shop" value={currentItem.shop} onChange={handleChange} required />
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleChange} required />
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
