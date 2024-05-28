@@ -43,9 +43,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
                     <option key={index} value={item}>{item}</option>
                 ))}
             </select>
-            <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />
-            {/* <input type="text" name="description" placeholder="Description" value={currentItem.description} onChange={handleChange} required /> */}
-            
+            <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />            
             <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
             <datalist id="description-options">
                 <option value="Oil change"></option>

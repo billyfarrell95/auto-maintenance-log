@@ -11,7 +11,6 @@ function App() {
   const [vehicles, setVehicles] = useState(["Vehicle One", "Vehicle Two", "Vehicle Three"]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
-
   const handleDeleteItems = () => {
     const newArr = items.filter(item => !selectedItems.includes(item.id));
     setItems(newArr);
@@ -41,7 +40,10 @@ function App() {
         />
 
       {selectedItems.length > 0 && (
-        <button onClick={handleDeleteItems}>Delete selected items ({selectedItems.length})</button>
+        <div>
+          <button onClick={handleDeleteItems}>Delete selected items ({selectedItems.length})</button>
+          <button onClick={() => setSelectedItems([])}>Deselect All</button>
+        </div>
       )}
     </>
   );
