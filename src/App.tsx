@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './App.css'
 import ItemsList from './components/ItemsList';
 import InputForm from './components/InputForm';
@@ -17,14 +17,6 @@ function App() {
     setSelectedItems([]);
   };
 
-  useEffect(() => {
-    // console.log("ALL ITEMS:", items)
-  }, [items]);
-
-  useEffect(() => {
-    // console.log("SELECTED ITEM QTY:", selectedItems.length);
-  }, [selectedItems]);
-
   return (
     <>
       <h1>Auto Maintenance Log</h1>
@@ -42,7 +34,6 @@ function App() {
       {selectedItems.length > 0 && (
         <div>
           <button onClick={handleDeleteItems}>Delete selected items ({selectedItems.length})</button>
-          <button onClick={() => setSelectedItems([])}>Deselect All</button>
         </div>
       )}
     </>
