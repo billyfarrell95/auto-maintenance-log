@@ -37,7 +37,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="input-form">
             <select name="vehicle" id="vehicles" value={currentItem.vehicle} onChange={handleChange}>
                 {vehicles.map((item, index) => (
                     <option key={index} value={item}>{item}</option>

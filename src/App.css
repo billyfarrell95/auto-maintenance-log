@@ -12,9 +12,9 @@ form {
     display: flex;
 }
 
-/* .data-item:hover {
-    border: 1px solid #f6f6f6;
-} */
+button {
+    cursor: pointer;
+}
 
 .data-item__selected {
     background: #f2f2f2;
@@ -32,11 +32,15 @@ form {
 }
 
 .data-item__display-default {
-    cursor: default;
+    cursor: pointer;
 }
 
 .data-item__display-selected {
     cursor: text;
+}
+
+.data-item {
+    cursor: pointer;
 }
 
 .data-item__wrapper {
@@ -56,9 +60,9 @@ form {
     align-self: flex-end;
 }
 
-/* .data-item input, form input {
+.input-form input {
     width: 100%;
-} */
+}
 
 .data-item select, form select {
     cursor: pointer;

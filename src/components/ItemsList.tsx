@@ -14,6 +14,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [focusedItemId, setFocusedItemId] = useState("");
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
+    const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false)
 
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
@@ -21,8 +22,10 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
         return dateB.getTime() - dateA.getTime();
     }
 
-    const handleEdit = (item: Item) => {
-        if (selectedItems.includes(item.id)) {
+    const handleEdit = (item: Item, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (selectedItems.includes(item.id) && !itemIsBeingEdited) {
+            setItemIsBeingEdited(true)
             setEditingItemId(item.id === editingItemId ? null: item.id)
         }
     }
@@ -33,7 +36,8 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
         setEditingItems(updatedItems);
     };
 
-    const handleItemSelect = (id: string) => {
+    const handleItemSelect = (id: string, e: React.FormEvent) => {
+        e.stopPropagation();
         setEditingItems([])
         setSelectedItems(prevSelected => {
             if (prevSelected.includes(id)) {
@@ -49,54 +53,45 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
     const handleFocus = (id: string) => {
         setFocusedItemId(id);
         if (!editingItems.length) {
-            setEditingItems(items.map(item => ({ ...item }))); // Copy original items
+            setEditingItems(items.map(item => ({ ...item })));
         }
     };
 
     const handleInputClick = (e: React.FormEvent) => {
         console.log("handle input click", e)
-        // e.stopPropagation();
+        e.stopPropagation();
     }
 
     const handleSaveItem = (e: React.FormEvent, id: string) => {
-        // e.preventDefault();
-        // const updatedItems = editingItems.map(item => item.id === id ? item : item);
-        // console.log(updatedItems)
-        // if (updatedItems.length) {
-        //     setItems(updatedItems);
-        // }
-        
-        // setEditingItemId(null);
+        e.stopPropagation();
         e.preventDefault();
+        setItemIsBeingEdited(false)
         const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
-        console.log("UPDATED ITEMS IN SAVE", updatedItems)
         setItems(updatedItems);
         setEditingItemId(null);
     }
 
-    const handleCancelEdit = () => {
+    const handleCancelEdit = (e: React.FormEvent) => {
+        e.stopPropagation();
         setEditingItems([])
         setEditingItemId(null);
+        setItemIsBeingEdited(false)
     }
-
-    // @todo
-    // 1. Issue saving updated item values - fixed
-    // 2. If item is being edited, require save/cancel before being able to edit another
-    // 3. Fix issue where item in unchecked after clicked to edit
 
     return (    
         <>
             {items.sort(sortByDate).map((item) => (
-                <div key={item.id} className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"}>
-                        <form onSubmit={(e) => handleSaveItem(e, item.id)}>
+                <div key={item.id} className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"} onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined}>
+                        <form>
                             <div className="data-item__wrapper">
                                 <input
                                     type="checkbox"
                                     checked={selectedItems.includes(item.id)}   
-                                    onClick={() => handleItemSelect(item.id)}
+                                    onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined}
+                                    disabled={editingItemId !== null && editingItemId !== item.id}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-                                            handleItemSelect(item.id);
+                                            handleItemSelect(item.id, e);
                                         }
                                     }}
                                     onChange={() => {}}
@@ -114,7 +109,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         ))}
                                     </select>
                                     ) : (
-                                        <div onClick={selectedItems.includes(item.id) ? () => handleEdit(item): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
+                                        <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
                                             {item.vehicle}
                                         </div>
                                     )}
@@ -128,7 +123,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         onFocus={() => handleFocus(item.id)}
                                         onClick={(e) => handleInputClick(e)} />
                                     ) : (
-                                        <div onClick={selectedItems.includes(item.id) ? () => handleEdit(item): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
+                                        <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
                                             {item.date}
                                         </div>
                                     )}
@@ -143,7 +138,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         onFocus={() => handleFocus(item.id)}
                                         onClick={(e) => handleInputClick(e)} />
                                     ) : (
-                                        <div onClick={selectedItems.includes(item.id) ? () => handleEdit(item): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
+                                        <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
                                             {item.description}
                                         </div>
                                     )}
@@ -158,7 +153,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         onFocus={() => handleFocus(item.id)}
                                         onClick={(e) => handleInputClick(e)} />
                                     ) : (
-                                        <div onClick={selectedItems.includes(item.id) ? () => handleEdit(item): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
+                                        <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
                                             {item.shop}
                                         </div>
                                     )}
@@ -172,7 +167,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         onFocus={() => handleFocus(item.id)}
                                         onClick={(e) => handleInputClick(e)} />
                                     ) : (
-                                        <div onClick={selectedItems.includes(item.id) ? () => handleEdit(item): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
+                                        <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
                                             {item.mileage}
                                         </div>
                                     )}
@@ -187,7 +182,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         onFocus={() => handleFocus(item.id)}
                                         onClick={(e) => handleInputClick(e)} />
                                     ) : (
-                                        <div onClick={selectedItems.includes(item.id) ? () => handleEdit(item): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
+                                        <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display"}>
                                             {item.memo}
                                         </div>
                                     )}
@@ -195,8 +190,8 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                             </div>
                         {editingItemId === item.id && (
                             <div className="data-item__button-wrapper">
-                                <button type="button" onClick={handleCancelEdit}>Cancel</button>
-                                <button type="submit">Save</button>
+                                <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
+                                <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>
                             </div>
                         )}
                     </form>
