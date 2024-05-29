@@ -12,12 +12,12 @@ form {
     display: flex;
 }
 
-.data-item {
-    cursor: pointer;
-}
+/* .data-item:hover {
+    border: 1px solid #f6f6f6;
+} */
 
-.data-item:hover {
-    background-color: #f4f4f4;
+.data-item__selected {
+    background: #f2f2f2;
 }
 
 .data-item form {
@@ -27,16 +27,27 @@ form {
 }
 
 .data-item__display {
-    cursor: pointer;
+    padding: 1rem;
+    border: 1px solid #e1e1e1;
+}
+
+.data-item__display-default {
+    cursor: default;
 }
 
 .data-item__display-selected {
     cursor: text;
 }
 
-form, .data-item__input-wrapper {
-    width: 100%;
+.data-item__wrapper {
     display: flex;
+    gap: 1rem;
+}
+
+.data-item__input-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: 0.5rem;
     padding-block: 0.2rem;
 }
@@ -45,9 +56,9 @@ form, .data-item__input-wrapper {
     align-self: flex-end;
 }
 
-.data-item input, form input {
+/* .data-item input, form input {
     width: 100%;
-}
+} */
 
 .data-item select, form select {
     cursor: pointer;

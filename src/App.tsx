@@ -18,11 +18,11 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("ALL ITEMS:", items)
+    // console.log("ALL ITEMS:", items)
   }, [items]);
 
   useEffect(() => {
-    console.log("SELECTED ITEM QTY:", selectedItems.length);
+    // console.log("SELECTED ITEM QTY:", selectedItems.length);
   }, [selectedItems]);
 
   return (
