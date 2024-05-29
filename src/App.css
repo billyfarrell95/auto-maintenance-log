@@ -12,6 +12,10 @@ form {
     display: flex;
 }
 
+.data-item {
+    cursor: pointer;
+}
+
 .data-item:hover {
     background-color: #f4f4f4;
 }
@@ -20,6 +24,14 @@ form {
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.data-item__display {
+    cursor: pointer;
+}
+
+.data-item__display-selected {
+    cursor: text;
 }
 
 form, .data-item__input-wrapper {
