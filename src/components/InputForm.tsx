@@ -23,19 +23,24 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setItems([...items, currentItem]);
+        const trimmedItem = {
+            ...currentItem,
+            description: currentItem.description.trim(),
+            shop: currentItem.shop.trim(),
+            mileage: currentItem.mileage.trim(),
+            memo: currentItem.memo.trim(),
+        };
+        setItems([...items, trimmedItem]);
         setCurrentItem({ ...initialValues, vehicle: vehicles[0] });
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
-        if (value.trim() !== " ") {
-            setCurrentItem({
-            ...currentItem,
-            [name]: value.trim(),
+        setCurrentItem({
+            ...currentItem,  
+            [name]: value,
             id: crypto.randomUUID()
         });
-        }
     };
 
     return (
