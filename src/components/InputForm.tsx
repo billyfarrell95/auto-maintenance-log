@@ -29,12 +29,12 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
-        if (value.trim().length > 0) {
+        if (value.trim() !== " ") {
             setCurrentItem({
-                ...currentItem,
-                [name]: value,
-                id: crypto.randomUUID()
-            });
+            ...currentItem,
+            [name]: value.trim(),
+            id: crypto.randomUUID()
+        });
         }
     };
 
