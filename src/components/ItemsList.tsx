@@ -20,7 +20,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
         return dateB.getTime() - dateA.getTime();
     }
 
-    const handleEdit = (item: Item, e: React.MouseEvent) => {
+    const handleEdit = (item: Item, e: React.MouseEvent | React.KeyboardEvent) => {
         e.stopPropagation();
         if (selectedItems.includes(item.id) && !itemIsBeingEdited) {
             setItemIsBeingEdited(true)
@@ -88,7 +88,12 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
             {/* @todo; add indeterminate state to this checkbox if some items are selected, but not all */}
             {items.length ? (
                 <div className="data-header">
-                    <input type="checkbox" checked={selectedItems.length === items.length && selectedItems.length > 1} onChange={handleSelectAll} />
+                    <input 
+                        type="checkbox" 
+                        checked={selectedItems.length === items.length && selectedItems.length > 1} 
+                        disabled={editingItemId !== null}
+                        onChange={handleSelectAll} 
+                        />
                     <div className="data-header__items">
                         <span>Vehicle</span>
                         <span>Date</span>
@@ -112,9 +117,10 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined}
                                         disabled={editingItemId !== null && editingItemId !== item.id}
                                         onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
-                                                handleItemSelect(item.id, e);
-                                            }
+                                            if (e.key === "Enter" && selectedItems.includes(item.id)) {
+                                                e.preventDefault()
+                                                handleEdit(item, e)
+                                            } 
                                         }}
                                         onChange={() => {}}
                                     />
