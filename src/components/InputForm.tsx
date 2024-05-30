@@ -29,11 +29,13 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setCurrentItem({
-            ...currentItem,
-            [name]: value,
-            id: crypto.randomUUID()
-        });
+        if (value.trim().length > 0) {
+            setCurrentItem({
+                ...currentItem,
+                [name]: value,
+                id: crypto.randomUUID()
+            });
+        }
     };
 
     return (
@@ -57,8 +59,8 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
                 <option value="Engine tune-up"></option>
                 <option value="New brakes/rotors"></option>
             </datalist>
-            <input type="text" name="shop" placeholder="Shop" value={currentItem.shop} onChange={handleChange} required />
-            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleChange} required />
+            <input type="text" name="shop" placeholder="Shop" value={currentItem.shop} onChange={handleChange} />
+            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleChange} />
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
             <button type="submit">Add</button>
         </form>

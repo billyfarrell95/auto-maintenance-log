@@ -22,14 +22,17 @@ function App() {
       <h1>Auto Maintenance Log</h1>
       <p>Total items: {items.length}</p>
       <InputForm items={items} setItems={setItems} vehicles={vehicles} />
-
-      <ItemsList
-          items={items}
-          setItems={setItems}
-          vehicles={vehicles}
-          setSelectedItems={setSelectedItems}
-          selectedItems={selectedItems}
-        />
+      {items.length ? (
+          <ItemsList
+            items={items}
+            setItems={setItems}
+            vehicles={vehicles}
+            setSelectedItems={setSelectedItems}
+            selectedItems={selectedItems}
+          />
+      ) : (
+        <p><i>Nothing here...</i></p>
+      )}
 
       {selectedItems.length > 0 && (
         <div>

@@ -16,6 +16,25 @@ button {
     cursor: pointer;
 }
 
+.data-header {
+    display: flex;
+    gap: 1rem;
+}
+
+.data-header__items {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    padding-block: 0.2rem;
+}
+
+.data-items {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
 .data-item__selected {
     background: #f2f2f2;
 }
