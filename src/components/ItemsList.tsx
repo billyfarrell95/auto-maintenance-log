@@ -33,13 +33,19 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
         const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: value } : item);
         setEditingItems(updatedItems);
     };
-
+    
+    const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+        const { name, value } = e.target;
+        const formattedValue = value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: formattedValue } : item);
+        setEditingItems(updatedItems);
+    };
+    
     const handleSelectAll = () => {
         const allItemsSelected = selectedItems.length === items.length;
         const newSelectedItems = allItemsSelected ? [] : items.map(item => item.id);
         setSelectedItems(newSelectedItems);
     };
-    
 
     const handleItemSelect = (id: string, e: React.FormEvent) => {
         e.stopPropagation();
@@ -97,6 +103,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                     <div className="data-header__items">
                         <span>Vehicle</span>
                         <span>Date</span>
+                        <span>Cost</span>
                         <span>Description</span>
                         <span>Shop</span>
                         <span>Mileage</span>
@@ -108,7 +115,9 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
             )}
             <div className="data-items">
                 {items.sort(sortByDate).map((item) => (
-                    <div key={item.id} className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"} onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined}>
+                    <div key={item.id} 
+                        className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"} 
+                        onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined} >
                             <form>
                                 <div className="data-item__wrapper">
                                     <input
@@ -155,6 +164,21 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                                 {item.date}
                                             </div>
                                         )}
+
+                                        {editingItemId === item.id ? (
+                                            <input
+                                                className="data-item__input"
+                                                type="text"
+                                                value={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
+                                                name={`cost-${item.id}`}
+                                                onChange={(e) => handleChange(e, item.id)}
+                                                onFocus={() => handleFocus()}
+                                                onClick={(e) => e.stopPropagation()} />
+                                        ) : (
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                                ${item.cost}
+                                            </div>
+                                        )}
                 
                                         {editingItemId === item.id ? (
                                             <input
@@ -191,7 +215,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                                 type="text"
                                                 value={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
                                                 name={`mileage-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
+                                                onChange={(e) => handleMileageChange(e, item.id)}
                                                 onFocus={() => handleFocus()}
                                                 onClick={(e) => e.stopPropagation()} />
                                         ) : (

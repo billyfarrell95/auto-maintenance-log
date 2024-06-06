@@ -11,12 +11,12 @@ const initialValues: Item = {
     id: "",
     date: "",
     vehicle: "",
+    cost: "",
     description: "",
     shop: "",
     mileage: "",
     memo: "",
 };
-
 
 function InputForm({ items, vehicles, setItems }: InputFormProps) {
     const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues, vehicle: vehicles[0] });
@@ -25,6 +25,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
         e.preventDefault();
         const trimmedItem = {
             ...currentItem,
+            cost: currentItem.cost.trim(),
             description: currentItem.description.trim(),
             shop: currentItem.shop.trim(),
             mileage: currentItem.mileage.trim(),
@@ -32,6 +33,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
         };
         setItems([...items, trimmedItem]);
         setCurrentItem({ ...initialValues, vehicle: vehicles[0] });
+        console.log(items)
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
@@ -39,6 +41,16 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
         setCurrentItem({
             ...currentItem,  
             [name]: value,
+            id: crypto.randomUUID()
+        });
+    };
+
+    const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        const formattedValue = value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        setCurrentItem({
+            ...currentItem,  
+            [name]: formattedValue,
             id: crypto.randomUUID()
         });
     };
@@ -51,6 +63,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
                 ))}
             </select>
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />            
+            <input type="text" name="cost" value={currentItem.cost} onChange={handleChange} placeholder="Cost" />            
             <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
             <datalist id="description-options">
                 <option value="Oil change"></option>
@@ -65,7 +78,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
                 <option value="New brakes/rotors"></option>
             </datalist>
             <input type="text" name="shop" placeholder="Shop" value={currentItem.shop} onChange={handleChange} />
-            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleChange} />
+            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
             <button type="submit">Add</button>
         </form>
