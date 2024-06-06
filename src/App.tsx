@@ -4,6 +4,7 @@ import ItemsList from './components/ItemsList';
 import InputForm from './components/InputForm';
 import { Item } from './types';
 import testData from './data/testData';
+// import AddShopForm from './components/AddShopForm';
 
 function App() {
   const tabs = {
@@ -13,8 +14,8 @@ function App() {
   }
   // const [items, setItems] = useState<Item[]>([]);
   const [items, setItems] = useState<Item[]>(testData);
-  const [vehicles, setVehicles] = useState(["Vehicle One", "Vehicle Two", "Vehicle Three"]);
-  const [shops, setShops] = useState(["Shop One", "Shop Two", "Shop Three"]);
+  const [vehicles, setVehicles] = useState([{id: crypto.randomUUID(), name: "Vehicle One"}, {id: crypto.randomUUID(), name: "Vehicle Two"}, {id: crypto.randomUUID(), name: "Vehicle Three"}]);
+  const [shops, setShops] = useState([{id: crypto.randomUUID(), name: "Shop One"}, {id: crypto.randomUUID(), name: "Shop Two"}, {id: crypto.randomUUID(), name: "Shop Three"}]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
@@ -66,7 +67,7 @@ function App() {
       
       {activeTab === tabs[2] && (
         <div>
-          Shops tabs
+          {/* <AddShopForm shops={shops} /> */}
         </div>
       )}
     </>

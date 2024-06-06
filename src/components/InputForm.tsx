@@ -1,12 +1,12 @@
 import { useState, FormEvent } from "react";
-import { Item } from "../types";
+import { Item, Shop, Vehicle } from "../types";
 import { datePickerCurrentDate, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
 
 interface InputFormProps {
     items: Item[];
-    vehicles: string[];
-    shops: string[];
+    vehicles: Vehicle[];
+    shops: Shop[];
     setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
@@ -22,7 +22,7 @@ const initialValues: Item = {
 };
 
 function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
-    const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues, vehicle: vehicles[0] });
+    const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues, vehicle: vehicles[0].name });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -35,7 +35,7 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
             memo: currentItem.memo.trim(),
         };
         setItems([...items, trimmedItem]);
-        setCurrentItem({ ...initialValues, vehicle: vehicles[0] });
+        setCurrentItem({ ...initialValues, vehicle: vehicles[0].name });
         console.log(items)
     };
 
@@ -69,12 +69,11 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
             <select name="vehicle" id="vehicles" value={currentItem.vehicle} onChange={handleChange}>
-                {vehicles.map((item, index) => (
-                    <option key={index} value={item}>{item}</option>
+                {vehicles.map((vehicle) => (
+                    <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                 ))}
             </select>
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />            
-            {/* <input type="text" name="cost" value={currentItem.cost} onChange={handleChange} placeholder="Cost" />    */}
             <CurrencyInput
                 placeholder="Enter cost"
                 value={currentItem.cost}
@@ -97,8 +96,8 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
             </datalist>
             <input list="shop-options" name="shop" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
             <datalist id="shop-options">
-                {shops.map((item, index) => (
-                    <option key={index} value={item}>{item}</option>
+                {shops.map((shop) => (
+                    <option key={shop.id} value={shop.name}>{shop.name}</option>
                 ))}
             </datalist>
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />

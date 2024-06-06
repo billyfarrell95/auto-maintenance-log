@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Item } from "../types";
+import { Item, Vehicle } from "../types";
 import "./ItemList.css"
 import { formatCost, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
@@ -7,7 +7,7 @@ import CurrencyInput from "react-currency-input-field";
 interface ItemsListProps {
     items: Item[];
     selectedItems: string[];
-    vehicles: string[];
+    vehicles: Vehicle[];
     setItems: React.Dispatch<React.SetStateAction<Item[]>>;
     setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -147,8 +147,8 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                                 onChange={(e) => handleChange(e, item.id)}
                                                 onFocus={() => handleFocus()}
                                                 onClick={(e) => e.stopPropagation()} >
-                                                {vehicles.map((vehicle, vIndex) => (
-                                                    <option key={vIndex} value={vehicle}>{vehicle}</option>
+                                                {vehicles.map((vehicle) => (
+                                                    <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                                                 ))}
                                             </select>
                                         ) : (
