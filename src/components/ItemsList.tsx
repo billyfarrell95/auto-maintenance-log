@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Item } from "../types";
 import "./ItemList.css"
+import { formatNumber } from "../utils/formatters";
   
 interface ItemsListProps {
     items: Item[];
@@ -36,7 +37,7 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
     
     const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
         const { name, value } = e.target;
-        const formattedValue = value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const formattedValue = formatNumber(value);
         const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: formattedValue } : item);
         setEditingItems(updatedItems);
     };
@@ -91,7 +92,6 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
 
     return (    
         <>
-            {/* @todo; add indeterminate state to this checkbox if some items are selected, but not all */}
             {items.length ? (
                 <div className="data-header">
                     <input 

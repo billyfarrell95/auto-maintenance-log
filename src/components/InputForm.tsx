@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { Item } from "../types";
+import { datePickerCurrentDate, formatNumber } from "../utils/formatters";
 
 interface InputFormProps {
     items: Item[];
@@ -9,7 +10,7 @@ interface InputFormProps {
 
 const initialValues: Item = {
     id: "",
-    date: "",
+    date: datePickerCurrentDate(),
     vehicle: "",
     cost: "",
     description: "",
@@ -47,7 +48,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
 
     const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        const formattedValue = value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const formattedValue = formatNumber(value);
         setCurrentItem({
             ...currentItem,  
             [name]: formattedValue,
