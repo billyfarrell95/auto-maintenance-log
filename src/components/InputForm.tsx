@@ -5,6 +5,7 @@ import { datePickerCurrentDate, formatNumber } from "../utils/formatters";
 interface InputFormProps {
     items: Item[];
     vehicles: string[];
+    shops: string[];
     setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
@@ -19,7 +20,7 @@ const initialValues: Item = {
     memo: "",
 };
 
-function InputForm({ items, vehicles, setItems }: InputFormProps) {
+function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
     const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues, vehicle: vehicles[0] });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -57,7 +58,7 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="input-form">
+        <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
             <select name="vehicle" id="vehicles" value={currentItem.vehicle} onChange={handleChange}>
                 {vehicles.map((item, index) => (
                     <option key={index} value={item}>{item}</option>
@@ -78,7 +79,12 @@ function InputForm({ items, vehicles, setItems }: InputFormProps) {
                 <option value="Engine tune-up"></option>
                 <option value="New brakes/rotors"></option>
             </datalist>
-            <input type="text" name="shop" placeholder="Shop" value={currentItem.shop} onChange={handleChange} />
+            <input list="shop-options" name="shop" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
+            <datalist id="shop-options">
+                {shops.map((item, index) => (
+                    <option key={index} value={item}>{item}</option>
+                ))}
+            </datalist>
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
             <button type="submit">Add</button>
