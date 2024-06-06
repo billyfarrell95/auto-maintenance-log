@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Item } from "../types";
 import "./ItemList.css"
-import { formatNumber } from "../utils/formatters";
+import { formatCost, formatMileage } from "../utils/formatters";
+import CurrencyInput from "react-currency-input-field";
   
 interface ItemsListProps {
     items: Item[];
@@ -37,8 +38,13 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
     
     const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
         const { name, value } = e.target;
-        const formattedValue = formatNumber(value);
+        const formattedValue = formatMileage(value);
         const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: formattedValue } : item);
+        setEditingItems(updatedItems);
+    };
+
+    const handleCostChange = (value: string | undefined, id: string) => {
+        const updatedItems = editingItems.map(item => item.id === id ? { ...item, cost: value || '' } : item);
         setEditingItems(updatedItems);
     };
     
@@ -166,17 +172,20 @@ function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems 
                                         )}
 
                                         {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
-                                                value={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
+                                            <CurrencyInput
+                                                id={`cost-${item.id}`}
                                                 name={`cost-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
+                                                placeholder="Enter cost"
+                                                value={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
+                                                prefix="$"
+                                                decimalsLimit={2}
                                                 onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
-                                        ) : (
+                                                onClick={(e) => e.stopPropagation()}
+                                                onValueChange={(value) => handleCostChange(value, item.id)}
+                                            />
+                                            ) : (
                                             <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
-                                                ${item.cost}
+                                                {formatCost(item.cost)}
                                             </div>
                                         )}
                 

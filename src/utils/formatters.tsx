@@ -8,6 +8,16 @@ export const datePickerCurrentDate = () => {
     return `${year}-${month}-${day}`
 }
 
-export const formatNumber = (value: string) => {
+export const formatMileage = (value: string) => {
     return value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+export const formatCost = (value: string) => {
+    const options = {
+        style: 'currency', 
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      };
+    return parseFloat(value).toLocaleString("en-US", options)
 }

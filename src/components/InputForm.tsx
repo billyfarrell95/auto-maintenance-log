@@ -1,6 +1,7 @@
 import { useState, FormEvent } from "react";
 import { Item } from "../types";
-import { datePickerCurrentDate, formatNumber } from "../utils/formatters";
+import { datePickerCurrentDate, formatMileage } from "../utils/formatters";
+import CurrencyInput from "react-currency-input-field";
 
 interface InputFormProps {
     items: Item[];
@@ -49,10 +50,18 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
 
     const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        const formattedValue = formatNumber(value);
+        const formattedValue = formatMileage(value);
         setCurrentItem({
             ...currentItem,  
             [name]: formattedValue,
+            id: crypto.randomUUID()
+        });
+    };
+
+    const handleCostChange = (value: string | undefined) => {
+        setCurrentItem({
+            ...currentItem,
+            cost: value || '',
             id: crypto.randomUUID()
         });
     };
@@ -65,7 +74,14 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
                 ))}
             </select>
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />            
-            <input type="text" name="cost" value={currentItem.cost} onChange={handleChange} placeholder="Cost" />            
+            {/* <input type="text" name="cost" value={currentItem.cost} onChange={handleChange} placeholder="Cost" />    */}
+            <CurrencyInput
+                placeholder="Enter cost"
+                value={currentItem.cost}
+                prefix="$"
+                decimalsLimit={2}
+                onValueChange={handleCostChange}
+            />         
             <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
             <datalist id="description-options">
                 <option value="Oil change"></option>
