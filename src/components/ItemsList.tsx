@@ -99,7 +99,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
     return (    
         <>
-            {items.length ? (
+            {items.length && (
                 <div className="data-header">
                     <input 
                         type="checkbox" 
@@ -117,8 +117,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                         <span>Memo</span>
                     </div>
                 </div>
-            ) : (
-                null
             )}
             <div className="data-items">
                 {items.sort(sortByDate).map((item) => (
