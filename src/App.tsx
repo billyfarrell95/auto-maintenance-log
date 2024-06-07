@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import './App.css'
 import ItemsList from './components/ItemsList';
 import InputForm from './components/InputForm';
-import { Item, Shop } from './types';
+import { Item, Shop, Vehicle } from './types';
 import testData from './data/testData';
-import AddShopForm from './components/AddShopForm';
+import ManageShops from './components/ManageShops';
+import ManageVehicles from './components/ManageVehicles';
 
 function App() {
   const tabs = {
@@ -14,7 +15,7 @@ function App() {
   }
   // const [items, setItems] = useState<Item[]>([]);
   const [items, setItems] = useState<Item[]>(testData);
-  const [vehicles, setVehicles] = useState([{id: crypto.randomUUID(), name: "Vehicle One"}, {id: crypto.randomUUID(), name: "Vehicle Two"}, {id: crypto.randomUUID(), name: "Vehicle Three"}]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -64,13 +65,13 @@ function App() {
 
       {activeTab === tabs[1] && (
         <div>
-          Vehicles tabs
+          <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
         </div>
       )}
       
       {activeTab === tabs[2] && (
         <div>
-          <AddShopForm shops={shops} setShops={setShops} />
+          <ManageShops shops={shops} setShops={setShops} />
         </div>
       )}
     </>

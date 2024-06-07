@@ -22,22 +22,23 @@ const initialValues: Item = {
 };
 
 function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
-    const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues, vehicle: vehicles[0].name });
+    const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedItem = {
             ...currentItem,
             cost: currentItem.cost.trim(),
+            vehicle: currentItem.vehicle.trim(),
             description: currentItem.description.trim(),
             shop: currentItem.shop.trim(),
             mileage: currentItem.mileage.trim(),
             memo: currentItem.memo.trim(),
         };
-        if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo) {
+        if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo || trimmedItem.vehicle) {
             setItems([...items, trimmedItem]);
         }
-        setCurrentItem({ ...initialValues, vehicle: vehicles[0].name });
+        setCurrentItem({ ...initialValues });
         console.log(items)
     };
 
@@ -70,20 +71,9 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
 
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
-            <select name="vehicle" id="vehicles" value={currentItem.vehicle} onChange={handleChange}>
-                {vehicles.map((vehicle) => (
-                    <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
-                ))}
-            </select>
-            <input type="date" name="date" value={currentItem.date} onChange={handleChange} required />            
-            <CurrencyInput
-                placeholder="Enter cost"
-                value={currentItem.cost}
-                prefix="$"
-                decimalsLimit={2}
-                onValueChange={handleCostChange}
-            />         
-            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
+            <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
+            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
+            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
             <datalist id="description-options">
                 <option value="Oil change"></option>
                 <option value="Wheel alignment/balance"></option>
@@ -96,13 +86,25 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
                 <option value="Engine tune-up"></option>
                 <option value="New brakes/rotors"></option>
             </datalist>
+            <input list="vehicles-options" name="vehicle" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" />
+            <datalist id="vehicles-options">
+                {vehicles.map((vehicle) => (
+                    <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
+                ))}
+            </datalist>
             <input list="shop-options" name="shop" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
             <datalist id="shop-options">
                 {shops.map((shop) => (
                     <option key={shop.id} value={shop.name}>{shop.name}</option>
                 ))}
             </datalist>
-            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
+            <CurrencyInput
+                placeholder="Enter cost"
+                value={currentItem.cost}
+                prefix="$"
+                decimalsLimit={2}
+                onValueChange={handleCostChange}
+            />         
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
             <button type="submit">Add</button>
         </form>

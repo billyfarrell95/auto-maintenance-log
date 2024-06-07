@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { Shop } from "../types";
 
-interface AddShopFormProps {
+interface ManageShopsProps {
     shops: Shop[];
     setShops: React.Dispatch<React.SetStateAction<Shop[]>>;
 }
@@ -11,7 +11,7 @@ const initialValues: Shop = {
     name: ""
 };
 
-function AddShopForm({ shops, setShops }: AddShopFormProps) {
+function ManageShops({ shops, setShops }: ManageShopsProps) {
     const [newShop, setNewShop] = useState<Shop>({ ...initialValues });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,4 +65,4 @@ function AddShopForm({ shops, setShops }: AddShopFormProps) {
     )
 }
 
-export default AddShopForm;
+export default ManageShops;
