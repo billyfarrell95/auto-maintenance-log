@@ -18,6 +18,7 @@ function App() {
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
 
   const handleDeleteItems = () => {
     const newArr = items.filter(item => !selectedItems.includes(item.id));
@@ -33,8 +34,8 @@ function App() {
     <>
       <h1>Auto Maintenance Log</h1>
       <button onClick={(e) => {handleActiveTab(tabs[0], e)}}>{tabs[0]}</button>
-      <button onClick={(e) => {handleActiveTab(tabs[1], e)}}>{tabs[1]}</button>
-      <button onClick={(e) => {handleActiveTab(tabs[2], e)}}>{tabs[2]}</button>
+      <button onClick={(e) => {handleActiveTab(tabs[1], e)}} disabled={itemIsBeingEdited}>{tabs[1]}</button>
+      <button onClick={(e) => {handleActiveTab(tabs[2], e)}} disabled={itemIsBeingEdited}>{tabs[2]}</button>
       {activeTab === tabs[0] && (
         <div>
           <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} />
@@ -46,6 +47,8 @@ function App() {
                 // shops={shops}
                 setSelectedItems={setSelectedItems}
                 selectedItems={selectedItems}
+                itemIsBeingEdited={itemIsBeingEdited}
+                setItemIsBeingEdited={setItemIsBeingEdited}
               />
           ) : (
             <p><i>Nothing here...</i></p>
@@ -53,7 +56,7 @@ function App() {
     
           {selectedItems.length > 0 && (
             <div>
-              <button onClick={handleDeleteItems}>Delete selected items ({selectedItems.length})</button>
+              <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected items ({selectedItems.length})</button>
             </div>
           )}
         </div>

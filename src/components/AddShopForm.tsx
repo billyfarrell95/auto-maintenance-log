@@ -22,7 +22,7 @@ function AddShopForm({ shops, setShops }: AddShopFormProps) {
             name: value
         }
         setNewShop(shop)
-        console.log(shops, value)
+        console.log("Shops,value", shops, value)
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -31,7 +31,9 @@ function AddShopForm({ shops, setShops }: AddShopFormProps) {
             ...newShop,
             name: newShop.name.trim()
         }
-        setShops([...shops, newShopTrimmed]);
+        if (newShopTrimmed.name) {
+            setShops([...shops, newShopTrimmed]);
+        }
         setNewShop({...initialValues});
     }
 

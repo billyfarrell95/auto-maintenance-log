@@ -34,7 +34,9 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
             mileage: currentItem.mileage.trim(),
             memo: currentItem.memo.trim(),
         };
-        setItems([...items, trimmedItem]);
+        if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo) {
+            setItems([...items, trimmedItem]);
+        }
         setCurrentItem({ ...initialValues, vehicle: vehicles[0].name });
         console.log(items)
     };

@@ -10,12 +10,13 @@ interface ItemsListProps {
     vehicles: Vehicle[];
     setItems: React.Dispatch<React.SetStateAction<Item[]>>;
     setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+    itemIsBeingEdited: boolean;
+    setItemIsBeingEdited: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems }: ItemsListProps) {
+function ItemsList({ items, vehicles, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited }: ItemsListProps) {
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
-    const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
