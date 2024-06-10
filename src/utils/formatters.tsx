@@ -19,5 +19,8 @@ export const formatCost = (value: string) => {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       };
-    return parseFloat(value).toLocaleString("en-US", options)
+    if (value) {
+        return parseFloat(value).toLocaleString("en-US", options)
+    }
+    
 }
