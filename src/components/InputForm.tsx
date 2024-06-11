@@ -8,6 +8,7 @@ interface InputFormProps {
     vehicles: Vehicle[];
     shops: Shop[];
     setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+    selectedItems: string[];
 }
 
 const initialValues: Item = {
@@ -21,7 +22,7 @@ const initialValues: Item = {
     memo: "",
 };
 
-function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
+function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFormProps) {
     const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -106,7 +107,7 @@ function InputForm({ items, vehicles, shops, setItems }: InputFormProps) {
                 onValueChange={handleCostChange}
             />         
             <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
-            <button type="submit">Add</button>
+            <button type="submit" disabled={selectedItems.length > 0}>Add</button>
         </form>
     );
 }

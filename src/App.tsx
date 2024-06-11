@@ -43,7 +43,7 @@ function App() {
       <button onClick={(e) => {handleActiveTab(tabs[2], e)}} disabled={itemIsBeingEdited}>{tabs[2]}</button>
       {activeTab === tabs[0] && (
         <div>
-          <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} />
+          <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} selectedItems={selectedItems} />
           {items.length ? (
               <ItemsList
                 items={items}

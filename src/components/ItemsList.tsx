@@ -53,7 +53,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         const allItemsSelected = selectedItems.length === items.length;
         const newSelectedItems = allItemsSelected ? [] : items.map(item => item.id);
         setSelectedItems(newSelectedItems);
-        setChecked(CHECKBOX_STATES.Checked)
     };
 
     const handleItemSelect = (id: string, e: React.FormEvent) => {
@@ -115,42 +114,37 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const handleCheckboxChange = () => {
         let updatedChecked: CHECKBOX_STATES = CHECKBOX_STATES.Empty;
     
-        if (selectedItems.length === items.length) {
+        if (checked === CHECKBOX_STATES.Checked) {
             updatedChecked = CHECKBOX_STATES.Empty;
+            setSelectedItems([]);
         } else if (checked === CHECKBOX_STATES.Empty) {
-            updatedChecked = CHECKBOX_STATES.Indeterminate;
-        } else if (checked === CHECKBOX_STATES.Indeterminate) {
             updatedChecked = CHECKBOX_STATES.Checked;
+            handleSelectAll()
+        } else if (checked === CHECKBOX_STATES.Indeterminate) {
+            setSelectedItems([])
+            updatedChecked = CHECKBOX_STATES.Empty;
         }
-        // if (checked === CHECKBOX_STATES.Checked) {
-        //     updatedChecked = CHECKBOX_STATES.Empty;
-        // } else if (checked === CHECKBOX_STATES.Empty) {
-        //     updatedChecked = CHECKBOX_STATES.Indeterminate;
-        // } else if (checked === CHECKBOX_STATES.Indeterminate) {
-        //     updatedChecked = CHECKBOX_STATES.Checked;
-        // }
     
         setChecked(updatedChecked);
     };
 
     const Checkbox = ({ label, value, onChange }: CheckboxProps) => {
-        // const checkboxRef = useRef();
         const checkboxRef = useRef<HTMLInputElement>(null);
 
         useEffect(() => {
             if (checkboxRef.current) {
-                if (selectedItems.length === items.length) {
+                if (value === CHECKBOX_STATES.Checked) {
                     checkboxRef.current.checked = true;
                     checkboxRef.current.indeterminate = false;
-                } else if (selectedItems.length === 0) {
+                  } else if (value === CHECKBOX_STATES.Empty) {
                     checkboxRef.current.checked = false;
                     checkboxRef.current.indeterminate = false;
-                } else if (selectedItems.length < items.length) {
+                  } else if (value === CHECKBOX_STATES.Indeterminate) {
                     checkboxRef.current.checked = false;
                     checkboxRef.current.indeterminate = true;
-                }
+                  }
             }
-            }, [value, selectedItems]);
+            }, [value]);
 
         return (
           <label>
@@ -165,17 +159,20 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         );
     };
 
+    useEffect(() => {
+        if (selectedItems.length === 0) {
+            setChecked(CHECKBOX_STATES.Empty)
+        } else if (selectedItems.length < items.length && selectedItems.length !== 0) {
+            setChecked(CHECKBOX_STATES.Indeterminate)
+        } else {
+            setChecked(CHECKBOX_STATES.Checked)
+        }
+    }, [selectedItems])
+
     return (    
         <>
             {items.length && (
                 <div className="data-header">
-                    {/* <input 
-                        type="checkbox" 
-                        checked={selectedItems.length === items.length && selectedItems.length > 1} 
-                        disabled={editingItemId !== null}
-                        onChange={handleSelectAll} 
-                    /> */}
-
                     <Checkbox
                         label=""
                         value={checked}
@@ -193,7 +190,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                 </div>
             )}
             <div className="data-items">
-                <p>Is checked? {checked}</p>
                 {items.sort(sortByDate).map((item) => (
                     <div key={item.id} 
                         className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"} 
