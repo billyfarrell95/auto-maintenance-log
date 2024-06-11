@@ -27,6 +27,10 @@ function App() {
     setSelectedItems([]);
   };
 
+  const handleDeselectAll = () => {
+    setSelectedItems([]);
+  }
+
   const handleActiveTab = (tab: string, e: React.MouseEvent) => {
     setActiveTab(tab)
   }
@@ -58,6 +62,7 @@ function App() {
           {selectedItems.length > 0 && (
             <div>
               <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected items ({selectedItems.length})</button>
+              <button onClick={handleDeselectAll} disabled={itemIsBeingEdited}>Deselect all</button>
             </div>
           )}
         </div>
