@@ -3,96 +3,23 @@ body {
 }
 
 .main-wrapper {
-    max-width: calc(100vw - 4rem);
+    max-width: calc(100vw - 2rem);
     margin-inline: auto;
-}
-
-form {
-    width: 100%;
-    display: flex;
+    padding-bottom: 4rem;
 }
 
 button {
     cursor: pointer;
 }
 
-.data-header {
+.buttons-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
+    justify-content: center;
     gap: 1rem;
-}
-
-.data-header__items {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-    padding-block: 0.2rem;
-}
-
-.data-items {
-    display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
-}
-
-.data-item__selected {
-    background: #f2f2f2;
-}
-
-.data-item form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.data-item__display {
-    padding: 1rem;
-    border: 1px solid #e1e1e1;
-}
-
-.data-item__display-default {
-    cursor: pointer;
-}
-
-.data-item__display-selected {
-    cursor: text;
-}
-
-.data-item {
-    cursor: pointer;
-}
-
-.data-item__wrapper {
-    display: flex;
-    gap: 1rem;
-}
-
-.data-item__input-wrapper {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-    padding-block: 0.2rem;
-}
-
-.data-item__button-wrapper {
-    align-self: flex-end;
-}
-
-.input-form input {
-    width: 100%;
-}
-
-.data-item select, form select {
-    cursor: pointer;
-}
-
-.data-item input[type=checkbox]{
-    width: auto;
-    cursor: pointer;
-}
-
-input {
-    border: 1px solid lightgray;
-    padding: 0.5rem;
+    padding-block: 1rem;
+    background-color: rgba(0,0,0,0.1);
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import ItemsList from './components/ItemsList';
 import InputForm from './components/InputForm';
@@ -9,16 +9,16 @@ import ManageVehicles from './components/ManageVehicles';
 
 function App() {
   const tabs = {
-    0: "Log",
-    1: "Vehicles",
-    2: "Shops"
+    log: "Log",
+    vehicles: "Vehicles",
+    shops: "Shops"
   }
   // const [items, setItems] = useState<Item[]>([]);
   const [items, setItems] = useState<Item[]>(testData);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [activeTab, setActiveTab] = useState(tabs.log);
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
 
   const handleDeleteItems = () => {
@@ -31,17 +31,17 @@ function App() {
     setSelectedItems([]);
   }
 
-  const handleActiveTab = (tab: string, e: React.MouseEvent) => {
+  const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
 
   return (
     <>
       <h1>Auto Maintenance Log</h1>
-      <button onClick={(e) => {handleActiveTab(tabs[0], e)}}>{tabs[0]}</button>
-      <button onClick={(e) => {handleActiveTab(tabs[1], e)}} disabled={itemIsBeingEdited}>{tabs[1]}</button>
-      <button onClick={(e) => {handleActiveTab(tabs[2], e)}} disabled={itemIsBeingEdited}>{tabs[2]}</button>
-      {activeTab === tabs[0] && (
+      <button onClick={() => {handleActiveTab(tabs.log)}}>{tabs.log}</button>
+      <button onClick={() => {handleActiveTab(tabs.vehicles)}} disabled={itemIsBeingEdited}>{tabs.vehicles} ({vehicles.length})</button>
+      <button onClick={() => {handleActiveTab(tabs.shops)}} disabled={itemIsBeingEdited}>{tabs.shops} ({shops.length})</button>
+      {activeTab === tabs.log && (
         <div>
           <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} selectedItems={selectedItems} />
           {items.length ? (
@@ -60,7 +60,7 @@ function App() {
           )}
     
           {selectedItems.length > 0 && (
-            <div>
+            <div className="buttons-bar">
               <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected items ({selectedItems.length})</button>
               <button onClick={handleDeselectAll} disabled={itemIsBeingEdited}>Deselect all</button>
             </div>
@@ -68,13 +68,13 @@ function App() {
         </div>
       )}
 
-      {activeTab === tabs[1] && (
+      {activeTab === tabs.vehicles && (
         <div>
           <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
         </div>
       )}
       
-      {activeTab === tabs[2] && (
+      {activeTab === tabs.shops && (
         <div>
           <ManageShops shops={shops} setShops={setShops} />
         </div>

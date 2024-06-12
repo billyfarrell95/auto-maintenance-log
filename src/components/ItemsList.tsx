@@ -212,6 +212,20 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     <div className="data-item__input-wrapper">
                                         {editingItemId === item.id ? (
                                             <input
+                                                className="data-item__input"
+                                                type="text"
+                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
+                                                name={`description-${item.id}`}
+                                                onChange={(e) => handleChange(e, item.id)}
+                                                onFocus={() => handleFocus()}
+                                                onClick={(e) => e.stopPropagation()} />
+                                        ) : (
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                                {item.description}
+                                            </div>
+                                        )}
+                                        {editingItemId === item.id ? (
+                                            <input
                                                 type="date"
                                                 value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
                                                 name={`date-${item.id}`}
@@ -235,20 +249,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         ) : (
                                             <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
                                                 {item.mileage}
-                                            </div>
-                                        )}
-                                        {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
-                                                name={`description-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
-                                        ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
-                                                {item.description}
                                             </div>
                                         )}
                                         {editingItemId === item.id ? (

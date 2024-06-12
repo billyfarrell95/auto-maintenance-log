@@ -1,0 +1,22 @@
+.input-form {
+    width: 100%;
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1rem;
+}
+
+@media screen and (min-width: 1200px) {
+    .input-form {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .input-form {
+        grid-template-columns: repeat(8, 1fr)
+    };
+}
+
+.input-form input {
+    width: 100%;
+}

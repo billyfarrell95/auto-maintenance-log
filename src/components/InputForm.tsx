@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import { Item, Shop, Vehicle } from "../types";
 import { datePickerCurrentDate, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
+import "./InputForm.css"
 
 interface InputFormProps {
     items: Item[];
@@ -72,9 +73,9 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFor
 
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
+            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
-            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
             <datalist id="description-options">
                 <option value="Oil change"></option>
                 <option value="Wheel alignment/balance"></option>
