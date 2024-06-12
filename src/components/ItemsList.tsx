@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Item, Vehicle } from "../types";
 import "./ItemList.css"
 import { formatCost, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
+import Checkbox from "./Checkbox";
   
 interface ItemsListProps {
     items: Item[];
@@ -15,8 +16,16 @@ interface ItemsListProps {
 }
 
 function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited }: ItemsListProps) {
+    enum CHECKBOX_STATES {
+        Checked = 'checked',
+        Empty = 'empty',
+        Indeterminate = 'indeterminate',
+    }
+
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
+    const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
+
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
@@ -92,24 +101,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     }
 
     const itemSelectedClasses = "data-item__display-selected data-item__display";
-    const itemDefaultClasses = "data-item__display-default data-item__display";
-
-    useEffect(() => {
-    }, [selectedItems])
-
-    enum CHECKBOX_STATES {
-        Checked = 'checked',
-        Empty = 'empty',
-        Indeterminate = 'indeterminate',
-    }
-
-    interface CheckboxProps {
-        label: string;
-        value: CHECKBOX_STATES;
-        onChange: () => void;
-    }
-
-    const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
+    const itemDefaultClasses = "data-item__display-default data-item__display";    
 
     const handleCheckboxChange = () => {
         let updatedChecked: CHECKBOX_STATES = CHECKBOX_STATES.Empty;
@@ -126,37 +118,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     
         setChecked(updatedChecked);
-    };
-
-    const Checkbox = ({ label, value, onChange }: CheckboxProps) => {
-        const checkboxRef = useRef<HTMLInputElement>(null);
-
-        useEffect(() => {
-            if (checkboxRef.current) {
-                if (value === CHECKBOX_STATES.Checked) {
-                    checkboxRef.current.checked = true;
-                    checkboxRef.current.indeterminate = false;
-                  } else if (value === CHECKBOX_STATES.Empty) {
-                    checkboxRef.current.checked = false;
-                    checkboxRef.current.indeterminate = false;
-                  } else if (value === CHECKBOX_STATES.Indeterminate) {
-                    checkboxRef.current.checked = false;
-                    checkboxRef.current.indeterminate = true;
-                  }
-            }
-            }, [value]);
-
-        return (
-          <label>
-            <input
-                ref={checkboxRef}
-                type="checkbox"
-                checked={value === CHECKBOX_STATES.Checked}
-                onChange={onChange}
-            />
-            {label}
-          </label>
-        );
     };
 
     useEffect(() => {
@@ -177,6 +138,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                         label=""
                         value={checked}
                         onChange={handleCheckboxChange}
+
                     />
                     <div className="data-header__items">
                         <span>Date</span>
