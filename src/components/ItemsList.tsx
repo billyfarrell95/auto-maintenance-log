@@ -3,7 +3,9 @@ import { Item, Vehicle } from "../types";
 import "./ItemList.css"
 import { formatCost, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
-import Checkbox from "./Checkbox";
+import ItemsListInput from "./ItemListInput";
+import ItemsListHeader from "./ItemsListHeader";
+import { CHECKBOX_STATES } from "./Checkbox";
   
 interface ItemsListProps {
     items: Item[];
@@ -16,15 +18,16 @@ interface ItemsListProps {
 }
 
 function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited }: ItemsListProps) {
-    enum CHECKBOX_STATES {
-        Checked = 'checked',
-        Empty = 'empty',
-        Indeterminate = 'indeterminate',
-    }
-
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
+
+    const itemSelectedClasses = "data-item__display-selected data-item__display";
+    const itemDefaultClasses = "data-item__display-default data-item__display";   
+
+    const handleDefineClasses = (item: Item) => {
+        return selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses 
+    }
 
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
@@ -32,14 +35,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         return dateB.getTime() - dateA.getTime();
     }
 
-    const handleEdit = (item: Item, e: React.MouseEvent | React.KeyboardEvent) => {
-        e.stopPropagation();
-        if (selectedItems.includes(item.id) && !itemIsBeingEdited) {
-            setItemIsBeingEdited(true)
-            setEditingItemId(item.id === editingItemId ? null: item.id)
-        }
-    }
-    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
         const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: value } : item);
@@ -56,6 +51,28 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const handleCostChange = (value: string | undefined, id: string) => {
         const updatedItems = editingItems.map(item => item.id === id ? { ...item, cost: value || '' } : item);
         setEditingItems(updatedItems);
+    };
+
+    const handleEdit = (item: Item, e: React.MouseEvent | React.KeyboardEvent) => {
+        e.stopPropagation();
+        if (selectedItems.includes(item.id) && !itemIsBeingEdited) {
+            setItemIsBeingEdited(true)
+            setEditingItemId(item.id === editingItemId ? null: item.id)
+        }
+    }
+
+    const handleCancelEdit = (e: React.FormEvent) => {
+        e.stopPropagation();
+        setEditingItems([])
+        setEditingItemId(null);
+        setItemIsBeingEdited(false)
+    }
+
+    // @todo Set only one item when editing?
+    const handleFocus = () => {
+        if (!editingItems.length) {
+            setEditingItems(items.map(item => ({ ...item })));
+        }
     };
     
     const handleSelectAll = () => {
@@ -78,12 +95,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         });
     };
 
-    const handleFocus = () => {
-        if (!editingItems.length) {
-            setEditingItems(items.map(item => ({ ...item })));
-        }
-    };
-
+    // @todo Set only one item when editing?
     const handleSaveItem = (e: React.FormEvent, id: string) => {
         e.stopPropagation();
         e.preventDefault();
@@ -91,17 +103,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
         setItems(updatedItems);
         setEditingItemId(null);
-    }
-
-    const handleCancelEdit = (e: React.FormEvent) => {
-        e.stopPropagation();
-        setEditingItems([])
-        setEditingItemId(null);
-        setItemIsBeingEdited(false)
-    }
-
-    const itemSelectedClasses = "data-item__display-selected data-item__display";
-    const itemDefaultClasses = "data-item__display-default data-item__display";    
+    } 
 
     const handleCheckboxChange = () => {
         let updatedChecked: CHECKBOX_STATES = CHECKBOX_STATES.Empty;
@@ -130,26 +132,14 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     }, [selectedItems])
 
+    useEffect(() => {
+        console.log("EDITING ITEMS", editingItems)
+    }, [editingItems])
+
     return (    
         <>
             {items.length && (
-                <div className="data-header">
-                    <Checkbox
-                        label=""
-                        value={checked}
-                        onChange={handleCheckboxChange}
-
-                    />
-                    <div className="data-header__items">
-                        <span>Date</span>
-                        <span>Mileage</span>
-                        <span>Description</span>
-                        <span>Vehicle</span>
-                        <span>Shop</span>
-                        <span>Cost</span>
-                        <span>Memo</span>
-                    </div>
-                </div>
+                <ItemsListHeader checked={checked} handleChange={handleCheckboxChange} />
             )}
             <div className="data-items">
                 {items.sort(sortByDate).map((item) => (
@@ -173,16 +163,15 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     />
                                     <div className="data-item__input-wrapper">
                                         {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
+                                            <ItemsListInput 
+                                                itemId={item.id} 
+                                                handleChange={handleChange} 
+                                                handleFocus={handleFocus}
                                                 defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
-                                                name={`description-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
+                                                type="text" 
+                                                name="description" />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {item.description}
                                             </div>
                                         )}
@@ -195,49 +184,46 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                                 onFocus={() => handleFocus()}
                                                 onClick={(e) => e.stopPropagation()} />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ?  itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {item.date}
                                             </div>
                                         )}
                                         {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
+                                            <ItemsListInput 
+                                                itemId={item.id} 
+                                                handleChange={handleMileageChange} 
+                                                handleFocus={handleFocus}
                                                 defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
-                                                name={`mileage-${item.id}`}
-                                                onChange={(e) => handleMileageChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
+                                                type="text"
+                                                name="mileage" />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {item.mileage}
                                             </div>
                                         )}
                                         {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
+                                            <ItemsListInput 
+                                                itemId={item.id} 
+                                                handleChange={handleChange} 
+                                                handleFocus={handleFocus}
                                                 defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
-                                                name={`vehicle-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
+                                                type="text"
+                                                name="vehicle" />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {item.vehicle}
                                             </div>
                                         )}
                                         {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
+                                            <ItemsListInput 
+                                                itemId={item.id} 
+                                                handleChange={handleChange} 
+                                                handleFocus={handleFocus}
                                                 defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop}
-                                                name={`shop-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
+                                                type="text"
+                                                name="shop" />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {item.shop}
                                             </div>
                                         )}
@@ -255,21 +241,20 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                                 onValueChange={(value) => handleCostChange(value, item.id)}
                                             />
                                             ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {formatCost(item.cost)}
                                             </div>
                                         )}
                                         {editingItemId === item.id ? (
-                                            <input
-                                                className="data-item__input"
-                                                type="text"
+                                            <ItemsListInput 
+                                                itemId={item.id} 
+                                                handleChange={handleChange} 
+                                                handleFocus={handleFocus}
                                                 defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo}
-                                                name={`memo-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
+                                                type="text"
+                                                name="memo" />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses }>
+                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                                                 {item.memo}
                                             </div>
                                         )}

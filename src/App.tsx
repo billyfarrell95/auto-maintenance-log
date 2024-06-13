@@ -49,7 +49,7 @@ function App() {
                 items={items}
                 setItems={setItems}
                 vehicles={vehicles}
-                // shops={shops}
+
                 setSelectedItems={setSelectedItems}
                 selectedItems={selectedItems}
                 itemIsBeingEdited={itemIsBeingEdited}

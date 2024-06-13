@@ -2,7 +2,8 @@ import { useState, FormEvent } from "react";
 import { Item, Shop, Vehicle } from "../types";
 import { datePickerCurrentDate, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
-import "./InputForm.css"
+import "./InputForm.css";
+import { maintenanceDescriptions } from "../data/data";
 
 interface InputFormProps {
     items: Item[];
@@ -77,16 +78,9 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFor
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
             <datalist id="description-options">
-                <option value="Oil change"></option>
-                <option value="Wheel alignment/balance"></option>
-                <option value="Tire rotation"></option>
-                <option value="New battery"></option>
-                <option value="Coolant flush"></option>
-                <option value="Spark plug replacement"></option>
-                <option value="Air filter replacement"></option>
-                <option value="New brakes"></option>
-                <option value="Engine tune-up"></option>
-                <option value="New brakes/rotors"></option>
+                {maintenanceDescriptions.map((item, index) => (
+                    <option value={item} key={index}>{item}</option>
+                ))}
             </datalist>
             <input list="vehicles-options" name="vehicle" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" />
             <datalist id="vehicles-options">
