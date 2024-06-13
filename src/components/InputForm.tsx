@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, ChangeEvent, SetStateAction, Dispatch } from "react";
 import { Item, Shop, Vehicle } from "../types";
 import { datePickerCurrentDate, formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
@@ -9,7 +9,7 @@ interface InputFormProps {
     items: Item[];
     vehicles: Vehicle[];
     shops: Shop[];
-    setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+    setItems: Dispatch<SetStateAction<Item[]>>;
     selectedItems: string[];
 }
 
@@ -45,7 +45,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFor
         console.log(items)
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
         setCurrentItem({
             ...currentItem,  
@@ -54,7 +54,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFor
         });
     };
 
-    const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMileageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         const formattedValue = formatMileage(value);
         setCurrentItem({

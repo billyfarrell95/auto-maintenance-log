@@ -1,13 +1,14 @@
+import { ChangeEvent } from "react";
+
 interface InputProps {
     itemId: string;
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
-    handleFocus: () => void;
+    handleChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
     defaultValue: string,
     type: string,
     name: string
 }
 
-function ItemsListInput({ itemId, handleChange, handleFocus, defaultValue, type, name }: InputProps) {
+function ItemsListInput({ itemId, handleChange, defaultValue, type, name }: InputProps) {
     return (
         <>
             <input
@@ -16,7 +17,6 @@ function ItemsListInput({ itemId, handleChange, handleFocus, defaultValue, type,
                 defaultValue={defaultValue}
                 name={`${name}-${itemId}`}
                 onChange={(e) => handleChange(e, itemId)}
-                onFocus={() => handleFocus()}
                 onClick={(e) => e.stopPropagation()} />
         </>
     )

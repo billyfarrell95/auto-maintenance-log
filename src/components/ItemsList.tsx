@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, MouseEvent, KeyboardEvent, FormEvent, Dispatch, SetStateAction } from "react";
 import { Item, Vehicle } from "../types";
 import "./ItemList.css"
-import { formatCost, formatMileage } from "../utils/formatters";
-import CurrencyInput from "react-currency-input-field";
-import ItemsListInput from "./ItemListInput";
 import ItemsListHeader from "./ItemsListHeader";
 import { CHECKBOX_STATES } from "./Checkbox";
+import ItemsListDisplay from "./ItemsListDisplay";
+import ItemsListEdit from "./ItemsListEdit";
   
 interface ItemsListProps {
     items: Item[];
     selectedItems: string[];
     vehicles: Vehicle[];
-    setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-    setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+    setItems: Dispatch<SetStateAction<Item[]>>;
+    setSelectedItems: Dispatch<React.SetStateAction<string[]>>;
     itemIsBeingEdited: boolean;
-    setItemIsBeingEdited: React.Dispatch<React.SetStateAction<boolean>>
+    setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>
 }
 
 function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited }: ItemsListProps) {
@@ -22,38 +21,13 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
 
-    const itemSelectedClasses = "data-item__display-selected data-item__display";
-    const itemDefaultClasses = "data-item__display-default data-item__display";   
-
-    const handleDefineClasses = (item: Item) => {
-        return selectedItems.includes(item.id) ? itemSelectedClasses : itemDefaultClasses 
-    }
-
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateB.getTime() - dateA.getTime();
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>, id: string) => {
-        const { name, value } = e.target;
-        const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: value } : item);
-        setEditingItems(updatedItems);
-    };
-    
-    const handleMileageChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-        const { name, value } = e.target;
-        const formattedValue = formatMileage(value);
-        const updatedItems = editingItems.map(item => item.id === id ? { ...item, [name.split('-')[0]]: formattedValue } : item);
-        setEditingItems(updatedItems);
-    };
-
-    const handleCostChange = (value: string | undefined, id: string) => {
-        const updatedItems = editingItems.map(item => item.id === id ? { ...item, cost: value || '' } : item);
-        setEditingItems(updatedItems);
-    };
-
-    const handleEdit = (item: Item, e: React.MouseEvent | React.KeyboardEvent) => {
+    const handleEdit = (item: Item, e: MouseEvent | KeyboardEvent) => {
         e.stopPropagation();
         if (selectedItems.includes(item.id) && !itemIsBeingEdited) {
             setItemIsBeingEdited(true)
@@ -61,19 +35,12 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     }
 
-    const handleCancelEdit = (e: React.FormEvent) => {
+    const handleCancelEdit = (e: FormEvent) => {
         e.stopPropagation();
         setEditingItems([])
         setEditingItemId(null);
         setItemIsBeingEdited(false)
     }
-
-    // @todo Set only one item when editing?
-    const handleFocus = () => {
-        if (!editingItems.length) {
-            setEditingItems(items.map(item => ({ ...item })));
-        }
-    };
     
     const handleSelectAll = () => {
         const allItemsSelected = selectedItems.length === items.length;
@@ -81,22 +48,19 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         setSelectedItems(newSelectedItems);
     };
 
-    const handleItemSelect = (id: string, e: React.FormEvent) => {
+    const handleItemSelect = (id: string, e: FormEvent) => {
         e.stopPropagation();
         setEditingItems([])
         setSelectedItems(prevSelected => {
             if (prevSelected.includes(id)) {
-                // Unselected
                 return prevSelected.filter(itemId => itemId !== id);
             } else {
-                // Selected
                 return [...prevSelected, id];
             }
         });
     };
 
-    // @todo Set only one item when editing?
-    const handleSaveItem = (e: React.FormEvent, id: string) => {
+    const handleSaveItem = (e: FormEvent, id: string) => {
         e.stopPropagation();
         e.preventDefault();
         setItemIsBeingEdited(false)
@@ -131,10 +95,12 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setChecked(CHECKBOX_STATES.Checked)
         }
     }, [selectedItems])
-
+   
     useEffect(() => {
-        console.log("EDITING ITEMS", editingItems)
-    }, [editingItems])
+        if (itemIsBeingEdited) {
+            setEditingItems(items.map(item => ({ ...item })));
+        }
+    }, [itemIsBeingEdited])
 
     return (    
         <>
@@ -146,7 +112,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                     <div key={item.id} 
                         className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"} 
                         onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined} >
-                            <form>
                                 <div className="data-item__wrapper">
                                     <input
                                         type="checkbox"
@@ -161,104 +126,13 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         }}
                                         onChange={() => {}}
                                     />
-                                    <div className="data-item__input-wrapper">
+                                    <>
                                         {editingItemId === item.id ? (
-                                            <ItemsListInput 
-                                                itemId={item.id} 
-                                                handleChange={handleChange} 
-                                                handleFocus={handleFocus}
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
-                                                type="text" 
-                                                name="description" />
+                                            <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} item={item} />
                                         ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {item.description}
-                                            </div>
+                                            <ItemsListDisplay selectedItems={selectedItems} handleEdit={handleEdit} item={item} />
                                         )}
-                                        {editingItemId === item.id ? (
-                                            <input
-                                                type="date"
-                                                value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
-                                                name={`date-${item.id}`}
-                                                onChange={(e) => handleChange(e, item.id)}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()} />
-                                        ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {item.date}
-                                            </div>
-                                        )}
-                                        {editingItemId === item.id ? (
-                                            <ItemsListInput 
-                                                itemId={item.id} 
-                                                handleChange={handleMileageChange} 
-                                                handleFocus={handleFocus}
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
-                                                type="text"
-                                                name="mileage" />
-                                        ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {item.mileage}
-                                            </div>
-                                        )}
-                                        {editingItemId === item.id ? (
-                                            <ItemsListInput 
-                                                itemId={item.id} 
-                                                handleChange={handleChange} 
-                                                handleFocus={handleFocus}
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
-                                                type="text"
-                                                name="vehicle" />
-                                        ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {item.vehicle}
-                                            </div>
-                                        )}
-                                        {editingItemId === item.id ? (
-                                            <ItemsListInput 
-                                                itemId={item.id} 
-                                                handleChange={handleChange} 
-                                                handleFocus={handleFocus}
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop}
-                                                type="text"
-                                                name="shop" />
-                                        ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {item.shop}
-                                            </div>
-                                        )}
-                                        {editingItemId === item.id ? (
-                                            <CurrencyInput
-                                                id={`cost-${item.id}`}
-                                                name={`cost-${item.id}`}
-                                                placeholder="Enter cost"
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
-                                                prefix="$"
-                                                decimalsLimit={2}
-                                                decimalScale={2}
-                                                onFocus={() => handleFocus()}
-                                                onClick={(e) => e.stopPropagation()}
-                                                onValueChange={(value) => handleCostChange(value, item.id)}
-                                            />
-                                            ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {formatCost(item.cost)}
-                                            </div>
-                                        )}
-                                        {editingItemId === item.id ? (
-                                            <ItemsListInput 
-                                                itemId={item.id} 
-                                                handleChange={handleChange} 
-                                                handleFocus={handleFocus}
-                                                defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo}
-                                                type="text"
-                                                name="memo" />
-                                        ) : (
-                                            <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                                                {item.memo}
-                                            </div>
-                                        )}
-                                    </div>
+                                    </>
                                 </div>
                             {editingItemId === item.id && (
                                 <div className="data-item__button-wrapper">
@@ -266,7 +140,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>
                                 </div>
                             )}
-                        </form>
                     </div>
                 ))}
             </div>

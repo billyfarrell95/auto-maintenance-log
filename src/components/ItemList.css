@@ -47,18 +47,28 @@
     gap: 1rem;
 }
 
-.data-item__input-wrapper {
+.data-item__display-wrapper.large {
+    display: none;
+}
+
+.data-item__display-wrapper {
     width: 100%;
     display: grid;
     gap: 0.5rem;
     padding-block: 0.2rem;
+    grid-template-columns: repeat(7, 1fr);
 }
 
 @media screen and (max-width: 600px) {
-    .data-item__input-wrapper div:not(:nth-of-type(1)) {
+    .data-item__item-wrapper div:not(:nth-of-type(1)) {
         display: none;
     }
-    
+    .data-item__display-wrapper.small {
+        display: grid;
+    }
+    .data-item__display-wrapper {
+        display: none;
+    }
 }
 
 .data-item input[type=checkbox]{
@@ -66,18 +76,10 @@
     cursor: pointer;
 }
 
-@media screen and (min-width: 1600px) {
-    .data-item__input-wrapper {
-        grid-template-columns: repeat(7, 1fr);
-    }
-    .data-header {
-        display: flex;
-        gap: 1rem;
-    }
-}
-
 .data-item__button-wrapper {
-    align-self: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
 }
 
 .data-item select, form select {
