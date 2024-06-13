@@ -51,22 +51,30 @@
     display: none;
 }
 
+.data-item__display-wrapper.small {
+    width: 100%;
+    display: grid;
+}
+
 .data-item__display-wrapper {
     width: 100%;
     display: grid;
     gap: 0.5rem;
     padding-block: 0.2rem;
-    grid-template-columns: repeat(7, 1fr);
 }
 
 @media screen and (max-width: 600px) {
-    .data-item__item-wrapper div:not(:nth-of-type(1)) {
+    .data-item__display-wrapper {
         display: none;
     }
-    .data-item__display-wrapper.small {
+}
+
+@media screen and (min-width: 1600px) {
+    .data-item__display-wrapper.large {
         display: grid;
+        grid-template-columns: repeat(7, 1fr);
     }
-    .data-item__display-wrapper {
+    .data-item__display-wrapper.small {
         display: none;
     }
 }
