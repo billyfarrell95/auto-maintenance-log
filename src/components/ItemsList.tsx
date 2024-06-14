@@ -109,9 +109,9 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             )}
             <div className="data-items">
                 {items.sort(sortByDate).map((item) => (
-                    <div key={item.id} 
-                        className={selectedItems.includes(item.id) ? "data-item data-item__selected" : "data-item"} 
-                        onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined} >
+                    <div className="data-item" key={item.id}>
+                        <div className={selectedItems.includes(item.id) ? "data-item__selected" : "data-item"}
+                            onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined} >
                                 <div className="data-item__wrapper">
                                     <input
                                         type="checkbox"
@@ -122,7 +122,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                             if (e.key === "Enter" && selectedItems.includes(item.id)) {
                                                 e.preventDefault()
                                                 handleEdit(item, e)
-                                            } 
+                                            }
                                         }}
                                         onChange={() => {}}
                                     />
@@ -134,12 +134,13 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         )}
                                     </>
                                 </div>
-                            {editingItemId === item.id && (
-                                <div className="data-item__button-wrapper">
-                                    <button type="button" onClick={(e) => {handleCancelEdit(e)}} disabled={!itemIsBeingEdited}>Cancel</button>
-                                    <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>
-                                </div>
-                            )}
+                        </div>
+                        {editingItemId === item.id && (
+                            <div className="data-item__button-wrapper">
+                                <button type="button" onClick={(e) => {handleCancelEdit(e)}} disabled={!itemIsBeingEdited}>Cancel</button>
+                                <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

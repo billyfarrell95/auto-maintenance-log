@@ -34,18 +34,18 @@ function ItemsListEdit({ editingItems, setEditingItems, item }: ItemsListEditPro
     return (
         <form>
             <div className="data-item__input-wrapper">
-                <ItemsListInput
-                    itemId={item.id}
-                    handleChange={handleChange}
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
-                    type="text"
-                    name="description" />
                 <input
                     type="date"
                     value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
                     name={`date-${item.id}`}
                     onChange={(e) => handleChange(e, item.id)}
                     onClick={(e) => e.stopPropagation()} />
+                <ItemsListInput
+                    itemId={item.id}
+                    handleChange={handleChange}
+                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
+                    type="text"
+                    name="description" />
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}

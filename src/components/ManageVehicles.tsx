@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { Vehicle } from "../types";
+import "./ManageVehicles.css";
 
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
@@ -44,22 +45,20 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
     return (
         <>
             <h2>Manage your vehicles</h2>
-            <form onSubmit={(e) => {handleSubmit(e)}} >
+            <form onSubmit={(e) => {handleSubmit(e)}} className="vehicles-form">
                 <label htmlFor="addVehicle">Add a vehicle</label>
                 <input id="addVehicle" type="text" onChange={handleChange} value={newVehicle.name} placeholder="Vehicle name" required />
                 <button type="submit">Add</button>
             </form>
             {vehicles.length > 0 ? (
-                <div>
-                    <ul>
-                        {vehicles.map((vehicle) => (
-                            <li key={vehicle.id}>
-                                <p>{vehicle.name} </p>
-                                <button onClick={() => handleDeleteVehicle(vehicle.id)}>Delete</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <ul className="vehicles-list" role="list">
+                    {vehicles.map((vehicle) => (
+                        <li key={vehicle.id}>
+                            <p>{vehicle.name} </p>
+                            <button onClick={() => handleDeleteVehicle(vehicle.id)}>Delete</button>
+                        </li>
+                    ))}
+                </ul>
             ) : (
                 <p><i>No saved vehicles</i></p>
             )}

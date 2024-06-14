@@ -1,18 +1,7 @@
-.data-header {
-    display: none;
-}
-
-.data-header__items {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-    padding-block: 0.2rem;
-}
-
 .data-items {
     display: flex;
     flex-direction: column;
+    font-size: 14px;
 }
 
 .data-item__selected {
@@ -26,7 +15,7 @@
 }
 
 .data-item__display {
-    padding: 1rem;
+    padding: 0.5rem;
     border: 1px solid #e1e1e1;
 }
 
@@ -45,22 +34,40 @@
 .data-item__wrapper {
     display: flex;
     gap: 1rem;
+    padding: 0.5rem;
 }
 
 .data-item__display-wrapper.large {
     display: none;
 }
 
-.data-item__display-wrapper.small {
+@media (hover: hover) {
+    .data-item__input-wrapper input:hover {
+        border: 1px solid #00000050;
+    }
+    .data-item__wrapper:hover {
+        background-color: #f1f1f1;
+    }
+    .data-item__display-selected:hover {
+        border: 1px solid #00000030;
+    }
+}
+
+.data-item__input-wrapper input {
+    padding: 0.5rem;
+    border: 1px solid #e1e1e1;
+}
+
+.data-item__display-wrapper.small, .data-item__input-wrapper {
     width: 100%;
     display: grid;
 }
 
-.data-item__display-wrapper {
+.data-item__display-wrapper, .data-item__input-wrapper {
     width: 100%;
     display: grid;
     gap: 0.5rem;
-    padding-block: 0.2rem;
+    /* padding-block: 0.2rem; */
 }
 
 @media screen and (max-width: 600px) {
@@ -69,8 +76,8 @@
     }
 }
 
-@media screen and (min-width: 1600px) {
-    .data-item__display-wrapper.large {
+@media screen and (min-width: 1400px) {
+    .data-item__display-wrapper.large, .data-item__input-wrapper {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
     }
@@ -88,6 +95,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .data-item select, form select {

@@ -1,5 +1,6 @@
 import Checkbox from "./Checkbox";
 import { CHECKBOX_STATES } from "./Checkbox";
+import "./ItemsListHeader.css";
 
 interface ItemsListHeaderProps {
     checked: CHECKBOX_STATES
@@ -17,8 +18,8 @@ function ItemsListHeader ({ checked, handleChange }: ItemsListHeaderProps) {
 
             />
             <div className="data-header__items">
-                <span>Description</span>
                 <span>Date</span>
+                <span>Description</span>
                 <span>Mileage</span>
                 <span>Vehicle</span>
                 <span>Shop</span>

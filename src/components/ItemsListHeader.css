@@ -1,0 +1,27 @@
+.data-header {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.data-header {
+    display: none;
+    padding: 0.5rem;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 1600px) {
+    .data-header {
+        display: flex;
+        gap: 1rem;
+    }
+}
+
+
+
+.data-header__items {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    padding-block: 0.2rem;
+    font-size: 14px;
+}

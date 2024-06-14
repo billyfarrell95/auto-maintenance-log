@@ -74,8 +74,8 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFor
 
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
-            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
+            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
             <datalist id="description-options">
                 {maintenanceDescriptions.map((item, index) => (

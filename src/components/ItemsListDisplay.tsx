@@ -16,8 +16,8 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
         <>
             <div className="data-item__display-wrapper small">
                 <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                    <div>{item.description}</div>
                     <div>{item.date}</div>
+                    <div>{item.description}</div> 
                     <div>{item.mileage}</div>
                     <div>{item.vehicle}</div>
                     <div>{item.shop}</div>
@@ -27,10 +27,10 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
             </div>
             <div className="data-item__display-wrapper large">
                 <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                    {item.description}
+                    {item.date}
                 </div>
                 <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                    {item.date}
+                    {item.description}
                 </div>
                 <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.mileage}

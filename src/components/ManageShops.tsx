@@ -54,7 +54,10 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                 <div>
                     <ul>
                         {shops.map((shop) => (
-                            <li key={shop.id}>{shop.name} <button onClick={() => handleDeleteShop(shop.id)}>Delete</button></li>
+                            <li key={shop.id}>
+                                <p>{shop.name} </p>
+                                <button onClick={() => handleDeleteShop(shop.id)}>Delete</button>
+                            </li>
                         ))}
                     </ul>
                 </div>
