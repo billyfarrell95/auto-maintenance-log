@@ -19,6 +19,7 @@ interface ItemsListProps {
 function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited }: ItemsListProps) {
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
+    const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
 
     const sortByDate = (a: Item, b: Item) => {
@@ -33,6 +34,11 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setItemIsBeingEdited(true)
             setEditingItemId(item.id === editingItemId ? null: item.id)
         }
+    }
+
+    const handleItemFocus = (item: Item, e: MouseEvent | KeyboardEvent) => {
+        e.stopPropagation();
+        setFocusedItemId(item.id)
     }
 
     const handleCancelEdit = (e: FormEvent) => {
@@ -110,8 +116,8 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             <div className="data-items">
                 {items.sort(sortByDate).map((item) => (
                     <div className="data-item" key={item.id}>
-                        <div className={selectedItems.includes(item.id) ? "data-item__selected" : "data-item"}
-                            onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined} >
+                        <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
+                            onClick={(e) => handleItemFocus(item, e)} >
                                 <div className="data-item__wrapper">
                                     <input
                                         type="checkbox"
@@ -127,10 +133,14 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         onChange={() => {}}
                                     />
                                     <>
-                                        {editingItemId === item.id ? (
-                                            <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} item={item} />
+                                        {focusedItemId === item.id ? (
+                                            <>
+                                                <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} item={item} />
+                                            </>
                                         ) : (
-                                            <ItemsListDisplay selectedItems={selectedItems} handleEdit={handleEdit} item={item} />
+                                            <>
+                                                <ItemsListDisplay selectedItems={selectedItems} handleEdit={handleEdit} item={item} />
+                                            </>
                                         )}
                                     </>
                                 </div>

@@ -15,7 +15,7 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
     return (
         <>
             <div className="data-item__display-wrapper small">
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div className={handleDefineClasses(item)}>
                     <div className="item">{item.date}</div>
                     <div className="item">{item.description}</div> 
                     <div className="item">{item.mileage}</div>
