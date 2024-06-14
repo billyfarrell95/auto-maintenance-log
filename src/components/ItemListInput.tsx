@@ -17,7 +17,8 @@ function ItemsListInput({ itemId, handleChange, defaultValue, type, name }: Inpu
                 defaultValue={defaultValue}
                 name={`${name}-${itemId}`}
                 onChange={(e) => handleChange(e, itemId)}
-                onClick={(e) => e.stopPropagation()} />
+                onClick={(e) => e.stopPropagation()}
+                onFocus={(e) => e.target.select()} />
         </>
     )
 }

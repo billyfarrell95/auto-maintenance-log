@@ -6,6 +6,7 @@
     display: none;
     padding: 0.5rem;
     font-weight: bold;
+    margin-bottom: 0.5rem;
 }
 
 @media screen and (min-width: 1600px) {
@@ -23,5 +24,4 @@
     grid-template-columns: repeat(7, 1fr);
     gap: 0.5rem;
     padding-block: 0.2rem;
-    font-size: 14px;
 }

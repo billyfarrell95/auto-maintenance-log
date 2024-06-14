@@ -16,13 +16,13 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
         <>
             <div className="data-item__display-wrapper small">
                 <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
-                    <div>{item.date}</div>
-                    <div>{item.description}</div> 
-                    <div>{item.mileage}</div>
-                    <div>{item.vehicle}</div>
-                    <div>{item.shop}</div>
-                    <div>{formatCost(item.cost)}</div>
-                    <div>{item.memo}</div>
+                    <div className="item">{item.date}</div>
+                    <div className="item">{item.description}</div> 
+                    <div className="item">{item.mileage}</div>
+                    <div className="item">{item.vehicle}</div>
+                    <div className="item">{item.shop}</div>
+                    <div className="item">{formatCost(item.cost)}</div>
+                    <div className="item">{item.memo}</div>
                 </div>
             </div>
             <div className="data-item__display-wrapper large">

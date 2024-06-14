@@ -1,32 +1,22 @@
-import { useState, FormEvent, ChangeEvent, SetStateAction, Dispatch } from "react";
+import { FormEvent, ChangeEvent, SetStateAction, Dispatch, useEffect } from "react";
 import { Item, Shop, Vehicle } from "../types";
-import { datePickerCurrentDate, formatMileage } from "../utils/formatters";
+import { formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
 import { maintenanceDescriptions } from "../data/data";
+import { initialValues } from "../App";
 
 interface InputFormProps {
     items: Item[];
+    currentItem: any,
     vehicles: Vehicle[];
     shops: Shop[];
     setItems: Dispatch<SetStateAction<Item[]>>;
+    setCurrentItem: Dispatch<SetStateAction<Item>>;
     selectedItems: string[];
 }
 
-const initialValues: Item = {
-    id: "",
-    date: datePickerCurrentDate(),
-    vehicle: "",
-    cost: "",
-    description: "",
-    shop: "",
-    mileage: "",
-    memo: "",
-};
-
-function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFormProps) {
-    const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
-
+function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem }: InputFormProps) {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedItem = {
@@ -70,25 +60,29 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems }: InputFor
             cost: value || '',
             id: crypto.randomUUID()
         });
-    };
+    }; 
+
+    useEffect(() => {
+        console.log("CURRENT ITEM STATE UPDATED", currentItem)
+    }, [currentItem])
 
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
             <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
-            <input list="description-options" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
+            <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
             <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
             <datalist id="description-options">
                 {maintenanceDescriptions.map((item, index) => (
                     <option value={item} key={index}>{item}</option>
                 ))}
             </datalist>
-            <input list="vehicles-options" name="vehicle" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" />
+            <input list="vehicles-options" name="vehicle" type="text" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" />
             <datalist id="vehicles-options">
                 {vehicles.map((vehicle) => (
                     <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                 ))}
             </datalist>
-            <input list="shop-options" name="shop" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
+            <input list="shop-options" name="shop" type="text" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
             <datalist id="shop-options">
                 {shops.map((shop) => (
                     <option key={shop.id} value={shop.name}>{shop.name}</option>

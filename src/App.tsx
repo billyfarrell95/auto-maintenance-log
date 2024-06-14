@@ -6,6 +6,18 @@ import { Item, Shop, Vehicle } from './types';
 import testData from './data/testData';
 import ManageShops from './components/ManageShops';
 import ManageVehicles from './components/ManageVehicles';
+import { datePickerCurrentDate } from './utils/formatters';
+
+export const initialValues: Item = {
+  id: "",
+  date: datePickerCurrentDate(),
+  vehicle: "",
+  cost: "",
+  description: "",
+  shop: "",
+  mileage: "",
+  memo: "",
+};
 
 function App() {
   const tabs = {
@@ -13,6 +25,7 @@ function App() {
     vehicles: "Vehicles",
     shops: "Shops"
   }
+  
   // const [items, setItems] = useState<Item[]>([]);
   const [items, setItems] = useState<Item[]>(testData);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -20,6 +33,7 @@ function App() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(tabs.log);
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
+  const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
 
   const handleDeleteItems = () => {
     const newArr = items.filter(item => !selectedItems.includes(item.id));
@@ -43,7 +57,7 @@ function App() {
       <button onClick={() => {handleActiveTab(tabs.shops)}} disabled={itemIsBeingEdited}>{tabs.shops} ({shops.length})</button>
       {activeTab === tabs.log && (
         <div>
-          <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} selectedItems={selectedItems} />
+          <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} selectedItems={selectedItems} currentItem={currentItem} setCurrentItem={setCurrentItem} />
           {items.length ? (
               <ItemsList
                 items={items}
@@ -61,8 +75,9 @@ function App() {
     
           {selectedItems.length > 0 && (
             <div className="buttons-bar">
-              <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected items ({selectedItems.length})</button>
-              <button onClick={handleDeselectAll} disabled={itemIsBeingEdited}>Deselect all</button>
+              <button onClick={handleDeselectAll} disabled={itemIsBeingEdited}>X</button>
+              <span>{selectedItems.length} Selected</span>
+              <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected</button>
             </div>
           )}
         </div>
