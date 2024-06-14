@@ -105,6 +105,9 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     useEffect(() => {
         if (itemIsBeingEdited) {
             setEditingItems(items.map(item => ({ ...item })));
+            console.log("is being edited", editingItemId)
+        } else {
+            console.log("not being edited")
         }
     }, [itemIsBeingEdited])
 
@@ -135,7 +138,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     <>
                                         {focusedItemId === item.id ? (
                                             <>
-                                                <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} item={item} />
+                                                <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} setEditingItemId={setEditingItemId} setItemIsBeingEdited={setItemIsBeingEdited} item={item} />
                                             </>
                                         ) : (
                                             <>
@@ -145,9 +148,9 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     </>
                                 </div>
                         </div>
-                        {editingItemId === item.id && (
+                        {editingItemId === item.id && focusedItemId === item.id && (
                             <div className="data-item__button-wrapper">
-                                <button type="button" onClick={(e) => {handleCancelEdit(e)}} disabled={!itemIsBeingEdited}>Cancel</button>
+                                <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
                                 <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>
                             </div>
                         )}

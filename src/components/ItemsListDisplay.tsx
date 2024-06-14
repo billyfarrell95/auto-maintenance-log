@@ -4,7 +4,7 @@ import { Item } from "../types";
 interface ItemsListDisplayProps {
     selectedItems: string[];
     item: Item;
-    handleEdit: any;
+    handleEdit: any; 
 }
 
 function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayProps) {
