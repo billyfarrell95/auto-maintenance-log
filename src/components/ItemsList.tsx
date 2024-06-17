@@ -37,8 +37,12 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     }
 
     const handleItemFocus = (item: Item, e: MouseEvent | KeyboardEvent) => {
-        e.stopPropagation();
-        setFocusedItemId(item.id)
+        if (!itemIsBeingEdited) {
+            setSelectedItems([]);
+            handleItemSelect(item.id, e)
+            e.stopPropagation();
+            setFocusedItemId(item.id)
+        }
     }
 
     const handleCancelEdit = (e: FormEvent) => {

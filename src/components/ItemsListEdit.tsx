@@ -15,6 +15,7 @@ interface ItemsListEditProps {
 
 function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
+        setItemIsBeingEdited(true)
         const { name, value } = e.target;
         let updatedValue = value;
 
@@ -38,7 +39,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
         e.target.select()
         e.stopPropagation()
         setEditingItemId(id);
-        setItemIsBeingEdited(true)
+        // setItemIsBeingEdited(true)
     }
 
     return (
@@ -56,7 +57,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
+                    value={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
                     type="text"
                     name="description" />
                 <ItemsListInput
@@ -64,7 +65,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
+                    value={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
                     type="text"
                     name="mileage" />
                 <ItemsListInput
@@ -72,7 +73,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
+                    value={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
                     type="text"
                     name="vehicle" />
                 <ItemsListInput
@@ -80,14 +81,14 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop}
+                    value={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop}
                     type="text"
                     name="shop" />
                 <CurrencyInput
                     id={`cost-${item.id}`}
                     name={`cost-${item.id}`}
                     placeholder="Enter cost"
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
+                    value={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
                     prefix="$"
                     decimalsLimit={2}
                     decimalScale={2}
@@ -100,7 +101,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    defaultValue={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo}
+                    value={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo}
                     type="text"
                     name="memo" />
             </div>
