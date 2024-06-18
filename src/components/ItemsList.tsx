@@ -30,18 +30,18 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
     const handleEdit = (item: Item, e: MouseEvent | KeyboardEvent) => {
         e.stopPropagation();
-        if (selectedItems.includes(item.id) && !itemIsBeingEdited) {
+        if (!itemIsBeingEdited) {
             setItemIsBeingEdited(true)
             setEditingItemId(item.id === editingItemId ? null: item.id)
         }
     }
 
-    const handleItemFocus = (item: Item, e: MouseEvent | KeyboardEvent) => {
+    const handleItemFocus = (id: string, e: MouseEvent | KeyboardEvent) => {
         if (!itemIsBeingEdited) {
             setSelectedItems([]);
-            handleItemSelect(item.id, e)
+            handleItemSelect(id, e)
             e.stopPropagation();
-            setFocusedItemId(item.id)
+            setFocusedItemId(id)
         }
     }
 
@@ -59,15 +59,17 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     };
 
     const handleItemSelect = (id: string, e: FormEvent) => {
-        e.stopPropagation();
-        setEditingItems([])
-        setSelectedItems(prevSelected => {
-            if (prevSelected.includes(id)) {
-                return prevSelected.filter(itemId => itemId !== id);
-            } else {
-                return [...prevSelected, id];
-            }
-        });
+        if (!itemIsBeingEdited) {
+            e.stopPropagation();
+            setEditingItems([])
+            setSelectedItems(prevSelected => {
+                if (prevSelected.includes(id)) {
+                    return prevSelected.filter(itemId => itemId !== id);
+                } else {
+                    return [...prevSelected, id];
+                }
+            });
+        }
     };
 
     const handleSaveItem = (e: FormEvent, id: string) => {
@@ -77,6 +79,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
         setItems(updatedItems);
         setEditingItemId(null);
+        setEditingItems([])
     } 
 
     const handleCheckboxChange = () => {
@@ -104,33 +107,35 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         } else {
             setChecked(CHECKBOX_STATES.Checked)
         }
+
+        // Unfocus item if it was previous focused, then another item was select
+        if (selectedItems.length > 1) {
+            setFocusedItemId(null)
+        }
     }, [selectedItems])
    
     useEffect(() => {
         if (itemIsBeingEdited) {
             setEditingItems(items.map(item => ({ ...item })));
-            console.log("is being edited", editingItemId)
-        } else {
-            console.log("not being edited")
         }
     }, [itemIsBeingEdited])
 
     return (    
         <>
             {items.length && (
-                <ItemsListHeader checked={checked} handleChange={handleCheckboxChange} />
+                <ItemsListHeader checked={checked} handleChange={handleCheckboxChange} itemIsBeingEdited={itemIsBeingEdited} />
             )}
             <div className="data-items">
                 {items.sort(sortByDate).map((item) => (
                     <div className="data-item" key={item.id}>
                         <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
-                            onClick={(e) => handleItemFocus(item, e)} >
+                            onClick={!itemIsBeingEdited && selectedItems.length < 2 ? (e) => handleItemFocus(item.id, e) : (e) => handleItemSelect(item.id, e)} >
                                 <div className="data-item__wrapper">
                                     <input
                                         type="checkbox"
                                         checked={selectedItems.includes(item.id)}
                                         onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined}
-                                        disabled={editingItemId !== null && editingItemId !== item.id}
+                                        disabled={itemIsBeingEdited}
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter" && selectedItems.includes(item.id)) {
                                                 e.preventDefault()
@@ -140,7 +145,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         onChange={() => {}}
                                     />
                                     <>
-                                        {focusedItemId === item.id ? (
+                                        {focusedItemId === item.id || editingItemId === item.id ? (
                                             <>
                                                 <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} setEditingItemId={setEditingItemId} setItemIsBeingEdited={setItemIsBeingEdited} item={item} />
                                             </>
@@ -152,7 +157,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     </>
                                 </div>
                         </div>
-                        {editingItemId === item.id && focusedItemId === item.id && (
+                        {editingItemId === item.id && (
                             <div className="data-item__button-wrapper">
                                 <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
                                 <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>

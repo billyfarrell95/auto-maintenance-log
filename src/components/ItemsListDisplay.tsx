@@ -9,7 +9,7 @@ interface ItemsListDisplayProps {
 
 function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayProps) {
     const handleDefineClasses = (item: Item) => {
-        return selectedItems.includes(item.id) ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display" 
+        return selectedItems.includes(item.id) && selectedItems.length < 2 ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display" 
     }
     
     return (
@@ -26,25 +26,25 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
                 </div>
             </div>
             <div className="data-item__display-wrapper large">
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.date}
                 </div>
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.description}
                 </div>
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.mileage}
                 </div>
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.vehicle}
                 </div>
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.shop}
                 </div>
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {formatCost(item.cost)}
                 </div>
-                <div onClick={selectedItems.includes(item.id) ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
                     {item.memo}
                 </div>
             </div>

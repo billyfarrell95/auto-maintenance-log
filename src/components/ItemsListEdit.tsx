@@ -9,13 +9,12 @@ interface ItemsListEditProps {
     editingItems: Item[];
     item: Item;
     setEditingItemId: any;
-    setItemIsBeingEdited: any;
+    setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>;
 }
 
 
 function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
-        setItemIsBeingEdited(true)
         const { name, value } = e.target;
         let updatedValue = value;
 
@@ -39,7 +38,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
         e.target.select()
         e.stopPropagation()
         setEditingItemId(id);
-        // setItemIsBeingEdited(true)
+        setItemIsBeingEdited(true)
     }
 
     return (
@@ -51,7 +50,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     name={`date-${item.id}`}
                     onChange={(e) => handleChange(e, item.id)}
                     onFocus={(e) => handleFocus(e, item.id)}
-                    onClick={(e) => e.stopPropagation()} />
+                    onClick={(e) => console.log(e)} />
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}

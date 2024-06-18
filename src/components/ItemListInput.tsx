@@ -14,7 +14,7 @@ function ItemsListInput({ itemId, handleChange, value, type, name, setItemIsBein
     const handleFocus = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         e.target.select();
         setEditingItemId(id);
-        // setItemIsBeingEdited(true)
+        setItemIsBeingEdited(true)
     }
 
     return (

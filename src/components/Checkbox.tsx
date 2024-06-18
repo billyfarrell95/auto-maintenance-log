@@ -10,9 +10,10 @@ interface CheckboxProps {
     label: string;
     value: CHECKBOX_STATES;
     onChange: () => void;
+    disabled: boolean
 }
 
-function Checkbox({ label, value, onChange }: CheckboxProps) {
+function Checkbox({ label, value, onChange, disabled }: CheckboxProps) {
     const checkboxRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -37,6 +38,7 @@ function Checkbox({ label, value, onChange }: CheckboxProps) {
                 type="checkbox"
                 checked={value === CHECKBOX_STATES.Checked}
                 onChange={onChange}
+                disabled={disabled}
             />
             {label}
         </label>
