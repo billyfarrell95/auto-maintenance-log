@@ -19,12 +19,13 @@ export const initialValues: Item = {
   memo: "",
 };
 
+export const tabs = {
+  log: "Log",
+  vehicles: "Vehicles",
+  shops: "Shops"
+}
+
 function App() {
-  const tabs = {
-    log: "Log",
-    vehicles: "Vehicles",
-    shops: "Shops"
-  }
   
   // const [items, setItems] = useState<Item[]>([]);
   const [items, setItems] = useState<Item[]>(testData);
@@ -48,7 +49,15 @@ function App() {
       <button onClick={() => {handleActiveTab(tabs.shops)}}>{tabs.shops} ({shops.length})</button>
       {activeTab === tabs.log && (
         <div>
-          <InputForm items={items} setItems={setItems} vehicles={vehicles} shops={shops} selectedItems={selectedItems} currentItem={currentItem} setCurrentItem={setCurrentItem} />
+          <InputForm 
+          items={items} 
+          setItems={setItems} 
+          vehicles={vehicles} 
+          shops={shops} 
+          selectedItems={selectedItems} 
+          currentItem={currentItem} 
+          setCurrentItem={setCurrentItem} 
+          handleActiveTab={handleActiveTab} />
           {items.length ? (
               <ItemsList
                 items={items}

@@ -31,9 +31,10 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
     const handleEdit = (item: Item, e: MouseEvent | KeyboardEvent) => {
         e.stopPropagation();
-        if (!itemIsBeingEdited) {
+        if (!itemIsBeingEdited && selectedItems.length < 2) {
             setItemIsBeingEdited(true)
             setEditingItemId(item.id === editingItemId ? null: item.id)
+            setFocusedItemId(item.id)
         }
     }
 
@@ -113,6 +114,10 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setChecked(CHECKBOX_STATES.Checked)
         }
 
+        // if (selectedItems.length > 1) {
+
+        // }
+
         // Unfocus Item if more than one are selected
         if (selectedItems.length > 1 && focusedItemId !== null) {
             setFocusedItemId(null)
@@ -170,7 +175,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         onChange={() => {}}
                                     />
                                     <>
-                                        {focusedItemId === item.id ? (
+                                        {focusedItemId === item.id || editingItemId === item.id ? (
                                             <>
                                                 <ItemsListEdit
                                                  editingItems={editingItems} 

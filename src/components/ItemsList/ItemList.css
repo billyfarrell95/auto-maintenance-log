@@ -22,9 +22,9 @@
     cursor: pointer;
 }
 
-.data-item__display-selected {
+/* .data-item__display-selected {
     cursor: text;
-}
+} */
 
 .data-item {
     cursor: pointer;

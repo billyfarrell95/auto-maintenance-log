@@ -9,7 +9,11 @@ interface ItemsListDisplayProps {
 
 function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayProps) {
     const handleDefineClasses = (item: Item) => {
-        return selectedItems.includes(item.id) && selectedItems.length < 2 ? "data-item__display-selected data-item__display" : "data-item__display-default data-item__display" 
+        if (selectedItems.includes(item.id) && selectedItems.length < 2) {
+            return "data-item__display-default data-item__display"
+        } else {
+            return "data-item__display"
+        }
     }
     
     return (

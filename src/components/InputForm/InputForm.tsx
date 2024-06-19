@@ -5,6 +5,8 @@ import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
 import { maintenanceDescriptions } from "../../data/data";
 import { initialValues } from "../../App";
+import { tabs } from "../../App";
+
 
 interface InputFormProps {
     items: Item[];
@@ -14,9 +16,10 @@ interface InputFormProps {
     setItems: Dispatch<SetStateAction<Item[]>>;
     setCurrentItem: Dispatch<SetStateAction<Item>>;
     selectedItems: string[];
+    handleActiveTab: (tab: string) => void; 
 }
 
-function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem }: InputFormProps) {
+function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem, handleActiveTab }: InputFormProps) {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedItem = {
@@ -63,35 +66,54 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
 
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
-            <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
-            <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
-            <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
-            <datalist id="description-options">
-                {maintenanceDescriptions.map((item, index) => (
-                    <option value={item} key={index}>{item}</option>
-                ))}
-            </datalist>
-            <input list="vehicles-options" name="vehicle" type="text" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" />
-            <datalist id="vehicles-options">
-                {vehicles.map((vehicle) => (
-                    <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
-                ))}
-            </datalist>
-            <input list="shop-options" name="shop" type="text" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
-            <datalist id="shop-options">
-                {shops.map((shop) => (
-                    <option key={shop.id} value={shop.name}>{shop.name}</option>
-                ))}
-            </datalist>
-            <CurrencyInput
-                placeholder="Enter cost"
-                value={currentItem.cost}
-                prefix="$"
-                decimalsLimit={2}
-                onValueChange={handleCostChange}
-            />         
-            <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
-            <button type="submit" disabled={selectedItems.length > 0}>Add</button>
+            <div className="input-form__input-wrapper">
+                <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
+            </div>
+            <div className="input-form__input-wrapper">
+                <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
+            </div>
+            <div className="input-form__input-wrapper">
+                <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
+                <datalist id="description-options">
+                    {maintenanceDescriptions.map((item, index) => (
+                        <option value={item} key={index}>{item}</option>
+                    ))}
+                </datalist>
+            </div>
+            <div className="input-form__input-wrapper">
+                <select id="vehicles-select">
+                    <option value="">-- select --</option>
+                    {vehicles.map((vehicle) => (
+                        <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
+                    ))}
+                </select>
+                {!vehicles.length && (
+                    <button onClick={() => {handleActiveTab(tabs.vehicles)}}>Add a vehicle</button>
+                )}
+            </div>
+            <div className="input-form__input-wrapper">
+                <input list="shop-options" name="shop" type="text" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
+                <datalist id="shop-options">
+                    {shops.map((shop) => (
+                        <option key={shop.id} value={shop.name}>{shop.name}</option>
+                    ))}
+                </datalist>
+            </div>
+            <div className="input-form__input-wrapper">
+                <CurrencyInput
+                    placeholder="Enter cost"
+                    value={currentItem.cost}
+                    prefix="$"
+                    decimalsLimit={2}
+                    onValueChange={handleCostChange}
+                />  
+            </div>       
+            <div className="input-form__input-wrapper">
+                <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
+            </div>       
+            <div className="input-form__input-wrapper">
+                <button type="submit" disabled={selectedItems.length > 0}>Add</button>
+            </div>       
         </form>
     );
 }

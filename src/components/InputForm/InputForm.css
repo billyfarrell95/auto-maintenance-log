@@ -17,7 +17,12 @@
     };
 }
 
-.input-form input {
+.input-form input, select {
     padding: 0.5rem;
     border: 1px solid #e1e1e1;
+}
+
+.input-form__input-wrapper {
+    display: flex;
+    flex-direction: column;
 }
