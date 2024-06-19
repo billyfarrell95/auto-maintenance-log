@@ -108,8 +108,8 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setChecked(CHECKBOX_STATES.Checked)
         }
 
-        // Unfocus item if it was previous focused, then another item was select
-        if (selectedItems.length > 1) {
+        // Unfocus Item if more than one are selected
+        if (selectedItems.length > 1 && focusedItemId !== null) {
             setFocusedItemId(null)
         }
     }, [selectedItems])
