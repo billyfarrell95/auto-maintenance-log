@@ -7,14 +7,14 @@ interface InputProps {
     type: string,
     name: string,
     setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>,
-    setEditingItemId: Dispatch<SetStateAction<string>>,
+    setEditingItemId: Dispatch<SetStateAction<string | null>>,
 }
 
 function ItemsListInput({ itemId, handleChange, value, type, name, setItemIsBeingEdited, setEditingItemId }: InputProps) {
     const handleFocus = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         e.target.select();
         setEditingItemId(id);
-        setItemIsBeingEdited(true)
+        setItemIsBeingEdited(true);
     }
 
     return (

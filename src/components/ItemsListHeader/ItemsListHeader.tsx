@@ -1,5 +1,5 @@
-import Checkbox from "./Checkbox";
-import { CHECKBOX_STATES } from "./Checkbox";
+import Checkbox from "../Checkbox";
+import { CHECKBOX_STATES } from "../Checkbox";
 import "./ItemsListHeader.css";
 
 interface ItemsListHeaderProps {

@@ -1,11 +1,11 @@
 import { useEffect, useState, MouseEvent, KeyboardEvent, FormEvent, Dispatch, SetStateAction } from "react";
-import { Item, Vehicle } from "../types";
+import { Item, Vehicle } from "../../types";
 import "./ItemList.css"
-import ItemsListHeader from "./ItemsListHeader";
-import { CHECKBOX_STATES } from "./Checkbox";
-import ItemsListDisplay from "./ItemsListDisplay";
-import ItemsListEdit from "./ItemsListEdit";
-  
+import ItemsListHeader from "../ItemsListHeader/ItemsListHeader";
+import { CHECKBOX_STATES } from "../Checkbox";
+import ItemsListDisplay from "../ItemsListDisplay/ItemsListDisplay";
+import ItemsListEdit from "../ItemsListEdit/ItemsListEdit";
+
 interface ItemsListProps {
     items: Item[];
     selectedItems: string[];
@@ -13,13 +13,14 @@ interface ItemsListProps {
     setItems: Dispatch<SetStateAction<Item[]>>;
     setSelectedItems: Dispatch<React.SetStateAction<string[]>>;
     itemIsBeingEdited: boolean;
-    setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>
+    setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>;
+    focusedItemId: string | null;
+    setFocusedItemId: Dispatch<SetStateAction<string | null>>;
 }
 
-function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited }: ItemsListProps) {
+function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId }: ItemsListProps) {
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
-    const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
 
     const sortByDate = (a: Item, b: Item) => {
@@ -36,12 +37,14 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     }
 
-    const handleItemFocus = (id: string, e: MouseEvent | KeyboardEvent) => {
-        if (!itemIsBeingEdited) {
+    const handleItemClick = (id: string, e: MouseEvent | KeyboardEvent ) => {
+        if (!itemIsBeingEdited && selectedItems.length < 2) {
             setSelectedItems([]);
             handleItemSelect(id, e)
             e.stopPropagation();
             setFocusedItemId(id)
+        } else {
+            handleItemSelect(id, e)
         }
     }
 
@@ -53,8 +56,8 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     }
     
     const handleSelectAll = () => {
-        const allItemsSelected = selectedItems.length === items.length;
-        const newSelectedItems = allItemsSelected ? [] : items.map(item => item.id);
+        const areAllItemsSelected = selectedItems.length === items.length;
+        const newSelectedItems = areAllItemsSelected ? [] : items.map(item => item.id);
         setSelectedItems(newSelectedItems);
     };
 
@@ -73,13 +76,15 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     };
 
     const handleSaveItem = (e: FormEvent, id: string) => {
-        e.stopPropagation();
-        e.preventDefault();
-        setItemIsBeingEdited(false)
-        const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
-        setItems(updatedItems);
-        setEditingItemId(null);
-        setEditingItems([])
+        if (editingItemId) {
+            e.stopPropagation();
+            e.preventDefault();
+            setItemIsBeingEdited(false)
+            const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
+            setItems(updatedItems);
+            setEditingItemId(null);
+            setEditingItems([])
+        }
     } 
 
     const handleCheckboxChange = () => {
@@ -155,29 +160,31 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                 {items.sort(sortByDate).map((item) => (
                     <div className="data-item" key={item.id}>
                         <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
-                            onClick={!itemIsBeingEdited && selectedItems.length < 2 ? (e) => handleItemFocus(item.id, e) : (e) => handleItemSelect(item.id, e)} >
+                            onClick={(e) => {handleItemClick(item.id, e)}} >
                                 <div className="data-item__wrapper">
                                     <input
                                         type="checkbox"
                                         checked={selectedItems.includes(item.id)}
-                                        onClick={!itemIsBeingEdited ? (e) => handleItemSelect(item.id, e) : undefined}
+                                        onClick={(e) => handleItemSelect(item.id, e)}
                                         disabled={itemIsBeingEdited}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter" && selectedItems.includes(item.id)) {
-                                                e.preventDefault()
-                                                handleEdit(item, e)
-                                            }
-                                        }}
                                         onChange={() => {}}
                                     />
                                     <>
-                                        {focusedItemId === item.id || editingItemId === item.id ? (
+                                        {focusedItemId === item.id ? (
                                             <>
-                                                <ItemsListEdit editingItems={editingItems} setEditingItems={setEditingItems} setEditingItemId={setEditingItemId} setItemIsBeingEdited={setItemIsBeingEdited} item={item} />
+                                                <ItemsListEdit
+                                                 editingItems={editingItems} 
+                                                 setEditingItems={setEditingItems} 
+                                                 setEditingItemId={setEditingItemId} 
+                                                 setItemIsBeingEdited={setItemIsBeingEdited} 
+                                                 item={item} />
                                             </>
                                         ) : (
                                             <>
-                                                <ItemsListDisplay selectedItems={selectedItems} handleEdit={handleEdit} item={item} />
+                                                <ItemsListDisplay 
+                                                selectedItems={selectedItems} 
+                                                handleEdit={handleEdit} 
+                                                item={item} />
                                             </>
                                         )}
                                     </>

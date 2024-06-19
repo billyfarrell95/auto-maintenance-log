@@ -1,14 +1,14 @@
 import { FormEvent, ChangeEvent, SetStateAction, Dispatch } from "react";
-import { Item, Shop, Vehicle } from "../types";
-import { formatMileage } from "../utils/formatters";
+import { Item, Shop, Vehicle } from "../../types";
+import { formatMileage } from "../../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
-import { maintenanceDescriptions } from "../data/data";
-import { initialValues } from "../App";
+import { maintenanceDescriptions } from "../../data/data";
+import { initialValues } from "../../App";
 
 interface InputFormProps {
     items: Item[];
-    currentItem: any,
+    currentItem: Item,
     vehicles: Vehicle[];
     shops: Shop[];
     setItems: Dispatch<SetStateAction<Item[]>>;

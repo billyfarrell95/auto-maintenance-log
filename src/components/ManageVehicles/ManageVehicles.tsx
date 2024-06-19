@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { Vehicle } from "../types";
+import { Vehicle } from "../../types";
 import "./ManageVehicles.css";
 
 interface ManageVehiclesProps {

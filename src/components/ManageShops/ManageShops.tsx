@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { Shop } from "../types";
+import { Shop } from "../../types";
 import "./ManageShops.css"
 
 interface ManageShopsProps {

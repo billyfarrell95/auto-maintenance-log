@@ -1,10 +1,10 @@
-import { formatCost } from "../utils/formatters";
-import { Item } from "../types";
+import { formatCost } from "../../utils/formatters";
+import { Item } from "../../types";
 
 interface ItemsListDisplayProps {
     selectedItems: string[];
     item: Item;
-    handleEdit: any; 
+    handleEdit: (item: Item, e: React.MouseEvent<HTMLElement> ) => void;
 }
 
 function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayProps) {

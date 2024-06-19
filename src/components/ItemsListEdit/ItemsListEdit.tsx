@@ -1,14 +1,14 @@
-import ItemsListInput from "./ItemListInput";
+import ItemsListInput from "../ItemListInput";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { formatMileage } from "../utils/formatters";
-import { Item } from "../types";
+import { formatMileage } from "../../utils/formatters";
+import { Item } from "../../types";
 import CurrencyInput from "react-currency-input-field";
 
 interface ItemsListEditProps {
     setEditingItems: Dispatch<SetStateAction<Item[]>>;
     editingItems: Item[];
     item: Item;
-    setEditingItemId: any;
+    setEditingItemId: Dispatch<SetStateAction<string | null>>;
     setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>;
 }
 
