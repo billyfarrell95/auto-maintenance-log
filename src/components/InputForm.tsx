@@ -1,4 +1,4 @@
-import { FormEvent, ChangeEvent, SetStateAction, Dispatch, useEffect } from "react";
+import { FormEvent, ChangeEvent, SetStateAction, Dispatch } from "react";
 import { Item, Shop, Vehicle } from "../types";
 import { formatMileage } from "../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
@@ -32,7 +32,6 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             setItems([...items, trimmedItem]);
         }
         setCurrentItem({ ...initialValues });
-        console.log(items)
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
@@ -61,10 +60,6 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             id: crypto.randomUUID()
         });
     }; 
-
-    useEffect(() => {
-        console.log("CURRENT ITEM STATE UPDATED", currentItem)
-    }, [currentItem])
 
     return (
         <form onSubmit={handleSubmit} className="input-form" autoComplete="off">
