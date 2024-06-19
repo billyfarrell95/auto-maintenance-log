@@ -120,12 +120,38 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     }, [itemIsBeingEdited])
 
+    const handleDeleteItems = () => {
+        const newArr = items.filter(item => !selectedItems.includes(item.id));
+        setItems(newArr);
+        setSelectedItems([]);
+    };
+
     return (    
         <>
             {items.length && (
                 <ItemsListHeader checked={checked} handleChange={handleCheckboxChange} itemIsBeingEdited={itemIsBeingEdited} />
             )}
             <div className="data-items">
+                {itemIsBeingEdited ? (
+                    <div className="data-item__button-wrapper">
+                        <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
+                        <button type="submit" onClick={editingItemId ? (e) => {handleSaveItem(e, editingItemId)} : undefined}>Save</button>
+                    </div>
+                ) : (
+                    <>
+                    {!selectedItems.length ? (
+                        <div className="data-item__button-wrapper">
+                            <button>Sort and filters will go here</button>
+                        </div>
+                    ) : (
+                        <div className="data-item__button-wrapper">
+                            <button onClick={() => setSelectedItems([])} disabled={itemIsBeingEdited}>X</button>
+                            <span>{selectedItems.length} Selected</span>
+                            <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected</button>
+                        </div>
+                    )}
+                    </>
+                )}
                 {items.sort(sortByDate).map((item) => (
                     <div className="data-item" key={item.id}>
                         <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
@@ -157,12 +183,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                     </>
                                 </div>
                         </div>
-                        {editingItemId === item.id && (
-                            <div className="data-item__button-wrapper">
-                                <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
-                                <button type="submit" onClick={(e) => {handleSaveItem(e, item.id)}}>Save</button>
-                            </div>
-                        )}
                     </div>
                 ))}
             </div>

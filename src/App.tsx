@@ -35,16 +35,6 @@ function App() {
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
 
-  const handleDeleteItems = () => {
-    const newArr = items.filter(item => !selectedItems.includes(item.id));
-    setItems(newArr);
-    setSelectedItems([]);
-  };
-
-  const handleDeselectAll = () => {
-    setSelectedItems([]);
-  }
-
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
@@ -72,14 +62,7 @@ function App() {
           ) : (
             <p><i>Nothing here...</i></p>
           )}
-    
-          {selectedItems.length > 0 && (
-            <div className="buttons-bar">
-              <button onClick={handleDeselectAll} disabled={itemIsBeingEdited}>X</button>
-              <span>{selectedItems.length} Selected</span>
-              <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected</button>
-            </div>
-          )}
+          
         </div>
       )}
 
