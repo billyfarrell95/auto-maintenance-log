@@ -15,6 +15,12 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
             return "data-item__display"
         }
     }
+
+    const handleDisplayItemClick = (item: Item,  e: React.MouseEvent<HTMLElement>) => {
+        if (selectedItems.includes(item.id) && selectedItems.length < 2) {
+            handleEdit(item, e);
+        }
+    };
     
     return (
         <>
@@ -30,25 +36,25 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
                 </div>
             </div>
             <div className="data-item__display-wrapper large">
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleEdit(item, e)} className={handleDefineClasses(item)}>
                     {item.date}
                 </div>
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {item.description}
                 </div>
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {item.mileage}
                 </div>
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {item.vehicle}
                 </div>
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {item.shop}
                 </div>
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {formatCost(item.cost)}
                 </div>
-                <div onClick={selectedItems.includes(item.id) && selectedItems.length < 2 ? (e) => handleEdit(item, e): undefined} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {item.memo}
                 </div>
             </div>

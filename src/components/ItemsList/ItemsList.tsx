@@ -22,6 +22,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
+    const [selectedModeOn, setSelectModeOn] = useState(false)
 
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
@@ -31,11 +32,20 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
     const handleEdit = (item: Item, e: MouseEvent | KeyboardEvent) => {
         e.stopPropagation();
-        if (!itemIsBeingEdited && selectedItems.length < 2) {
+        if (!itemIsBeingEdited && !selectedModeOn) {
             setItemIsBeingEdited(true)
             setEditingItemId(item.id === editingItemId ? null: item.id)
             setFocusedItemId(item.id)
+        } else {
+            handleItemSelect(item.id, e)
         }
+    }
+
+    const handleCancelEdit = (e: FormEvent) => {
+        e.stopPropagation();
+        setEditingItems([])
+        setEditingItemId(null);
+        setItemIsBeingEdited(false)
     }
 
     const handleItemClick = (id: string, e: MouseEvent | KeyboardEvent ) => {
@@ -47,13 +57,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         } else {
             handleItemSelect(id, e)
         }
-    }
-
-    const handleCancelEdit = (e: FormEvent) => {
-        e.stopPropagation();
-        setEditingItems([])
-        setEditingItemId(null);
-        setItemIsBeingEdited(false)
     }
     
     const handleSelectAll = () => {
@@ -114,9 +117,11 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setChecked(CHECKBOX_STATES.Checked)
         }
 
-        // if (selectedItems.length > 1) {
-
-        // }
+        if (selectedItems.length) {
+            setSelectModeOn(true)
+        } else {
+            setSelectModeOn(false)
+        }
 
         // Unfocus Item if more than one are selected
         if (selectedItems.length > 1 && focusedItemId !== null) {
@@ -175,7 +180,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         onChange={() => {}}
                                     />
                                     <>
-                                        {focusedItemId === item.id || editingItemId === item.id ? (
+                                        {focusedItemId === item.id ? (
                                             <>
                                                 <ItemsListEdit
                                                  editingItems={editingItems} 
