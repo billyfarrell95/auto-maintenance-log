@@ -1,14 +1,17 @@
 import Checkbox from "../Checkbox";
 import { CHECKBOX_STATES } from "../Checkbox";
 import "./ItemsListHeader.css";
+import { SetStateAction, Dispatch } from "react";
 
 interface ItemsListHeaderProps {
     checked: CHECKBOX_STATES
     handleChange: () => void;
     itemIsBeingEdited: boolean;
+    sortItemsDescending: boolean,
+    setSortItemsDescending: Dispatch<SetStateAction<boolean>>;
 }
 
-function ItemsListHeader ({ checked, handleChange, itemIsBeingEdited }: ItemsListHeaderProps) {
+function ItemsListHeader ({ checked, handleChange, itemIsBeingEdited, sortItemsDescending, setSortItemsDescending }: ItemsListHeaderProps) {
     
     return (
         <div className="data-header">
@@ -20,7 +23,7 @@ function ItemsListHeader ({ checked, handleChange, itemIsBeingEdited }: ItemsLis
 
             />
             <div className="data-header__items">
-                <span>Date</span>
+                <span>Date <button onClick={() => setSortItemsDescending(current => !current)}>{sortItemsDescending ? ("desc") : ("asc")}</button></span>
                 <span>Description</span>
                 <span>Mileage</span>
                 <span>Vehicle</span>

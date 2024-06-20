@@ -1,4 +1,4 @@
-import { useEffect, useState, MouseEvent, KeyboardEvent, FormEvent, Dispatch, SetStateAction } from "react";
+import { useEffect, useState, MouseEvent, KeyboardEvent, FormEvent, Dispatch, SetStateAction, ChangeEvent } from "react";
 import { Item, Vehicle } from "../../types";
 import "./ItemList.css"
 import ItemsListHeader from "../ItemsListHeader/ItemsListHeader";
@@ -18,16 +18,22 @@ interface ItemsListProps {
     setFocusedItemId: Dispatch<SetStateAction<string | null>>;
 }
 
-function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId }: ItemsListProps) {
+function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId, vehicles }: ItemsListProps) {
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
-    const [selectedModeOn, setSelectModeOn] = useState(false)
+    const [selectedModeOn, setSelectModeOn] = useState(false);
+    const [sortItemsDescending, setSortItemsDescending] = useState(true);
+    const [vehicleSort, setVehicleSort] = useState<string>("");
 
     const sortByDate = (a: Item, b: Item) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
-        return dateB.getTime() - dateA.getTime();
+        if (sortItemsDescending) {
+            return dateB.getTime() - dateA.getTime();
+        } else {
+            return dateA.getTime() - dateB.getTime();
+        }
     }
 
     const handleEdit = (item: Item, e: MouseEvent | KeyboardEvent) => {
@@ -134,6 +140,9 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setEditingItems(items.map(item => ({ ...item })));
         }
     }, [itemIsBeingEdited])
+    useEffect(() => {
+        console.log(sortItemsDescending)
+    }, [sortItemsDescending])
 
     const handleDeleteItems = () => {
         const newArr = items.filter(item => !selectedItems.includes(item.id));
@@ -141,10 +150,19 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         setSelectedItems([]);
     };
 
+    const handleVehicleSort = (e: ChangeEvent<HTMLSelectElement>) => {
+        setVehicleSort(e.target.value)
+    }
+
     return (    
         <>
             {items.length && (
-                <ItemsListHeader checked={checked} handleChange={handleCheckboxChange} itemIsBeingEdited={itemIsBeingEdited} />
+                <ItemsListHeader
+                 checked={checked} 
+                 handleChange={handleCheckboxChange} 
+                 itemIsBeingEdited={itemIsBeingEdited}
+                 sortItemsDescending={sortItemsDescending}
+                 setSortItemsDescending={setSortItemsDescending} />
             )}
             <div className="data-items">
                 {itemIsBeingEdited ? (
@@ -156,7 +174,12 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                     <>
                     {!selectedItems.length ? (
                         <div className="data-item__button-wrapper">
-                            <button>Sort and filters will go here</button>
+                            <select id="vehicles-select" disabled={!vehicles.length} onChange={(e) => handleVehicleSort(e)}>
+                                <option value="">All vehicles</option>
+                                {vehicles.map((vehicle) => (
+                                    <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
+                                ))}
+                            </select>
                         </div>
                     ) : (
                         <div className="data-item__button-wrapper">
@@ -168,38 +191,44 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                     </>
                 )}
                 {items.sort(sortByDate).map((item) => (
-                    <div className="data-item" key={item.id}>
-                        <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
-                            onClick={(e) => {handleItemClick(item.id, e)}} >
-                                <div className="data-item__wrapper">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedItems.includes(item.id)}
-                                        onClick={(e) => handleItemSelect(item.id, e)}
-                                        disabled={itemIsBeingEdited}
-                                        onChange={() => {}}
-                                    />
-                                    <>
-                                        {focusedItemId === item.id ? (
-                                            <>
-                                                <ItemsListEdit
-                                                 editingItems={editingItems} 
-                                                 setEditingItems={setEditingItems} 
-                                                 setEditingItemId={setEditingItemId} 
-                                                 setItemIsBeingEdited={setItemIsBeingEdited} 
-                                                 item={item} />
-                                            </>
-                                        ) : (
-                                            <>
-                                                <ItemsListDisplay 
-                                                selectedItems={selectedItems} 
-                                                handleEdit={handleEdit} 
-                                                item={item} />
-                                            </>
-                                        )}
-                                    </>
-                                </div>
+                    <div>
+                        {item.vehicle.includes(vehicleSort) ? (
+                            <div className="data-item" key={item.id}>
+                            <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
+                                onClick={(e) => {handleItemClick(item.id, e)}} >
+                                    <div className="data-item__wrapper">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedItems.includes(item.id)}
+                                            onClick={(e) => handleItemSelect(item.id, e)}
+                                            disabled={itemIsBeingEdited}
+                                            onChange={() => {}}
+                                        />
+                                        <>
+                                            {focusedItemId === item.id ? (
+                                                <>
+                                                    <ItemsListEdit
+                                                     editingItems={editingItems}
+                                                     setEditingItems={setEditingItems}
+                                                     setEditingItemId={setEditingItemId}
+                                                     setItemIsBeingEdited={setItemIsBeingEdited}
+                                                     item={item} />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ItemsListDisplay
+                                                    selectedItems={selectedItems}
+                                                    handleEdit={handleEdit}
+                                                    item={item} />
+                                                </>
+                                            )}
+                                        </>
+                                    </div>
+                            </div>
                         </div>
+                        ) : (
+                            null
+                        )}
                     </div>
                 ))}
             </div>

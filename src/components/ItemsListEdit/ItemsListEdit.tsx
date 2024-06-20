@@ -12,7 +12,6 @@ interface ItemsListEditProps {
     setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>;
 }
 
-
 function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
@@ -67,6 +66,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     value={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
                     type="text"
                     name="mileage" />
+                    
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
@@ -74,7 +74,8 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     setItemIsBeingEdited={setItemIsBeingEdited}
                     value={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
                     type="text"
-                    name="vehicle" />
+                    name="vehicle" />                  
+                    
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
