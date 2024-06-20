@@ -36,7 +36,7 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
                 </div>
             </div>
             <div className="data-item__display-wrapper large">
-                <div onClick={(e) => handleEdit(item, e)} className={handleDefineClasses(item)}>
+                <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     {item.date}
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>

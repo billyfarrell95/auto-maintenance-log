@@ -81,7 +81,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 </datalist>
             </div>
             <div className="input-form__input-wrapper">
-                <select id="vehicles-select">
+                <select id="vehicles-select" disabled={!vehicles.length}>
                     <option value="">-- select --</option>
                     {vehicles.map((vehicle) => (
                         <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
