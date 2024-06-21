@@ -5,6 +5,7 @@ import ItemsListHeader from "../ItemsListHeader/ItemsListHeader";
 import { CHECKBOX_STATES } from "../Checkbox";
 import ItemsListDisplay from "../ItemsListDisplay/ItemsListDisplay";
 import ItemsListEdit from "../ItemsListEdit/ItemsListEdit";
+import ItemsListToolbar from "../../components/ItemsListToolbar/ItemsListToolbar"
 
 interface ItemsListProps {
     items: Item[];
@@ -18,7 +19,7 @@ interface ItemsListProps {
     setFocusedItemId: Dispatch<SetStateAction<string | null>>;
 }
 
-function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId, vehicles, }: ItemsListProps) {
+function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId, vehicles }: ItemsListProps) {
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState("")
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
@@ -164,34 +165,18 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                  setSortItemsDescending={setSortItemsDescending} />
             )}
             <div className="data-items">
-                {itemIsBeingEdited ? (
-                    <div className="data-item__button-wrapper">
-                        <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
-                        <button type="submit" onClick={(e) => {handleSaveItem(e, editingItemId)}}>Save</button>
-                    </div>
-                ) : (
-                    <>
-                    {!selectedItems.length ? (
-                        <div className="data-item__button-wrapper">
-                            <div>
-                                <span>Sort by: </span>
-                                <select id="vehicles-select" onChange={(e) => handleVehicleSort(e)} value={vehicleSort}>
-                                    <option value="">All vehicles</option>
-                                    {vehicles.map((vehicle) => (
-                                        <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="data-item__button-wrapper">
-                            <button onClick={() => setSelectedItems([])} disabled={itemIsBeingEdited}>X</button>
-                            <span>{selectedItems.length} Selected</span>
-                            <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected</button>
-                        </div>
-                    )}
-                    </>
-                )}
+                <ItemsListToolbar 
+                    selectedItems={selectedItems}
+                    itemIsBeingEdited={itemIsBeingEdited}
+                    handleCancelEdit={handleCancelEdit}
+                    handleSaveItem={handleSaveItem}
+                    vehicleSort={vehicleSort}
+                    handleDeleteItems={handleDeleteItems}
+                    handleVehicleSort={handleVehicleSort}
+                    editingItemId={editingItemId}
+                    vehicles={vehicles}
+                    setSelectedItems={setSelectedItems} />
+
                 {items.sort(sortByDate).map((item) => (
                     <div key={item.id}>
                         {item.vehicle.includes(vehicleSort) ? (
