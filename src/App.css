@@ -1,41 +1,20 @@
-body, input[type=date] {
-    font-family: Arial, Helvetica, sans-serif;
+.tab-btn {
+    font-size: 0.875rem;
 }
 
-input[type=text],
-input[type=number],
-input[type=date],
-select {
-  font-size: 1rem;
-}
-
-.main-wrapper {
-    max-width: calc(100vw - 2rem);
-    margin-inline: auto;
-    padding-bottom: 4rem;
-}
-
-button {
-    cursor: pointer;
-}
-
-form label {
-    display: block;
-    font-weight: bold;
-}
-
-form input {
-    padding: 0.5rem;
-}
-
-.buttons-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+.tabs-wrapper {
+    border-bottom: 1px solid var(--clr-light-gray);
     display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding-block: 1rem;
-    background-color: rgba(0,0,0,0.1);
+    gap: 0.5rem;
+}
+
+.tabs-wrapper__tab-btn {
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+}
+.tabs-wrapper__tab-btn.active {
+    background-color: var(--clr-primary);
+    color: white;
 }

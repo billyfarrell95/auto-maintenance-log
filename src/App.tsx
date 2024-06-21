@@ -48,9 +48,11 @@ function App() {
   return (
     <>
       <h1>Auto Maintenance Log</h1>
-      <button onClick={() => {handleActiveTab(tabs.log)}}>{tabs.log}</button>
-      <button onClick={() => {handleActiveTab(tabs.vehicles)}}>{tabs.vehicles} ({vehicles.length})</button>
-      <button onClick={() => {handleActiveTab(tabs.shops)}}>{tabs.shops} ({shops.length})</button>
+      <div className="tabs-wrapper">
+        <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}>{tabs.log}</button>
+        <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}>{tabs.vehicles} ({vehicles.length})</button>
+        <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}>{tabs.shops} ({shops.length})</button>
+      </div>
       {activeTab === tabs.log && (
         <div>
           <InputForm 

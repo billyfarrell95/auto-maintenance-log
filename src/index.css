@@ -1,0 +1,53 @@
+:root {
+    --clr-dark: #222222;
+    --clr-primary: #29339B;
+    --clr-light-gray: #e4e4e4;
+}
+
+body, * {
+    font-family: "Open Sans", sans-serif;
+}
+
+input:disabled {
+    cursor: default;
+}
+
+input[type=text],
+input[type=number],
+input[type=date],
+select {
+  font-size: 1rem;
+}
+
+button {
+    cursor: pointer;
+    border: none; 
+}
+
+/****** Typography *******/
+
+h1,h2,h3,h4,h5,h6 {
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/****** Global layout *****/
+.main-wrapper {
+    max-width: calc(100vw - 4rem);
+    margin-inline: auto;
+    padding-block: 2rem;
+}
+
+/******* Buttons ********/
+.btn {
+    padding: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--clr-primary);
+    color: white;
+}

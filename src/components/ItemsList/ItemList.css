@@ -107,6 +107,6 @@
     min-height: 40px;
 }
 
-.data-item select, form select {
+.data-item select {
     cursor: pointer;
 }
