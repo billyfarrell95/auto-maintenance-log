@@ -22,7 +22,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
-    const [selectedModeOn, setSelectModeOn] = useState(false);
+    const [selectModeOn, setSelectModeOn] = useState(false);
     const [sortItemsDescending, setSortItemsDescending] = useState(true);
     const [vehicleSort, setVehicleSort] = useState<string>("");
 
@@ -38,7 +38,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
     const handleEdit = (item: Item, e: MouseEvent | KeyboardEvent) => {
         e.stopPropagation();
-        if (!itemIsBeingEdited && !selectedModeOn) {
+        if (!itemIsBeingEdited && !selectModeOn) {
             setItemIsBeingEdited(true)
             setEditingItemId(item.id === editingItemId ? null: item.id)
             setFocusedItemId(item.id)
