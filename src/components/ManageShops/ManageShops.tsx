@@ -19,7 +19,6 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
         const value = e.target.value;
         const shop = {
             ...newShop,
-            id: crypto.randomUUID(),
             name: value
         }
         setNewShop(shop)
@@ -32,8 +31,10 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
             ...newShop,
             name: newShop.name.trim()
         }
-        if (newShopTrimmed.name) {
+        if (newShopTrimmed.name && !shops.some(e => e.name.toLowerCase() === newShopTrimmed.name.toLowerCase())) {
             setShops([...shops, newShopTrimmed]);
+        } else {
+            console.log("Shop name already used.")
         }
         setNewShop({...initialValues});
     }

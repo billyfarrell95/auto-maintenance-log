@@ -1,25 +1,28 @@
 import ItemsListInput from "../ItemListInput";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { formatMileage } from "../../utils/formatters";
-import { Item } from "../../types";
+import { Item, Vehicle } from "../../types";
 import CurrencyInput from "react-currency-input-field";
 
 interface ItemsListEditProps {
     setEditingItems: Dispatch<SetStateAction<Item[]>>;
     editingItems: Item[];
     item: Item;
-    setEditingItemId: Dispatch<SetStateAction<string | null>>;
+    setEditingItemId: Dispatch<SetStateAction<string>>;
     setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>;
+    vehicles: Vehicle[]
 }
 
-function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
+function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited, vehicles }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
+        console.log(name, value)
         let updatedValue = value;
 
         if (name.startsWith('mileage')) {
             updatedValue = formatMileage(value);
         }
+
 
         const updatedItems = editingItems.map(item => 
             item.id === id ? { ...item, [name.split('-')[0]]: updatedValue } : item
@@ -33,8 +36,14 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
         setEditingItems(updatedItems);
     };
 
-    const handleFocus = (e: ChangeEvent<HTMLInputElement>, id: string) => {
+    const handleFocus = (e: ChangeEvent<HTMLInputElement> , id: string) => {
         e.target.select()
+        e.stopPropagation()
+        setEditingItemId(id);
+        setItemIsBeingEdited(true)
+    }
+
+    const handleSelectFocus = (e: ChangeEvent<HTMLSelectElement> , id: string) => {
         e.stopPropagation()
         setEditingItemId(id);
         setItemIsBeingEdited(true)
@@ -55,40 +64,46 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.description || item.description}
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.description || "") : (item.description)}
                     type="text"
-                    name="description" />
+                    name="description"
+                    placeholder="Maintenance description" />
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.mileage || item.mileage}
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.mileage || "") : (item.mileage)}
                     type="text"
-                    name="mileage" />
+                    name="mileage"
+                    placeholder="Mileage" />
+
+                 <select id="vehicles-select"
+                    name={`vehicle-${item.id}`} 
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || "") : (item.vehicle)}
+                    onChange={(e) => {handleChange(e, item.id)}} 
+                    onFocus={(e) => {handleSelectFocus(e, item.id)}}
+                    >
+                    <option value="">-- select --</option>
+                    {vehicles.map((vehicle) => (
+                        <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
+                    ))}
+                </select>
                     
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || item.vehicle}
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.shop || "") : (item.shop)}
                     type="text"
-                    name="vehicle" />                  
-                    
-                <ItemsListInput
-                    itemId={item.id}
-                    handleChange={handleChange}
-                    setEditingItemId={setEditingItemId}
-                    setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.shop || item.shop}
-                    type="text"
-                    name="shop" />
+                    name="shop"
+                    placeholder="Shop" />
                 <CurrencyInput
                     id={`cost-${item.id}`}
                     name={`cost-${item.id}`}
                     placeholder="Enter cost"
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.cost || item.cost}
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.cost || "") : (item.cost)}
                     prefix="$"
                     decimalsLimit={2}
                     decimalScale={2}
@@ -101,9 +116,10 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
                     setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.memo || item.memo}
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.memo || "") : (item.memo)}
                     type="text"
-                    name="memo" />
+                    name="memo"
+                    placeholder="Memo" />
             </div>
         </form>
     )

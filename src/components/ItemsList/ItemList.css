@@ -3,8 +3,8 @@
     flex-direction: column;
 }
 
-.data-item__selected {
-    background: #f2f2f2;
+.data-item__selected, .data-item__selected:hover {
+    background: lightgray;
 }
 
 .data-item form {
@@ -44,7 +44,7 @@
     .data-item__input-wrapper input:hover {
         border: 1px solid #00000050;
     }
-    .data-item__wrapper:hover {
+    .data-item:hover {
         background-color: #f1f1f1;
     }
     .data-item__display-selected:hover {
@@ -104,6 +104,7 @@
     display: flex;
     gap: 0.5rem;
     margin-block: 0.5rem;
+    min-height: 40px;
 }
 
 .data-item select, form select {

@@ -2,6 +2,7 @@ import Checkbox from "../Checkbox";
 import { CHECKBOX_STATES } from "../Checkbox";
 import "./ItemsListHeader.css";
 import { SetStateAction, Dispatch } from "react";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 interface ItemsListHeaderProps {
     checked: CHECKBOX_STATES
@@ -23,7 +24,7 @@ function ItemsListHeader ({ checked, handleChange, itemIsBeingEdited, sortItemsD
 
             />
             <div className="data-header__items">
-                <span>Date <button onClick={() => setSortItemsDescending(current => !current)}>{sortItemsDescending ? ("desc") : ("asc")}</button></span>
+                <span>Date <button onClick={() => setSortItemsDescending(current => !current)}>{sortItemsDescending ? (<i className="bi bi-arrow-down-short"></i>) : (<i className="bi bi-arrow-up-short"></i>)}</button></span>
                 <span>Description</span>
                 <span>Mileage</span>
                 <span>Vehicle</span>

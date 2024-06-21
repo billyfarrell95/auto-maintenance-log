@@ -7,10 +7,11 @@ interface InputProps {
     type: string,
     name: string,
     setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>,
-    setEditingItemId: Dispatch<SetStateAction<string | null>>,
+    setEditingItemId: Dispatch<SetStateAction<string>>,
+    placeholder: string,
 }
 
-function ItemsListInput({ itemId, handleChange, value, type, name, setItemIsBeingEdited, setEditingItemId }: InputProps) {
+function ItemsListInput({ itemId, handleChange, value, type, name, setItemIsBeingEdited, setEditingItemId, placeholder }: InputProps) {
     const handleFocus = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         e.target.select();
         setEditingItemId(id);
@@ -26,7 +27,8 @@ function ItemsListInput({ itemId, handleChange, value, type, name, setItemIsBein
                 name={`${name}-${itemId}`}
                 onChange={(e) => handleChange(e, itemId)}
                 onClick={(e) => e.stopPropagation()}
-                onFocus={(e) => handleFocus(e, itemId)} />
+                onFocus={(e) => handleFocus(e, itemId)}
+                placeholder={placeholder} />
         </>
     )
 }

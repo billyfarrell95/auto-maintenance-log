@@ -19,7 +19,6 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
         const value = e.target.value;
         const vehicle = {
             ...newVehicle,
-            id: crypto.randomUUID(),
             name: value
         }
         setNewVehicle(vehicle)
@@ -29,10 +28,13 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
         e.preventDefault();
         const newVehicleTrimmed = {
             ...newVehicle,
-            name: newVehicle.name.trim()
+            name: newVehicle.name.trim(),
+            id: crypto.randomUUID()
         }
-        if (newVehicleTrimmed.name) {
+        if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
             setVehicles([...vehicles, newVehicleTrimmed]);
+        } else {
+            console.log("Vehicle name already used.")
         }
         setNewVehicle({...initialValues});
     }

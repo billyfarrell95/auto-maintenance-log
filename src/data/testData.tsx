@@ -1,8 +1,10 @@
+import testVehicles from "../data/testVehicles"
+
 const testData = [
   {
       id: crypto.randomUUID(),
       date: "2024-05-23",
-      vehicle: "Vehicle Three",
+      vehicle: testVehicles[2].name,
       cost: "52.00",
       description: "Oil Change",
       shop: "Shop name 123",
@@ -12,7 +14,7 @@ const testData = [
   {
       id: crypto.randomUUID(),
       date: "2024-05-02",
-      vehicle: "Vehicle One",
+      vehicle: testVehicles[0].name,
       cost: "45.00",
       description: "Tire rotation",
       shop: "Shop name 123",
@@ -22,7 +24,7 @@ const testData = [
   {
       id: crypto.randomUUID(),
       date: "2023-05-02",
-      vehicle: "Vehicle Two",
+      vehicle: testVehicles[1].name,
       cost: "243.00",
       description: "New brakes",
       shop: "Shop name 123",
@@ -32,7 +34,7 @@ const testData = [
   {
       id: crypto.randomUUID(),
       date: "2023-12-05",
-      vehicle: "Vehicle One",
+      vehicle: testVehicles[0].name,
       cost: "123.00",
       description: "Coolant flush",
       shop: "Shop name 789",
@@ -42,7 +44,7 @@ const testData = [
   {
       id: crypto.randomUUID(),
       date: "2024-02-28",
-      vehicle: "Vehicle Three",
+      vehicle: testVehicles[2].name,
       cost: "40.12",
       description: "Air filter replacement",
       shop: "Shop name 456",
@@ -52,7 +54,7 @@ const testData = [
   {
       id: crypto.randomUUID(),
       date: "2023-10-15",
-      vehicle: "Vehicle Two",
+      vehicle: testVehicles[1].name,
       cost: "1254.23",
       description: "Spark plug replacement",
       shop: "Shop name 789",

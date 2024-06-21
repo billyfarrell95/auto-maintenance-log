@@ -32,6 +32,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             memo: currentItem.memo.trim(),
         };
         if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo || trimmedItem.vehicle) {
+            console.log(trimmedItem.vehicle)
             setItems([...items, trimmedItem]);
         }
         setCurrentItem({ ...initialValues });
@@ -81,8 +82,8 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 </datalist>
             </div>
             <div className="input-form__input-wrapper">
-                <select id="vehicles-select" disabled={!vehicles.length}>
-                    <option value="">-- select --</option>
+                <select id="vehicles-select" disabled={!vehicles.length} name="vehicle" onChange={handleChange}>
+                    <option value="">-- select vehicle --</option>
                     {vehicles.map((vehicle) => (
                         <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                     ))}

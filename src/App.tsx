@@ -7,6 +7,9 @@ import testData from './data/testData';
 import ManageShops from './components/ManageShops/ManageShops';
 import ManageVehicles from './components/ManageVehicles/ManageVehicles';
 import { datePickerCurrentDate } from './utils/formatters';
+import testVehicles from "./data/testVehicles";
+import testShops from "./data/testShops";
+
 
 export const initialValues: Item = {
   id: "",
@@ -26,11 +29,12 @@ export const tabs = {
 }
 
 function App() {
-  
   // const [items, setItems] = useState<Item[]>([]);
+  // const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  // const [shops, setShops] = useState<Shop[]>([]);
   const [items, setItems] = useState<Item[]>(testData);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [shops, setShops] = useState<Shop[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>(testVehicles);
+  const [shops, setShops] = useState<Shop[]>(testShops);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(tabs.log);
@@ -50,14 +54,14 @@ function App() {
       {activeTab === tabs.log && (
         <div>
           <InputForm 
-          items={items} 
-          setItems={setItems} 
-          vehicles={vehicles} 
-          shops={shops} 
-          selectedItems={selectedItems} 
-          currentItem={currentItem} 
-          setCurrentItem={setCurrentItem} 
-          handleActiveTab={handleActiveTab} />
+            items={items} 
+            setItems={setItems} 
+            vehicles={vehicles} 
+            shops={shops} 
+            selectedItems={selectedItems} 
+            currentItem={currentItem} 
+            setCurrentItem={setCurrentItem} 
+            handleActiveTab={handleActiveTab} />
           {items.length ? (
               <ItemsList
                 items={items}
