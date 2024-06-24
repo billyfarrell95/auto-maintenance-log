@@ -26,3 +26,7 @@
     flex-direction: column;
     gap: 0.3rem;
 }
+
+.dialog::backdrop {
+    background-color: black;
+}

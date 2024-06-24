@@ -7,7 +7,6 @@ import { maintenanceDescriptions } from "../../data/data";
 import { initialValues } from "../../App";
 import { tabs } from "../../App";
 
-
 interface InputFormProps {
     items: Item[];
     currentItem: Item,
@@ -21,6 +20,7 @@ interface InputFormProps {
 
 // @todo: form validation, can't add item until vehicle is select (required to add a vehicle to vehicles list before adding item)
 function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem, handleActiveTab }: InputFormProps) {
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedItem = {
@@ -38,6 +38,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
         }
         setCurrentItem({ ...initialValues });
     };
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;

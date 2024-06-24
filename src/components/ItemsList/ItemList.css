@@ -53,7 +53,7 @@
 
 .data-item__input-wrapper input, .data-item__display-wrapper.large .data-item__display {
     padding: 0.5rem;
-    border: 1px solid #e1e1e1;
+    border: 1px solid var(--clr-primary-light);
 }
 
 .data-item__display{
@@ -63,7 +63,7 @@
 
 .data-item__display-wrapper .item {
     padding: 0.5rem;
-    border: 1px solid #e1e1e1;
+    border: 1px solid var(--clr-primary-light);
 }
 
 .data-item__display-wrapper.small, .data-item__input-wrapper {

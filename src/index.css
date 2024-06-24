@@ -3,7 +3,7 @@
     --clr-primary: #29339B;
     --clr-primary-hover: #29339B20;
     --clr-primary-light: #29339B50;
-    --clr-light-gray: #f1f1f1;
+    --clr-light-gray: #e1e1e1;
     --clr-danger: #ea2323;
 }
 
@@ -26,7 +26,7 @@ input[type=checkbox] {
     transform: scale(1.5);
 }
 
-form input, select {
+input, select {
     padding: 0.5rem;
     border: 1px solid var(--clr-primary-light);
 }
@@ -76,6 +76,10 @@ section {
 }
 
 /******* Buttons ********/
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
 .btn {
     padding: 0.5rem;
     border-radius: 0.3rem;
@@ -92,7 +96,7 @@ section {
     padding: 0;
 }
 
-.btn-primary {
+.btn-primary, .btn-primary:disabled:hover {
     background-color: var(--clr-primary);
     border: 1px solid var(--clr-primary);
     color: white;
