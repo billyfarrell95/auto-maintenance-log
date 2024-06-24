@@ -1,7 +1,10 @@
 :root {
     --clr-dark: #222222;
     --clr-primary: #29339B;
-    --clr-light-gray: #e4e4e4;
+    --clr-primary-hover: #29339B20;
+    --clr-primary-light: #29339B50;
+    --clr-light-gray: #f1f1f1;
+    --clr-danger: #ea2323;
 }
 
 body, * {
@@ -19,6 +22,20 @@ select {
   font-size: 1rem;
 }
 
+input[type=checkbox] {
+    transform: scale(1.5);
+}
+
+form input, select {
+    padding: 0.5rem;
+    border: 1px solid var(--clr-primary-light);
+}
+
+form label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
 button {
     cursor: pointer;
     border: none; 
@@ -28,16 +45,32 @@ button {
 
 h1,h2,h3,h4,h5,h6 {
     margin-bottom: 1rem;
+    font-weight: bold;
 }
 
 h1 {
     font-size: 1.5rem;
-    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.1rem;
+}
+
+@media screen and (min-width: 1200px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
 }
 
 /****** Global layout *****/
+section {
+    padding-block: 1.5rem;
+}
 .main-wrapper {
-    max-width: calc(100vw - 4rem);
+    max-width: calc(100vw - 3rem);
     margin-inline: auto;
     padding-block: 2rem;
 }
@@ -45,9 +78,76 @@ h1 {
 /******* Buttons ********/
 .btn {
     padding: 0.5rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    transition: 0.2s all;
+}
+
+.btn-sm {
+    padding-block: 0.3rem;
+    font-size: 0.875rem;
+}
+
+.btn-icon {
+    padding: 0;
 }
 
 .btn-primary {
     background-color: var(--clr-primary);
+    border: 1px solid var(--clr-primary);
     color: white;
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--clr-primary);
+}
+
+.btn-danger {
+    background-color: var(--clr-danger);
+    border: 1px solid var(--clr-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: white;
+    color: var(--clr-danger)
+}
+
+.btn-outline-danger {
+    background-color: transparent;
+    color: var(--clr-danger);
+    border: 1px solid var(--clr-danger);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--clr-danger);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: white;
+    border: 1px solid var(--clr-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--clr-primary-hover);
+}
+
+.btn-transparent {
+    background-color: transparent;
+    padding: 0;
+}
+
+.btn-transparent:hover {
+    background-color: var(--clr-primary-hover);
+}
+
+
+/***** LAYOUT UTILITIES *****/
+.d-flex {
+    display: flex;
+}
+.align-self-flex-end {
+    align-self: flex-end;
 }

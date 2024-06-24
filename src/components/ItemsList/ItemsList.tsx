@@ -66,6 +66,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     }
     
+    // @todo: update checkbox select all. If a vehicle sort is applied, only select all that match sort
     const handleSelectAll = () => {
         const areAllItemsSelected = selectedItems.length === items.length;
         const newSelectedItems = areAllItemsSelected ? [] : items.map(item => item.id);

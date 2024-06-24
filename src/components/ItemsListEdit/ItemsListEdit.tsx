@@ -66,6 +66,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     setItemIsBeingEdited={setItemIsBeingEdited}
                     value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.description || "") : (item.description)}
                     type="text"
+                    inputMode="text"
                     name="description"
                     placeholder="Maintenance description" />
                 <ItemsListInput
@@ -75,6 +76,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     setItemIsBeingEdited={setItemIsBeingEdited}
                     value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.mileage || "") : (item.mileage)}
                     type="text"
+                    inputMode="numeric"
                     name="mileage"
                     placeholder="Mileage" />
 
@@ -97,12 +99,14 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     setItemIsBeingEdited={setItemIsBeingEdited}
                     value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.shop || "") : (item.shop)}
                     type="text"
+                    inputMode="text"
                     name="shop"
                     placeholder="Shop" />
                 <CurrencyInput
                     id={`cost-${item.id}`}
                     name={`cost-${item.id}`}
                     placeholder="Enter cost"
+                    inputMode="numeric"
                     value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.cost || "") : (item.cost)}
                     prefix="$"
                     decimalsLimit={2}
@@ -118,6 +122,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     setItemIsBeingEdited={setItemIsBeingEdited}
                     value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.memo || "") : (item.memo)}
                     type="text"
+                    inputMode="text"
                     name="memo"
                     placeholder="Memo" />
             </div>

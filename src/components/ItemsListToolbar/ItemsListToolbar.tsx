@@ -1,5 +1,6 @@
 import { Dispatch, FormEvent, ChangeEvent } from "react";
 import { Vehicle } from "../../types";
+import "./ItemsListToolbar.css"
 
 interface ItemsListToolbarProps {
     selectedItems: string[];
@@ -16,18 +17,19 @@ interface ItemsListToolbarProps {
 
 
 function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, handleDeleteItems, handleSaveItem, vehicleSort, editingItemId, handleVehicleSort, vehicles, setSelectedItems }: ItemsListToolbarProps) {
-    
+
     return (
         <>
-            {itemIsBeingEdited ? (
-                    <div className="data-item__button-wrapper">
-                        <button type="button" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
-                        <button type="submit" onClick={(e) => {handleSaveItem(e, editingItemId)}}>Save</button>
+            <div className="toolbar-wrapper">
+                {itemIsBeingEdited ? (
+                    <div className="toolbar-wrapper__group">
+                        <button type="button" className="btn btn-sm btn-secondary" onClick={(e) => {handleCancelEdit(e)}}>Cancel</button>
+                        <button type="submit" className="btn btn-sm btn-primary" onClick={(e) => {handleSaveItem(e, editingItemId)}}>Save</button>
                     </div>
                 ) : (
                     <>
                     {!selectedItems.length ? (
-                        <div className="data-item__button-wrapper">
+                        <div className="toolbar-wrapper__group">
                             <div>
                                 <span>Sort by: </span>
                                 <select id="vehicles-select" onChange={(e) => handleVehicleSort(e)} value={vehicleSort}>
@@ -39,14 +41,15 @@ function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, 
                             </div>
                         </div>
                     ) : (
-                        <div className="data-item__button-wrapper">
-                            <button onClick={() => setSelectedItems([])} disabled={itemIsBeingEdited}>X</button>
-                            <span>{selectedItems.length} Selected</span>
-                            <button onClick={handleDeleteItems} disabled={itemIsBeingEdited}>Delete selected</button>
+                        <div className="toolbar-wrapper__group">
+                            <button onClick={() => setSelectedItems([])} className="btn btn-sm btn-secondary" disabled={itemIsBeingEdited}><i className="bi bi-x-lg"></i></button>
+                            <span>{selectedItems.length} selected</span>
+                            <button onClick={handleDeleteItems} className="btn btn-sm btn-danger" disabled={itemIsBeingEdited}>Delete selected</button>
                         </div>
                     )}
                     </>
                 )}
+            </div>
         </>
     )
 }

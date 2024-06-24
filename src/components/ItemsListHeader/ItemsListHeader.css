@@ -1,22 +1,22 @@
 .data-header {
-    border-bottom: 1px solid #e1e1e1;
+    border-bottom: 1px solid var(--clr-primary-light);
 }
 
 .data-header {
     display: none;
-    padding: 0.5rem;
+    padding-inline: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
     font-weight: bold;
-    margin-bottom: 0.5rem;
 }
 
 @media screen and (min-width: 1600px) {
     .data-header {
         display: flex;
         gap: 1rem;
+        align-items: center;
     }
 }
-
-
 
 .data-header__items {
     width: 100%;

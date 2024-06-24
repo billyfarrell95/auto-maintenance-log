@@ -48,23 +48,29 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
         <>
             <h2>Manage your shops</h2>
             <form onSubmit={(e) => {handleSubmit(e)}} className="shops-form">
-                <label htmlFor="addShop">Add a shop</label>
-                <input id="addShop" type="text" onChange={handleChange} value={newShop.name} placeholder="Shop name" required />
-                <button type="submit">Add</button>
+                <div>
+                    <label htmlFor="addShop">Add a shop</label>
+                    <input id="addShop" type="text" onChange={handleChange} value={newShop.name} placeholder="Shop name" required />
+                </div>
+                <div className="align-self-flex-end"><button type="submit" className="btn btn-primary">Add</button></div>
             </form>
             {shops.length > 0 ? (
-                <div>
-                    <ul className="shops-list" role="list">
+                <div className="shops-list-wrapper">
+                    <ul className="shops-list-wrapper__list" role="list">
                     {shops.map((shop) => (
-                        <li key={shop.id}>
-                            <p>{shop.name} </p>
-                            <button onClick={() => handleDeleteShop(shop.id)}>Delete</button>
+                        <li key={shop.id} className="shops-list-wrapper__item">
+                            {shop.name}
+                            <div>
+                                <button onClick={() => handleDeleteShop(shop.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                            </div>
                         </li>
                     ))}
                 </ul>
                 </div>
             ) : (
-                <p><i>No saved shops</i></p>
+                <div className="shops-list-wrapper">
+                    <p><i>No saved shops</i></p>
+                </div>
             )}
         </>
     )

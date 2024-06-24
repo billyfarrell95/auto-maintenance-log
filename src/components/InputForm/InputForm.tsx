@@ -19,6 +19,7 @@ interface InputFormProps {
     handleActiveTab: (tab: string) => void; 
 }
 
+// @todo: form validation, can't add item until vehicle is select (required to add a vehicle to vehicles list before adding item)
 function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem, handleActiveTab }: InputFormProps) {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -71,10 +72,10 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
             </div>
             <div className="input-form__input-wrapper">
-                <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" />
+                <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
             </div>
             <div className="input-form__input-wrapper">
-                <input type="text" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} />
+                <input type="text" inputMode="numeric" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} required />
                 <datalist id="description-options">
                     {maintenanceDescriptions.map((item, index) => (
                         <option value={item} key={index}>{item}</option>
@@ -82,18 +83,20 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 </datalist>
             </div>
             <div className="input-form__input-wrapper">
-                <select id="vehicles-select" disabled={!vehicles.length} name="vehicle" onChange={handleChange}>
+                <select id="vehicles-select" disabled={!vehicles.length} name="vehicle" onChange={handleChange} required>
                     <option value="">-- select vehicle --</option>
                     {vehicles.map((vehicle) => (
                         <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                     ))}
                 </select>
                 {!vehicles.length && (
-                    <button onClick={() => {handleActiveTab(tabs.vehicles)}}>Add a vehicle</button>
+                    <div className="d-flex  align-self-flex-end">
+                        <button onClick={() => {handleActiveTab(tabs.vehicles)}} className="btn btn-sm btn-primary">Add a vehicle</button>
+                    </div>
                 )}
             </div>
             <div className="input-form__input-wrapper">
-                <input list="shop-options" name="shop" type="text" value={currentItem.shop} onChange={handleChange} placeholder="Shop" />
+                <input list="shop-options" name="shop" type="text" value={currentItem.shop} onChange={handleChange} placeholder="Shop" required />
                 <datalist id="shop-options">
                     {shops.map((shop) => (
                         <option key={shop.id} value={shop.name}>{shop.name}</option>
@@ -104,16 +107,18 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 <CurrencyInput
                     placeholder="Enter cost"
                     value={currentItem.cost}
+                    inputMode="numeric"
                     prefix="$"
                     decimalsLimit={2}
                     onValueChange={handleCostChange}
+                    required
                 />  
             </div>       
             <div className="input-form__input-wrapper">
-                <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
+                <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} required />
             </div>       
             <div className="input-form__input-wrapper">
-                <button type="submit" disabled={selectedItems.length > 0}>Add</button>
+                <button type="submit" className="btn btn-primary" disabled={selectedItems.length > 0}>Add</button>
             </div>       
         </form>
     );

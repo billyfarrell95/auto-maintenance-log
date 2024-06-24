@@ -47,22 +47,30 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
     return (
         <>
             <h2>Manage your vehicles</h2>
-            <form onSubmit={(e) => {handleSubmit(e)}} className="vehicles-form">
-                <label htmlFor="addVehicle">Add a vehicle</label>
-                <input id="addVehicle" type="text" onChange={handleChange} value={newVehicle.name} placeholder="Vehicle name" required />
-                <button type="submit">Add</button>
+            <form onSubmit={(e) => {handleSubmit(e)}} className="shops-form">
+                <div>
+                    <label htmlFor="addVehicle">Add a vehicle</label>
+                    <input id="addVehicle" type="text" onChange={handleChange} value={newVehicle.name} placeholder="Vehicle name" required />
+                </div>
+                <div className="align-self-flex-end"><button type="submit" className="btn btn-primary">Add</button></div>
             </form>
             {vehicles.length > 0 ? (
-                <ul className="vehicles-list" role="list">
+                <div className="shops-list-wrapper">
+                    <ul className="shops-list-wrapper__list" role="list">
                     {vehicles.map((vehicle) => (
-                        <li key={vehicle.id}>
-                            <p>{vehicle.name} </p>
-                            <button onClick={() => handleDeleteVehicle(vehicle.id)}>Delete</button>
+                        <li key={vehicle.id} className="shops-list-wrapper__item">
+                            {vehicle.name}
+                            <div>
+                                <button onClick={() => handleDeleteVehicle(vehicle.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                            </div>
                         </li>
                     ))}
                 </ul>
+                </div>
             ) : (
-                <p><i>No saved vehicles</i></p>
+                <div className="shops-list-wrapper">
+                    <p><i>No saved vehicles</i></p>
+                </div>
             )}
         </>
     )

@@ -1,0 +1,11 @@
+.toolbar-wrapper {
+    border-bottom: 1px solid var(--clr-primary-light);
+    padding-block: 1rem;
+}
+
+.toolbar-wrapper__group {
+    display: flex;
+    gap: 1rem;
+    min-height: 45px;
+    align-items: center;
+}

@@ -54,6 +54,7 @@ function App() {
         <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}>{tabs.shops} ({shops.length})</button>
       </div>
       {activeTab === tabs.log && (
+        <section>
         <div>
           <InputForm 
             items={items} 
@@ -79,20 +80,20 @@ function App() {
           ) : (
             <p><i>Nothing here...</i></p>
           )}
-          
         </div>
+        </section>
       )}
 
       {activeTab === tabs.vehicles && (
-        <div>
+        <section>
           <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
-        </div>
+        </section>
       )}
       
       {activeTab === tabs.shops && (
-        <div>
-          <ManageShops shops={shops} setShops={setShops} />
-        </div>
+        <section>
+           <ManageShops shops={shops} setShops={setShops} />
+        </section>
       )}
     </>
   );

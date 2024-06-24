@@ -1,10 +1,30 @@
-.vehicles-form input {
-    display: block;
-    margin-bottom: 0.5rem;
+.vehicles-form {
+    display: flex;
+    gap: 0.5rem;
 }
 
-.vehicles-list {
+.vehicles-form input, .vehicles-form label {
+    display: block;
+}
+
+.vehicles-list-wrapper {
+    padding-block: 1.5rem;
+}
+
+.vehicles-list-wrapper__list {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    font-weight: bold;
+    padding-block: 2rem;
+    color: var(--clr-primary);
+}
+
+.vehicles-list-wrapper__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--clr-primary-light);
 }

@@ -24,7 +24,7 @@ function ItemsListHeader ({ checked, handleChange, itemIsBeingEdited, sortItemsD
 
             />
             <div className="data-header__items">
-                <span>Date <button onClick={() => setSortItemsDescending(current => !current)}>{sortItemsDescending ? (<i className="bi bi-arrow-down-short"></i>) : (<i className="bi bi-arrow-up-short"></i>)}</button></span>
+                <span>Date <button onClick={() => setSortItemsDescending(current => !current)} className="btn-transparent">{sortItemsDescending ? (<i className="bi bi-arrow-down"></i>) : (<i className="bi bi-arrow-up"></i>)}</button></span>
                 <span>Description</span>
                 <span>Mileage</span>
                 <span>Vehicle</span>
