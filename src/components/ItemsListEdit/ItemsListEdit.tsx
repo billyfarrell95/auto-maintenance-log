@@ -13,7 +13,7 @@ interface ItemsListEditProps {
     vehicles: Vehicle[]
 }
 
-function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited, vehicles }: ItemsListEditProps) {
+function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
         console.log(name, value)
@@ -38,12 +38,6 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
 
     const handleFocus = (e: ChangeEvent<HTMLInputElement> , id: string) => {
         e.target.select()
-        e.stopPropagation()
-        setEditingItemId(id);
-        setItemIsBeingEdited(true)
-    }
-
-    const handleSelectFocus = (e: ChangeEvent<HTMLSelectElement> , id: string) => {
         e.stopPropagation()
         setEditingItemId(id);
         setItemIsBeingEdited(true)
@@ -79,19 +73,18 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     inputMode="numeric"
                     name="mileage"
                     placeholder="Mileage" />
-
-                 <select id="vehicles-select"
-                    name={`vehicle-${item.id}`} 
-                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || "") : (item.vehicle)}
-                    onChange={(e) => {handleChange(e, item.id)}} 
-                    onFocus={(e) => {handleSelectFocus(e, item.id)}}
-                    >
-                    <option value="">-- select --</option>
-                    {vehicles.map((vehicle) => (
-                        <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
-                    ))}
-                </select>
                     
+                <ItemsListInput
+                    itemId={item.id}
+                    handleChange={handleChange}
+                    setEditingItemId={setEditingItemId}
+                    setItemIsBeingEdited={setItemIsBeingEdited}
+                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || "") : (item.vehicle)}
+                    type="text"
+                    inputMode="text"
+                    name="vehicle"
+                    placeholder="Vehicle" />
+
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}

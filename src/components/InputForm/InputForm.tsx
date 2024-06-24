@@ -5,7 +5,6 @@ import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
 import { maintenanceDescriptions } from "../../data/data";
 import { initialValues } from "../../App";
-import { tabs } from "../../App";
 
 interface InputFormProps {
     items: Item[];
@@ -19,7 +18,7 @@ interface InputFormProps {
 }
 
 // @todo: form validation, can't add item until vehicle is select (required to add a vehicle to vehicles list before adding item)
-function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem, handleActiveTab }: InputFormProps) {
+function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem }: InputFormProps) {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -84,17 +83,12 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 </datalist>
             </div>
             <div className="input-form__input-wrapper">
-                <select id="vehicles-select" disabled={!vehicles.length} name="vehicle" onChange={handleChange} required>
-                    <option value="">-- select vehicle --</option>
+                <input list="vehicle-options" name="vehicle" type="text" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" required />
+                <datalist id="vehicle-options">
                     {vehicles.map((vehicle) => (
                         <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                     ))}
-                </select>
-                {!vehicles.length && (
-                    <div className="d-flex  align-self-flex-end">
-                        <button onClick={() => {handleActiveTab(tabs.vehicles)}} className="btn btn-sm btn-primary">Add a vehicle</button>
-                    </div>
-                )}
+                </datalist>
             </div>
             <div className="input-form__input-wrapper">
                 <input list="shop-options" name="shop" type="text" value={currentItem.shop} onChange={handleChange} placeholder="Shop" required />
@@ -116,7 +110,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 />  
             </div>       
             <div className="input-form__input-wrapper">
-                <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} required />
+                <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
             </div>       
             <div className="input-form__input-wrapper">
                 <button type="submit" className="btn btn-primary" disabled={selectedItems.length > 0}>Add</button>
