@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import ItemsList from './components/ItemsList/ItemsList';
 import InputForm from './components/InputForm/InputForm';
@@ -9,7 +9,8 @@ import ManageVehicles from './components/ManageVehicles/ManageVehicles';
 import { datePickerCurrentDate } from './utils/formatters';
 import testVehicles from "./data/testVehicles";
 import testShops from "./data/testShops";
-import Login from './components/Login/Login';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 
 export const initialValues: Item = {
@@ -30,6 +31,7 @@ export const tabs = {
 }
 
 function App() {
+  const [user, setUser] = useState(false)
   // const [items, setItems] = useState<Item[]>([]);
   // const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   // const [shops, setShops] = useState<Shop[]>([]);
@@ -42,13 +44,32 @@ function App() {
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
 
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
+      console.log(user)
+      if (user) {
+        console.log("logged in")
+        setUser(true)
+      } else {
+        console.log("logged out")
+        setUser(false)
+        navigate("/login")
+      }
+      setUser(false)
+    })
+  }, [user])
+
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
 
   return (
     <>
-      <Login />
+      {/* {!user && (
+        <Navigate to="/login"></Navigate>
+      )} */}
       <h1>Auto Maintenance Log</h1>
       <div className="tabs-wrapper">
         <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>

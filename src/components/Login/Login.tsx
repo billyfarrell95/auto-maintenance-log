@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 import auth from '../../firebase/firebase';
@@ -25,9 +24,9 @@ function Login() {
                 {
                     provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
                     requireDisplayName: false,
-                    disableSignUp: {
-                        status: true
-                    },
+                    // disableSignUp: {
+                    //     status: true
+                    // },
                 },
             ],
             tosUrl: '/', // URL to you terms and conditions.
