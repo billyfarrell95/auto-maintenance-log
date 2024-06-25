@@ -43,17 +43,13 @@ function App() {
   const [activeTab, setActiveTab] = useState(tabs.log);
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
-
   const navigate = useNavigate()
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
-      console.log(user)
       if (user) {
-        console.log("logged in")
         setUser(true)
       } else {
-        console.log("logged out")
         setUser(false)
         navigate("/login")
       }
