@@ -31,7 +31,7 @@ input, select {
     border: 1px solid var(--clr-primary-light);
 }
 
-form label {
+form label, label {
     font-weight: 600;
     margin-bottom: 0.25rem;
 }
@@ -154,4 +154,14 @@ button:disabled {
 }
 .align-self-flex-end {
     align-self: flex-end;
+}
+
+/***** SPACING UTILITIES *****/
+.pb-1 {
+    padding-bottom: 1rem;
+}
+
+/***** TYPOGRAPHY ******/
+.fs-small {
+    font-size: 0.875rem;
 }

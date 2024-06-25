@@ -4,6 +4,11 @@
     gap: 0.25rem;
 }
 
+.data-item__display-wrapper {
+    border-top: 1px solid transparent;
+    /* border-bottom: 1px solid var(--clr-primary-light); */
+}
+
 .data-item__selected, .data-item__selected:hover {
     background-color: var(--clr-primary-hover);
 }
@@ -15,19 +20,18 @@
 }
 
 .data-item__display {
-    /* padding: 0.5rem; */
-    border: 1px solid #e1e1e1;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    display: grid;
+    gap: 0.25rem;
+    /* border: 2px solid transparent; */
 }
 
 .data-item__display-default {
     cursor: pointer;
 }
 
-/* .data-item__display-selected {
-    cursor: text;
-} */
-
-.data-item {
+.data-item, .data-item label {
     cursor: pointer;
     transition: 0.2s all;
 }
@@ -36,6 +40,21 @@
     display: flex;
     gap: 1rem;
     padding: 0.5rem;
+    min-height: 75px;
+    align-items: center;
+    border-bottom: 1px solid var(--clr-primary-light);
+}
+
+.data-item__data {
+    /* padding: 0.6rem; */
+    text-wrap: nowrap;
+    overflow-x: hidden;
+}
+
+.data-item__display-wrapper label, .data-item__display label {
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--clr-primary);
 }
 
 .data-item__display-wrapper.large {
@@ -51,22 +70,7 @@
     }
 }
 
-.data-item__input-wrapper input, .data-item__display-wrapper.large .data-item__display {
-    padding: 0.5rem;
-    border: 1px solid var(--clr-primary-light);
-}
-
-.data-item__display{
-    display: grid;
-    gap: 0.5rem;
-}
-
-.data-item__display-wrapper .item {
-    padding: 0.5rem;
-    border: 1px solid var(--clr-primary-light);
-}
-
-.data-item__display-wrapper.small, .data-item__input-wrapper {
+.data-item__display-wrapper.small, .data-item__input-wrapper * {
     width: 100%;
     display: grid;
 }
@@ -75,7 +79,6 @@
     width: 100%;
     display: grid;
     gap: 0.5rem;
-    /* padding-block: 0.2rem; */
 }
 
 @media screen and (max-width: 600px) {
@@ -84,19 +87,28 @@
     }
 }
 
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1200px) {
     .data-item__display-wrapper.large, .data-item__input-wrapper {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
     .data-item__display-wrapper.small {
         display: none;
     }
 }
 
+@media screen and (min-width: 1600px) {
+    .data-item__display label {
+        display: none;
+    }
+    .data-item__display-wrapper.large, .data-item__input-wrapper {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
 .data-item input[type=checkbox]{
     width: auto;
-    /* cursor: pointer; */
 }
 
 .data-item select {

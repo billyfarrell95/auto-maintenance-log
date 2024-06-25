@@ -46,13 +46,16 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
     return (
         <form>
             <div className="data-item__input-wrapper">
-                <input
-                    type="date"
-                    value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
-                    name={`date-${item.id}`}
-                    onChange={(e) => handleChange(e, item.id)}
-                    onFocus={(e) => handleFocus(e, item.id)}
-                    onClick={(e) => console.log(e)} />
+                <div className="data-item__display">
+                    <label>Date</label>
+                    <input
+                        type="date"
+                        value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
+                        name={`date-${item.id}`}
+                        onChange={(e) => handleChange(e, item.id)}
+                        onFocus={(e) => handleFocus(e, item.id)}
+                        onClick={(e) => console.log(e)} />
+                </div>
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
@@ -62,7 +65,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     type="text"
                     inputMode="text"
                     name="description"
-                    placeholder="Maintenance description" />
+                    placeholder="Description" />
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
@@ -95,19 +98,22 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     inputMode="text"
                     name="shop"
                     placeholder="Shop" />
-                <CurrencyInput
-                    id={`cost-${item.id}`}
-                    name={`cost-${item.id}`}
-                    placeholder="Enter cost"
-                    inputMode="numeric"
-                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.cost || "") : (item.cost)}
-                    prefix="$"
-                    decimalsLimit={2}
-                    decimalScale={2}
-                    onFocus={(e) => handleFocus(e, item.id)}
-                    onClick={(e) => e.stopPropagation()}
-                    onValueChange={(value) => handleCostChange(value, item.id)}
-                />
+                <div className="data-item__display">
+                    <label>Cost</label>
+                    <CurrencyInput
+                        id={`cost-${item.id}`}
+                        name={`cost-${item.id}`}
+                        placeholder="Enter cost"
+                        inputMode="numeric"
+                        value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.cost || "") : (item.cost)}
+                        prefix="$"
+                        decimalsLimit={2}
+                        decimalScale={2}
+                        onFocus={(e) => handleFocus(e, item.id)}
+                        onClick={(e) => e.stopPropagation()}
+                        onValueChange={(value) => handleCostChange(value, item.id)}
+                    />
+                </div>
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}

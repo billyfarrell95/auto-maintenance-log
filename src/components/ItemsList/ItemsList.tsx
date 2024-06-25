@@ -182,7 +182,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                     <div key={item.id}>
                         {item.vehicle.includes(vehicleSort) ? (
                             <div className="data-item">
-                                <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : "data-item"}
+                                <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : undefined}
                                     onClick={(e) => {handleItemClick(item.id, e)}} >
                                         <div className="data-item__wrapper">
                                             <input

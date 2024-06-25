@@ -47,6 +47,7 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
     return (
         <>
             <h2>Manage your shops</h2>
+            <p>Add shops for quick access when adding maintenance items.</p>
             <form onSubmit={(e) => {handleSubmit(e)}} className="shops-form">
                 <div>
                     <label htmlFor="addShop">Add a shop</label>
@@ -55,17 +56,20 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                 <div className="align-self-flex-end"><button type="submit" className="btn btn-primary">Add</button></div>
             </form>
             {shops.length > 0 ? (
-                <div className="shops-list-wrapper">
-                    <ul className="shops-list-wrapper__list" role="list">
-                    {shops.map((shop) => (
-                        <li key={shop.id} className="shops-list-wrapper__item">
-                            {shop.name}
-                            <div>
-                                <button onClick={() => handleDeleteShop(shop.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <div>
+                    <div className="shops-list-wrapper pb-1">
+                        <ul className="shops-list-wrapper__list" role="list">
+                        {shops.map((shop) => (
+                            <li key={shop.id} className="shops-list-wrapper__item">
+                                {shop.name}
+                                <div>
+                                    <button onClick={() => handleDeleteShop(shop.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                </div>
+                            </li>
+                        ))}
+                        </ul>
+                    </div>
+                    <p className="fs-small">Note: deleting shops will not remove them from your maintenance log, only from forms, filters, and this list.</p>
                 </div>
             ) : (
                 <div className="shops-list-wrapper">

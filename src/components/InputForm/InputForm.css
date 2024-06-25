@@ -16,11 +16,6 @@
     };
 }
 
-/* .input-form input, select {
-    padding: 0.5rem;
-    border: 1px solid var(--clr-primary-light);
-} */
-
 .input-form__input-wrapper {
     display: flex;
     flex-direction: column;

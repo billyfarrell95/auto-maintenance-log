@@ -27,36 +27,48 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
         <>
             <div className="data-item__display-wrapper small">
                 <div className={handleDefineClasses(item)}>
-                    <div className="item">{formatDate(item.date)}</div>
-                    <div className="item">{item.description}</div> 
-                    {/* <div className="item">{item.mileage}</div> */}
-                    <div className="item">{item.vehicle}</div>
-                    {/* <div className="item">{item.shop}</div> */}
-                    {/* <div className="item">{formatCost(item.cost)}</div> */}
-                    {/* <div className="item">{item.memo}</div> */}
+                    <div className="item">
+                        <div><label>Date</label></div>
+                        <span className="data-item__data">{formatDate(item.date)}</span>
+                    </div>
+                    <div className="item">
+                        <div><label>Vehicle</label></div>
+                        <span className="data-item__data">{item.vehicle}</span>
+                    </div>
+                    <div className="item">
+                        <div><label>Description</label></div>
+                        <span className="data-item__data">{item.description}</span>
+                    </div>
                 </div>
             </div>
             <div className="data-item__display-wrapper large">
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {formatDate(item.date)}
+                    <label>Date</label>
+                    <span className="data-item__data">{formatDate(item.date)}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {item.description}
+                    <label>Description</label>
+                    <span className="data-item__data">{item.description}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {item.mileage}
+                    <label>Mileage</label>
+                    <span className="data-item__data">{item.mileage}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {item.vehicle}
+                    <label>Vehicle</label>
+                    <span className="data-item__data">{item.vehicle}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {item.shop}
+                    <label>Shop</label>
+                    <span className="data-item__data">{item.shop}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {formatCost(item.cost)}
+                    <label>Cost</label>
+                    <span className="data-item__data">{formatCost(item.cost)}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
-                    {item.memo}
+                    <label>Memo</label>
+                    <span className="data-item__data">{item.memo}</span>
                 </div>
             </div>
         </>

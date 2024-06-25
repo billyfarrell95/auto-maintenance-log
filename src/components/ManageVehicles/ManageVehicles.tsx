@@ -47,7 +47,8 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
     return (
         <>
             <h2>Manage your vehicles</h2>
-            <form onSubmit={(e) => {handleSubmit(e)}} className="shops-form">
+            <p>Add vehicles for quick access when adding maintenance items.</p>
+            <form onSubmit={(e) => {handleSubmit(e)}} className="vehicles-form">
                 <div>
                     <label htmlFor="addVehicle">Add a vehicle</label>
                     <input id="addVehicle" type="text" onChange={handleChange} value={newVehicle.name} placeholder="Vehicle name" required />
@@ -55,20 +56,23 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
                 <div className="align-self-flex-end"><button type="submit" className="btn btn-primary">Add</button></div>
             </form>
             {vehicles.length > 0 ? (
-                <div className="shops-list-wrapper">
-                    <ul className="shops-list-wrapper__list" role="list">
-                    {vehicles.map((vehicle) => (
-                        <li key={vehicle.id} className="shops-list-wrapper__item">
-                            {vehicle.name}
-                            <div>
-                                <button onClick={() => handleDeleteVehicle(vehicle.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <div>
+                    <div className="vehicles-list-wrapper pb-1">
+                        <ul role="list" className="vehicles-list-wrapper__list">
+                        {vehicles.map((vehicle) => (
+                            <li key={vehicle.id} className="vehicles-list-wrapper__item">
+                                {vehicle.name}
+                                <div>
+                                    <button onClick={() => handleDeleteVehicle(vehicle.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                </div>
+                            </li>
+                        ))}
+                        </ul>
+                    </div>
+                    <p className="fs-small">Note: deleting vehicles will not remove them from your maintenance log, only from forms, filters, and this list.</p>
                 </div>
             ) : (
-                <div className="shops-list-wrapper">
+                <div className="vehicles-list-wrapper">
                     <p><i>No saved vehicles</i></p>
                 </div>
             )}

@@ -72,7 +72,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 <input type="date" name="date" value={currentItem.date} onChange={handleChange} />   
             </div>
             <div className="input-form__input-wrapper">
-                <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Maintenance description" required />
+                <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Description" required />
             </div>
             <div className="input-form__input-wrapper">
                 <input type="text" inputMode="numeric" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} required />

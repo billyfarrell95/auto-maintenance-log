@@ -22,16 +22,19 @@ function ItemsListInput({ itemId, handleChange, value, type, name, setItemIsBein
 
     return (
         <>
-            <input
-                className="data-item__input"
-                type={type}
-                value={value}
-                inputMode={inputMode}
-                name={`${name}-${itemId}`}
-                onChange={(e) => handleChange(e, itemId)}
-                onClick={(e) => e.stopPropagation()}
-                onFocus={(e) => handleFocus(e, itemId)}
-                placeholder={placeholder} />
+            <div className="data-item__display">
+                <div><label>{placeholder}</label></div>
+                <input
+                    className="data-item__input"
+                    type={type}
+                    value={value}
+                    inputMode={inputMode}
+                    name={`${name}-${itemId}`}
+                    onChange={(e) => handleChange(e, itemId)}
+                    onClick={(e) => e.stopPropagation()}
+                    onFocus={(e) => handleFocus(e, itemId)}
+                    placeholder={placeholder} />
+            </div>
         </>
     )
 }

@@ -54,34 +54,36 @@ function App() {
         <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
       </div>
       {activeTab === tabs.log && (
-        <section>
         <div>
-          <InputForm 
-            items={items} 
-            setItems={setItems} 
-            vehicles={vehicles} 
-            shops={shops} 
-            selectedItems={selectedItems} 
-            currentItem={currentItem} 
-            setCurrentItem={setCurrentItem} 
-            handleActiveTab={handleActiveTab} />
-          {items.length ? (
-              <ItemsList
-                items={items}
-                setItems={setItems}
-                vehicles={vehicles}
-                focusedItemId={focusedItemId}
-                setFocusedItemId={setFocusedItemId}
-                setSelectedItems={setSelectedItems}
-                selectedItems={selectedItems}
-                itemIsBeingEdited={itemIsBeingEdited}
-                setItemIsBeingEdited={setItemIsBeingEdited}
-              />
-          ) : (
-            <p><i>Nothing here...</i></p>
-          )}
+          <section>
+            <InputForm 
+              items={items} 
+              setItems={setItems} 
+              vehicles={vehicles} 
+              shops={shops} 
+              selectedItems={selectedItems} 
+              currentItem={currentItem} 
+              setCurrentItem={setCurrentItem} 
+              handleActiveTab={handleActiveTab} />
+            </section>
+            <div>
+              {items.length ? (
+                  <ItemsList
+                    items={items}
+                    setItems={setItems}
+                    vehicles={vehicles}
+                    focusedItemId={focusedItemId}
+                    setFocusedItemId={setFocusedItemId}
+                    setSelectedItems={setSelectedItems}
+                    selectedItems={selectedItems}
+                    itemIsBeingEdited={itemIsBeingEdited}
+                    setItemIsBeingEdited={setItemIsBeingEdited}
+                  />
+              ) : (
+                <p><i>Nothing here...</i></p>
+              )}
+            </div>
         </div>
-        </section>
       )}
 
       {activeTab === tabs.vehicles && (
