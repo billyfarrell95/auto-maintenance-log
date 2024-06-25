@@ -9,6 +9,7 @@ import ManageVehicles from './components/ManageVehicles/ManageVehicles';
 import { datePickerCurrentDate } from './utils/formatters';
 import testVehicles from "./data/testVehicles";
 import testShops from "./data/testShops";
+import Login from './components/Login/Login';
 
 
 export const initialValues: Item = {
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <>
+      <Login />
       <h1>Auto Maintenance Log</h1>
       <div className="tabs-wrapper">
         <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
