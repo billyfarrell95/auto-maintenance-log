@@ -12,7 +12,6 @@ import testShops from "./data/testShops";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
-
 export const initialValues: Item = {
   id: "",
   date: datePickerCurrentDate(),

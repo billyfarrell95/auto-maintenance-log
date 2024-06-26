@@ -19,15 +19,13 @@ function Login() {
                     document.getElementById('loader')!.style.display = 'none';
                 }
             },
+            signInFlow: 'popup',
             signInSuccessUrl: '/', // This is where should redirect if the sign in is successful.
             signInOptions: [ // This array contains all the ways an user can authenticate in your application.
                 {
-                    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                    provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                     requireDisplayName: false,
-                    // disableSignUp: {
-                    //     status: true
-                    // },
-                },
+                }
             ],
             tosUrl: '/', // URL to you terms and conditions.
             privacyPolicyUrl: function() { // URL to your privacy policy
