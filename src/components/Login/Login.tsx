@@ -20,7 +20,7 @@ function Login() {
                 }
             },
             signInFlow: 'popup',
-            signInSuccessUrl: '/', // This is where should redirect if the sign in is successful.
+            signInSuccessUrl: '/app', // This is where should redirect if the sign in is successful.
             signInOptions: [ // This array contains all the ways an user can authenticate in your application.
                 {
                     provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,

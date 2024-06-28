@@ -87,7 +87,6 @@ function App() {
 }
 
   useEffect(() => {
-    console.log("USER TRUE/FALSE:", user)
     const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
       if (user && auth.currentUser) {
         setUser(true)
@@ -102,7 +101,7 @@ function App() {
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
-
+  
   return (
     <>
       {!user ? (
