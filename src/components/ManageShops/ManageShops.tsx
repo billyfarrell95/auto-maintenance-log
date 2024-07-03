@@ -22,14 +22,14 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
             name: value
         }
         setNewShop(shop)
-        console.log("Shops,value", shops, value)
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newShopTrimmed = {
             ...newShop,
-            name: newShop.name.trim()
+            name: newShop.name.trim(),
+            id: crypto.randomUUID()
         }
         if (newShopTrimmed.name && !shops.some(e => e.name.toLowerCase() === newShopTrimmed.name.toLowerCase())) {
             setShops([...shops, newShopTrimmed]);

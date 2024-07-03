@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import ItemsList from './components/ItemsList/ItemsList';
 import InputForm from './components/InputForm/InputForm';
@@ -13,7 +13,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import auth from './firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/firebase';
-import { collection, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, addDoc, updateDoc, onSnapshot, QuerySnapshot, orderBy } from 'firebase/firestore';
 
 export const initialValues: Item = {
   id: "",
@@ -51,15 +51,16 @@ function App() {
     auth.signOut()
   }
 
-  const checkIfUserExists = async (userId: string) => {
+  const checkIfUserExists = async () => {
     try {
         const collectionRef = collection(db, "users");
         // const finalData = [];
-        const q = query(collectionRef, where('userId', 'in', [userId]));
+        const q = query(collectionRef, where('userId', 'in', [auth?.currentUser?.uid]));
 
         const docSnap = await getDocs(q)
         if (docSnap.empty) {
-          uploadNewUser(userId)
+          console.log("docsnap empty")
+          uploadNewUser()
         } else {
           return true
         }
@@ -68,21 +69,25 @@ function App() {
     }
 }
 
-  const uploadNewUser = async (currentUser: any) => {
-    const docName = currentUser.uid;
-    const newUserUpload = {
-        userId: currentUser.uid,
-        email: currentUser.email,
-        name: currentUser.displayName,
-        logItems: null,
-        vehicles: null,
-        shops: null,
-    }
-    try {
-        const document = doc(db, "users", docName)
-        await setDoc(document, newUserUpload)
-    } catch (error) {
-        console.error("Error uploading new user", error)
+  const uploadNewUser = async () => {
+    if (auth.currentUser?.uid) {
+      // const docName = currentUser.uid;
+      const newUserUpload = {
+          userId: auth?.currentUser?.uid,
+          email: auth?.currentUser?.email,
+          name: auth?.currentUser?.displayName,
+          logItems: null,
+          vehicles: null,
+          shops: null,
+      }
+      
+
+      try {
+          const userRef = doc(db, "users", auth?.currentUser?.uid)
+          await setDoc(userRef, newUserUpload);
+      } catch (error) {
+          console.error("Error uploading new user", error)
+      }
     }
 }
 
@@ -90,7 +95,7 @@ function App() {
     const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
       if (user && auth.currentUser) {
         setUser(true)
-        checkIfUserExists(auth.currentUser.uid)
+        checkIfUserExists()
       } else {
         navigate("/login")
         setUser(false)
@@ -101,6 +106,46 @@ function App() {
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
+
+  useEffect(() => {
+    if (auth?.currentUser?.uid) {
+      const userRef = doc(db, 'users', auth?.currentUser?.uid);
+      onSnapshot(userRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          const vehiclesData = userData.vehicles || [];
+          const shopsData = userData.shops || [];
+          const itemsData = userData.logItems || [];
+          setItems(itemsData);
+          setShops(shopsData);
+          setVehicles(vehiclesData);
+        } else {
+          setVehicles([]);
+        }
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const updateUserData = async () => {
+      try {
+        const userId = auth?.currentUser?.uid;
+        if (userId) {
+          const userDocRef = doc(db, "users", userId);
+          await updateDoc(userDocRef, {
+            logItems: items,
+            vehicles: vehicles,
+            shops: shops,
+          });
+        }
+      } catch (error) {
+        console.error("Error updating user vehicles", error);
+      }
+    };
+  
+    updateUserData();
+  }, [items, vehicles, shops]);
+  
   
   return (
     <>

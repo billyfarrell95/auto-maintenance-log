@@ -3,6 +3,7 @@ import firebase from 'firebase/compat/app';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 import auth from '../../firebase/firebase';
+import "./Login.css";
 
 function Login() {
     useEffect(() => {
@@ -35,9 +36,11 @@ function Login() {
     }, []);
     return (
         <>
-            <h1>Login Page</h1>
-            <div id="firebaseui-auth-container"></div>
-            <div id="loader">Loading...</div>
+            <div className="login">
+                <h1>Login</h1>
+                <div id="firebaseui-auth-container"></div>
+                <div id="loader">Loading...</div>
+            </div>
         </>
     )
 }
