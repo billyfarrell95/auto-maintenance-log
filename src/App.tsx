@@ -13,7 +13,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import auth from './firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/firebase';
-import { collection, query, where, getDocs, doc, setDoc, addDoc, updateDoc, onSnapshot, QuerySnapshot, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
 
 export const initialValues: Item = {
   id: "",
@@ -34,6 +34,7 @@ export const tabs = {
 
 function App() {
   const [user, setUser] = useState(false);
+  const [isUserNew, setIsUserNew] = useState(Boolean);
   const [items, setItems] = useState<Item[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
@@ -59,10 +60,10 @@ function App() {
 
         const docSnap = await getDocs(q)
         if (docSnap.empty) {
-          console.log("docsnap empty")
+          setIsUserNew(true)
           uploadNewUser()
         } else {
-          return true
+          setIsUserNew(false)
         }
     } catch (error) {
         console.error("Error checking if user exists", error)
@@ -157,6 +158,8 @@ function App() {
         <div>
           <h1>Auto Maintenance Log</h1>
           <button onClick={logout}>Sign out</button>
+          <button onClick={() => navigate("/settings")}>Settings</button>
+          {isUserNew ? (<p>Welcome, {auth?.currentUser?.displayName}!</p>) : (<p>Welcome back, {auth?.currentUser?.displayName}</p>)}
           <div className="tabs-wrapper">
             <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
             <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>

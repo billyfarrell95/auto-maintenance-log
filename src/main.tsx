@@ -5,6 +5,9 @@ import Login from './components/Login/Login.tsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './components/Home/Home.tsx'
+import SettingsPage from './components/SettingsPage/SettingsPage.tsx'
+import Terms from './components/Terms/Terms.tsx'
+import Privacy from './components/Privacy/Privacy.tsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +21,18 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />
+  },
+  {
+    path: "/settings",
+    element: <SettingsPage />
+  },
+  {
+    path: "/terms",
+    element: <Terms />
+  },
+  {
+    path: "privacy",
+    element: <Privacy />
   }
 ])
 

@@ -4,8 +4,14 @@ import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 import auth from '../../firebase/firebase';
 import "./Login.css";
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    const navigate = useNavigate()
+    auth.onAuthStateChanged(user => {
+        user ? navigate('/app'): undefined
+    })
+    
     useEffect(() => {
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
 
@@ -28,10 +34,10 @@ function Login() {
                     requireDisplayName: false,
                 }
             ],
-            tosUrl: '/', // URL to you terms and conditions.
-            privacyPolicyUrl: function() { // URL to your privacy policy
-                window.location.assign('/');
-            }
+            // Terms of service url.
+            tosUrl: '/terms',
+            // Privacy policy url.
+            privacyPolicyUrl: '/privacy'
         });
     }, []);
     return (
