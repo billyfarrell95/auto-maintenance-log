@@ -5,6 +5,9 @@ import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
 import { maintenanceDescriptions } from "../../data/data";
 import { initialValues } from "../../App";
+import { doc, collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import auth from "../../firebase/firebase";
 
 interface InputFormProps {
     items: Item[];
@@ -18,7 +21,7 @@ interface InputFormProps {
 }
 
 function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem }: InputFormProps) {
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedItem = {
             ...currentItem,
@@ -30,10 +33,19 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             memo: currentItem.memo.trim(),
         };
         if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo || trimmedItem.vehicle) {
-            console.log(trimmedItem.vehicle)
-            setItems([...items, trimmedItem]);
+            try {
+                if (auth.currentUser) {
+                    const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                    const itemsCollectionRef = collection(userDocRef, 'items');
+                    await addDoc(itemsCollectionRef, trimmedItem)
+                }
+                setItems([...items, trimmedItem]);
+                setCurrentItem({ ...initialValues });
+            } catch (error) {
+                console.error("Error adding new item to db", error)
+            }
         }
-        setCurrentItem({ ...initialValues });
+        
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {

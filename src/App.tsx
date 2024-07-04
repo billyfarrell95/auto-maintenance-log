@@ -13,7 +13,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import auth from './firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/firebase';
-import { collection, query, where, getDocs, doc, setDoc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, updateDoc, addDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
 
 export const initialValues: Item = {
   id: "",
@@ -82,7 +82,6 @@ function App() {
           shops: null,
       }
       
-
       try {
           const userRef = doc(db, "users", auth?.currentUser?.uid)
           await setDoc(userRef, newUserUpload);
@@ -110,43 +109,45 @@ function App() {
 
   useEffect(() => {
     if (auth?.currentUser?.uid) {
-      const userRef = doc(db, 'users', auth?.currentUser?.uid);
-      onSnapshot(userRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-          const vehiclesData = userData.vehicles || [];
-          const shopsData = userData.shops || [];
-          const itemsData = userData.logItems || [];
-          setItems(itemsData);
-          setShops(shopsData);
-          setVehicles(vehiclesData);
-        } else {
-          setVehicles([]);
-        }
+      const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
+      const itemsCollectionRef = collection(userDocRef, 'items');
+      const shopsCollectionRef = collection(userDocRef, 'shops');
+      const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
+      onSnapshot(itemsCollectionRef, (querySnap) => {
+        const itemsData: Item[] = [];
+        // @todo: define type for "doc"
+        querySnap.forEach((doc: any) => {
+          itemsData.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        setItems(itemsData);
+      });
+      onSnapshot(shopsCollectionRef, (querySnap) => {
+        const shopsData: Shop[] = [];
+        // @todo: define type for "doc"
+        querySnap.forEach((doc: any) => {
+          shopsData.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        setShops(shopsData);
+      });
+      onSnapshot(vehiclesCollectionRef, (querySnap) => {
+        const vehiclesData: Vehicle[] = [];
+        // @todo: define type for "doc"
+        querySnap.forEach((doc: any) => {
+          vehiclesData.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        setVehicles(vehiclesData);
       });
     }
-  }, [user]);
-
-  useEffect(() => {
-    const updateUserData = async () => {
-      try {
-        const userId = auth?.currentUser?.uid;
-        if (userId) {
-          const userDocRef = doc(db, "users", userId);
-          await updateDoc(userDocRef, {
-            logItems: items,
-            vehicles: vehicles,
-            shops: shops,
-          });
-        }
-      } catch (error) {
-        console.error("Error updating user vehicles", error);
-      }
-    };
-  
-    updateUserData();
-  }, [items, vehicles, shops]);
-  
+  }, [user]);  
   
   return (
     <>

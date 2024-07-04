@@ -117,6 +117,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         setChecked(updatedChecked);
     };
 
+    // @todo: delete items from db
     const handleDeleteItems = () => {
         const newArr = items.filter(item => !selectedItems.includes(item.id));
         setItems(newArr);

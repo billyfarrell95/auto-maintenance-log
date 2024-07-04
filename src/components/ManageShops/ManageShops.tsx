@@ -1,6 +1,9 @@
 import { useState, FormEvent } from "react";
 import { Shop } from "../../types";
-import "./ManageShops.css"
+import "./ManageShops.css";
+import auth from "../../firebase/firebase";
+import { doc, collection, addDoc, query, where, deleteDoc, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
 interface ManageShopsProps {
     shops: Shop[];
@@ -24,24 +27,50 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
         setNewShop(shop)
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newShopTrimmed = {
             ...newShop,
             name: newShop.name.trim(),
             id: crypto.randomUUID()
         }
+        // @todo: improve validation against duplicate names
         if (newShopTrimmed.name && !shops.some(e => e.name.toLowerCase() === newShopTrimmed.name.toLowerCase())) {
+            try {
+                if (auth.currentUser) {
+                    const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                    const shopsCollectionRef = collection(userDocRef, 'shops');
+                    await addDoc(shopsCollectionRef, newShopTrimmed)
+                }
+            } catch (error) {
+                console.error("Error adding new shop to db", error)
+            }
             setShops([...shops, newShopTrimmed]);
         } else {
-            console.log("Shop name already used.")
+            // @todo: input validation when shop name has been used
+            alert('Shop name already used.');
         }
         setNewShop({...initialValues});
     }
 
-    const handleDeleteShop = (id: string) => {
+    const handleDeleteShop = async (id: string) => {
         const updatedShops = shops.filter((shop, _) => shop.id !== id);
         setShops(updatedShops)
+        try {
+            if (auth.currentUser) {
+                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                const shopsCollectionRef = collection(userDocRef, 'shops');
+                const q = query(shopsCollectionRef, where("id", "==", id))
+
+                const querySnapshot = await getDocs(q);
+                // @todo: define type for "doc"
+                querySnapshot.forEach((doc: any) => {
+                    deleteDoc(doc.ref);
+                });
+            }
+        } catch (error) {
+            console.error("Error deleting shop from db", error)
+        }
     }
 
     return (

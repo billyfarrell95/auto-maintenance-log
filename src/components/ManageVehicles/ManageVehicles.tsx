@@ -1,6 +1,9 @@
 import { useState, FormEvent } from "react";
 import { Vehicle } from "../../types";
 import "./ManageVehicles.css";
+import auth from "../../firebase/firebase";
+import { doc, collection, addDoc, query, where, deleteDoc, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebase"
 
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
@@ -24,24 +27,50 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
         setNewVehicle(vehicle)
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newVehicleTrimmed = {
             ...newVehicle,
             name: newVehicle.name.trim(),
             id: crypto.randomUUID()
         }
+        // @todo: improve validation against duplicate names
         if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
+            try {
+                if (auth.currentUser) {
+                    const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                    const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
+                    await addDoc(vehiclesCollectionRef, newVehicleTrimmed)
+                }
+            } catch (error) {
+                console.error("Error adding new vehicle to db", error)
+            }
             setVehicles([...vehicles, newVehicleTrimmed]);
         } else {
-            console.log("Vehicle name already used.")
+            // @todo: input validation when vehicle name has been used
+            alert('Vehicle name already used.');
         }
         setNewVehicle({...initialValues});
     }
 
-    const handleDeleteVehicle = (id: string) => {
+    const handleDeleteVehicle = async (id: string) => {
         const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id !== id);
         setVehicles(updatedVehicles)
+        try {
+            if (auth.currentUser) {
+                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
+                const q = query(vehiclesCollectionRef, where("id", "==", id))
+
+                const querySnapshot = await getDocs(q);
+                // @todo: define type for "doc"
+                querySnapshot.forEach((doc: any) => {
+                    deleteDoc(doc.ref);
+                });
+            }
+        } catch (error) {
+            console.error("Error deleting vehicle from db", error)
+        }
     }
 
     return (
