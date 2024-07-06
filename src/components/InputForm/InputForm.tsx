@@ -5,7 +5,7 @@ import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
 import { maintenanceDescriptions } from "../../data/data";
 import { initialValues } from "../../App";
-import { doc, collection, addDoc } from "firebase/firestore";
+import { doc, collection, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import auth from "../../firebase/firebase";
 
@@ -37,7 +37,8 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 if (auth.currentUser) {
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                     const itemsCollectionRef = collection(userDocRef, 'items');
-                    await addDoc(itemsCollectionRef, trimmedItem)
+                    // Create doc with custom ID (for reference when editing or deleting)
+                    await setDoc(doc(itemsCollectionRef, trimmedItem.id), trimmedItem);
                 }
                 setItems([...items, trimmedItem]);
                 setCurrentItem({ ...initialValues });

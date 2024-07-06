@@ -6,6 +6,8 @@ import { CHECKBOX_STATES } from "../Checkbox";
 import ItemsListDisplay from "../ItemsListDisplay/ItemsListDisplay";
 import ItemsListEdit from "../ItemsListEdit/ItemsListEdit";
 import ItemsListToolbar from "../../components/ItemsListToolbar/ItemsListToolbar"
+import auth, { db } from "../../firebase/firebase";
+import { doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
 
 interface ItemsListProps {
     items: Item[];
@@ -87,14 +89,22 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
     };
 
-    const handleSaveItem = (e: FormEvent, id: string) => {
-        if (editingItemId) {
+    const handleSaveItem = async (e: FormEvent, id: string) => {
+        if (editingItemId && auth.currentUser) {
             e.stopPropagation();
             console.log("saving")
             e.preventDefault();
             setItemIsBeingEdited(false);
             const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
+            const itemToUpload = updatedItems.find(item => item.id === id);
             setItems(updatedItems);
+           
+            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+            const itemsCollectionRef = collection(userDocRef, "items");
+            const itemsDocRef = doc(itemsCollectionRef, id)
+            // @todo: itemToUpload can't be type of Item/why does itemToUpload need a type?
+            await updateDoc(itemsDocRef, itemToUpload as { [value: string]: any });
+            // await updateDoc(itemsDocRef, itemToUpload);
             setEditingItemId("");
             setEditingItems([]);
         }
@@ -117,12 +127,24 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         setChecked(updatedChecked);
     };
 
-    // @todo: delete items from db
-    const handleDeleteItems = () => {
+    const handleDeleteItems = async () => {
         const newArr = items.filter(item => !selectedItems.includes(item.id));
         setItems(newArr);
+        selectedItems.forEach(itemId => {
+            deleteFromDb(itemId)
+        })
         setSelectedItems([]);
     };
+
+    const deleteFromDb = async (id: string) => {
+        if (auth.currentUser) {
+            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+            const itemsCollectionRef = collection(userDocRef, "items");
+            
+            const itemsDocRef = doc(itemsCollectionRef, id)
+            await deleteDoc(itemsDocRef);
+        }
+    }
 
     const handleVehicleSort = (e: ChangeEvent<HTMLSelectElement>) => {
         setVehicleSort(e.target.value)

@@ -1,19 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import ItemsList from './components/ItemsList/ItemsList';
 import InputForm from './components/InputForm/InputForm';
 import { Item, Shop, Vehicle } from './types';
-import testData from './data/testData';
+// import testData from './data/testData';
 import ManageShops from './components/ManageShops/ManageShops';
 import ManageVehicles from './components/ManageVehicles/ManageVehicles';
 import { datePickerCurrentDate } from './utils/formatters';
-import testVehicles from "./data/testVehicles";
-import testShops from "./data/testShops";
+// import testVehicles from "./data/testVehicles";
+// import testShops from "./data/testShops";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import auth from './firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/firebase';
-import { collection, query, where, getDocs, doc, setDoc, updateDoc, addDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, onSnapshot } from 'firebase/firestore';
 
 export const initialValues: Item = {
   id: "",
@@ -55,7 +55,6 @@ function App() {
   const checkIfUserExists = async () => {
     try {
         const collectionRef = collection(db, "users");
-        // const finalData = [];
         const q = query(collectionRef, where('userId', 'in', [auth?.currentUser?.uid]));
 
         const docSnap = await getDocs(q)
@@ -72,14 +71,10 @@ function App() {
 
   const uploadNewUser = async () => {
     if (auth.currentUser?.uid) {
-      // const docName = currentUser.uid;
       const newUserUpload = {
           userId: auth?.currentUser?.uid,
           email: auth?.currentUser?.email,
           name: auth?.currentUser?.displayName,
-          logItems: null,
-          vehicles: null,
-          shops: null,
       }
       
       try {
