@@ -21,6 +21,8 @@ function SettingsPage() {
             await deleteCollectionDocs(itemsRef);
             await deleteCollectionDocs(vehiclesRef);
             await deleteCollectionDocs(shopsRef);
+            
+            auth.currentUser.delete();
 
             await deleteDoc(userRef);
             auth.signOut()
