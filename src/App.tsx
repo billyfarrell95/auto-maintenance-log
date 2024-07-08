@@ -7,6 +7,7 @@ import { Item, Shop, Vehicle } from './types';
 import ManageShops from './components/ManageShops/ManageShops';
 import ManageVehicles from './components/ManageVehicles/ManageVehicles';
 import { datePickerCurrentDate } from './utils/formatters';
+import Header from './components/Header/Header';
 // import testVehicles from "./data/testVehicles";
 // import testShops from "./data/testShops";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -47,10 +48,6 @@ function App() {
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
   const navigate = useNavigate()
-
-  const logout = () => {
-    auth.signOut()
-  }
 
   const checkIfUserExists = async () => {
     try {
@@ -152,59 +149,58 @@ function App() {
         </div>
       ) : (
         <div>
-          <h1>Auto Maintenance Log</h1>
-          <button onClick={logout}>Sign out</button>
-          <button onClick={() => navigate("/settings")}>Settings</button>
-          {isUserNew ? (<p>Welcome, {auth?.currentUser?.displayName}!</p>) : (<p>Welcome back, {auth?.currentUser?.displayName}</p>)}
-          <div className="tabs-wrapper">
-            <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
-            <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
-            <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
-          </div>
-          {activeTab === tabs.log && (
-            <div>
-              <section>
-                <InputForm 
-                  items={items} 
-                  setItems={setItems} 
-                  vehicles={vehicles} 
-                  shops={shops} 
-                  selectedItems={selectedItems} 
-                  currentItem={currentItem} 
-                  setCurrentItem={setCurrentItem} 
-                  handleActiveTab={handleActiveTab} />
-                </section>
-                <div>
-                  {items.length ? (
-                      <ItemsList
-                        items={items}
-                        setItems={setItems}
-                        vehicles={vehicles}
-                        focusedItemId={focusedItemId}
-                        setFocusedItemId={setFocusedItemId}
-                        setSelectedItems={setSelectedItems}
-                        selectedItems={selectedItems}
-                        itemIsBeingEdited={itemIsBeingEdited}
-                        setItemIsBeingEdited={setItemIsBeingEdited}
-                      />
-                  ) : (
-                    <p><i>Nothing here...</i></p>
-                  )}
-                </div>
+          <Header />
+          <main className="main-wrapper">
+            {isUserNew ? (<p>Welcome, {auth?.currentUser?.displayName}!</p>) : (<p>Welcome back, {auth?.currentUser?.displayName}</p>)}
+            <div className="tabs-wrapper">
+              <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
+              <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
+              <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
             </div>
-          )}
-
-          {activeTab === tabs.vehicles && (
-            <section>
-              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
-            </section>
-          )}
+            {activeTab === tabs.log && (
+              <div>
+                <section>
+                  <InputForm
+                    items={items}
+                    setItems={setItems}
+                    vehicles={vehicles}
+                    shops={shops}
+                    selectedItems={selectedItems}
+                    currentItem={currentItem}
+                    setCurrentItem={setCurrentItem}
+                    handleActiveTab={handleActiveTab} />
+                  </section>
+                  <div>
+                    {items.length ? (
+                        <ItemsList
+                          items={items}
+                          setItems={setItems}
+                          vehicles={vehicles}
+                          focusedItemId={focusedItemId}
+                          setFocusedItemId={setFocusedItemId}
+                          setSelectedItems={setSelectedItems}
+                          selectedItems={selectedItems}
+                          itemIsBeingEdited={itemIsBeingEdited}
+                          setItemIsBeingEdited={setItemIsBeingEdited}
+                        />
+                    ) : (
+                      <p><i>Nothing here...</i></p>
+                    )}
+                  </div>
+              </div>
+            )}
+            {activeTab === tabs.vehicles && (
+              <section>
+                <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
+              </section>
+            )}
           
-          {activeTab === tabs.shops && (
-            <section>
-              <ManageShops shops={shops} setShops={setShops} />
-            </section>
-          )}
+            {activeTab === tabs.shops && (
+              <section>
+                <ManageShops shops={shops} setShops={setShops} />
+              </section>
+            )}
+          </main>
         </div>
       )}
     </>

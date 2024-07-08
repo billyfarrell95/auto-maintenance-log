@@ -48,10 +48,6 @@ h1,h2,h3,h4,h5,h6 {
     font-weight: bold;
 }
 
-h1 {
-    font-size: 1.5rem;
-}
-
 h2 {
     font-size: 1.1rem;
 }
@@ -69,10 +65,9 @@ h2 {
 section {
     padding-block: 1.5rem;
 }
-.main-wrapper {
+.app-wrapper {
     max-width: calc(100vw - 3rem);
     margin-inline: auto;
-    padding-block: 2rem;
 }
 
 /******* Buttons ********/

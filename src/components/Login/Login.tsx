@@ -5,6 +5,7 @@ import 'firebaseui/dist/firebaseui.css';
 import auth from '../../firebase/firebase';
 import "./Login.css";
 import { useNavigate } from 'react-router-dom';
+import Header from '../Header/Header';
 
 function Login() {
     const navigate = useNavigate()
@@ -42,11 +43,14 @@ function Login() {
     }, []);
     return (
         <>
-            <div className="login">
-                <h1>Login</h1>
-                <div id="firebaseui-auth-container"></div>
-                <div id="loader">Loading...</div>
-            </div>
+            <Header />
+            <main className="main-wrapper">
+                <div className="login">
+                    <h1>Login</h1>
+                    <div id="firebaseui-auth-container"></div>
+                    <div id="loader">Loading...</div>
+                </div>
+            </main>
         </>
     )
 }

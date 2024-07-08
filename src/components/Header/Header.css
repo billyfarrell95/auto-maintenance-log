@@ -1,0 +1,18 @@
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--clr-primary);
+    padding-block: 1rem;
+}
+
+.main-header h1 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.main-header__buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}

@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 function Home() {
     const navigate = useNavigate();
     return (
-        <div>
+        <main className="main-wrapper">
             <h1>Home</h1>
             {!auth.currentUser && (
-                <button onClick={() => {navigate("/login")}}>Log in</button>
+                <button className="btn btn-primary" onClick={() => {navigate("/login")}}>Log in</button>
             )}
-        </div>
+        </main>
     )
 }
 

@@ -2,7 +2,9 @@
 
 function Privacy() {
     return (
-        <h1>Privacy Policy</h1>
+        <main className="main-wrapper">
+            <h1>Privacy Policy</h1>
+        </main>
     )
 }
 

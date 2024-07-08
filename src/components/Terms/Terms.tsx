@@ -2,7 +2,9 @@
 
 function Terms() {
     return (
-        <h1>Terms of Service</h1>
+        <main className="main-wrapper">
+            <h1>Terms of Service</h1>
+        </main>
     )
 }
 
