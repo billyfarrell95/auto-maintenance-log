@@ -43,7 +43,7 @@ function Login() {
     }, []);
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <main className="main-wrapper">
                 <div className="login">
                     <h1>Login</h1>

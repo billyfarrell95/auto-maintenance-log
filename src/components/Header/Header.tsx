@@ -21,7 +21,12 @@ function Header() {
                     </div>
                 </>
             ) : (
-                <h1><a href="/login">Auto Maintenance Log</a></h1>
+                <>
+                <h1><a href="/">Auto Maintenance Log</a></h1>
+                <div className="main-header__buttons">
+                    <button className="btn btn-primary" onClick={() => {navigate("/login")}}>Log in</button>
+                </div>
+                </>
             )}
         </header>
     )

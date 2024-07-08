@@ -1,10 +1,13 @@
-
+import Header from "../Header/Header";
 
 function Privacy() {
     return (
-        <main className="main-wrapper">
-            <h1>Privacy Policy</h1>
-        </main>
+        <>
+            <Header />
+            <main className="main-wrapper">
+                <h1>Privacy Policy</h1>
+            </main>
+        </>
     )
 }
 
