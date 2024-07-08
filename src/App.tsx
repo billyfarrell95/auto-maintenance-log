@@ -143,12 +143,7 @@ function App() {
   
   return (
     <>
-      {!user ? (
-        <div>
-          <button onClick={() => {navigate("/login")}}>Log in</button>
-        </div>
-      ) : (
-        <div>
+      <div>
           <Header />
           <main className="main-wrapper">
             {isUserNew ? (<p>Welcome, {auth?.currentUser?.displayName}!</p>) : (<p>Welcome back, {auth?.currentUser?.displayName}</p>)}
@@ -202,7 +197,6 @@ function App() {
             )}
           </main>
         </div>
-      )}
     </>
   );
 }
