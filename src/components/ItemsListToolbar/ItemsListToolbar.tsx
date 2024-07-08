@@ -31,7 +31,7 @@ function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, 
                     {!selectedItems.length ? (
                         <div className="toolbar-wrapper__group">
                             <div>
-                                <span>Sort by: </span>
+                                <span>Filter by: </span>
                                 <select id="vehicles-select" onChange={(e) => handleVehicleSort(e)} value={vehicleSort}>
                                     <option value="">All vehicles</option>
                                     {vehicles.map((vehicle) => (
