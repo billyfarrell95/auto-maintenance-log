@@ -83,14 +83,14 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             </div>
             <div className="input-form__input-wrapper">
                 <input list="description-options" type="text" name="description" value={currentItem.description} onChange={handleChange} placeholder="Description" required />
-            </div>
-            <div className="input-form__input-wrapper">
-                <input type="text" inputMode="numeric" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} required />
                 <datalist id="description-options">
                     {maintenanceDescriptions.map((item, index) => (
                         <option value={item} key={index}>{item}</option>
                     ))}
                 </datalist>
+            </div>
+            <div className="input-form__input-wrapper">
+                <input type="text" inputMode="numeric" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} required />
             </div>
             <div className="input-form__input-wrapper">
                 <input list="vehicle-options" name="vehicle" type="text" value={currentItem.vehicle} onChange={handleChange} placeholder="Vehicle" required />

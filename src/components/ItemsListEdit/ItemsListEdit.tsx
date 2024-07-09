@@ -74,7 +74,6 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     inputMode="numeric"
                     name="mileage"
                     placeholder="Mileage" />
-                    
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
@@ -85,7 +84,6 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     inputMode="text"
                     name="vehicle"
                     placeholder="Vehicle" />
-
                 <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
