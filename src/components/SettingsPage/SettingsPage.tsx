@@ -41,18 +41,31 @@ function SettingsPage() {
                 <>
                     <Header />
                     <main className="main-wrapper">
-                        {!hasDeletedAccount ? (
-                            <>
-                                <h1>Account Settings</h1>
-                                <h2>Delete account</h2>
-                                {!isDeleting ? (<button className="btn btn-danger" onClick={() => setIsDeleting(true)}>Proceed to delete</button>) : (<button className="btn btn-danger" onClick={() => confirmDeleteAccount()}>Are you sure?</button>)}
-                            </>
-                        ) : (
-                            <>
-                                <p>Your account has been deleted.</p>
-                                <a href="/">Home</a>
-                            </>
-                        )}
+                        <a href="/app"><i className="bi bi-arrow-left"></i> Back</a>
+                        <section>
+                            <h2>Account Settings</h2>
+                            {!hasDeletedAccount ? (
+                                <>
+                                    <h3>Delete account</h3>
+                                    {!isDeleting ? (
+                                        <button className="btn btn-primary" onClick={() => setIsDeleting(true)}>Delete account</button>
+                                    ) : (
+                                        <>
+                                            <div className="d-flex gap-1">
+                                                <button className="btn btn-danger" onClick={() => confirmDeleteAccount()}>Are you sure?</button>
+                                                <button className="btn btn-secondary" onClick={() => setIsDeleting(false)}>Cancel</button>
+                                            </div>
+                                        </>
+                                    )}
+                                    <p className="fs-small my-1"><i className="bi bi-info-circle"></i> Deleting your account will remove your user account data, including login info and any data you have created.</p>
+                                </>
+                            ) : (
+                                <>
+                                    <p>Your account has been deleted.</p>
+                                    <a href="/">Home</a>
+                                </>
+                            )}
+                        </section>
                     </main>
                 </>
             ) : (

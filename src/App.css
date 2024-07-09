@@ -38,3 +38,7 @@
 .tabs-wrapper__tab-btn:hover {
     border-bottom: 1px solid var(--clr-primary);
 }
+
+.form-toggle-btn {
+    width: 110px;
+}

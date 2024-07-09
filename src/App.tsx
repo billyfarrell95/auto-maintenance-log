@@ -47,6 +47,7 @@ function App() {
   const [activeTab, setActiveTab] = useState(tabs.log);
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
+  const [isFormHidden, setIsFormHidden] = useState(false);
   const navigate = useNavigate()
 
   const checkIfUserExists = async () => {
@@ -146,26 +147,35 @@ function App() {
       <div>
           <Header />
           <main className="main-wrapper">
-            {isUserNew ? (<p>Welcome, {auth?.currentUser?.displayName}!</p>) : (<p>Welcome back, {auth?.currentUser?.displayName}</p>)}
+            {isUserNew ? (<p className="pb-1">Welcome, {auth?.currentUser?.displayName}!</p>) : (<p className="pb-1">Welcome back, {auth?.currentUser?.displayName}!</p>)}
             <div className="tabs-wrapper">
               <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
               <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
               <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
             </div>
             {activeTab === tabs.log && (
-              <div>
-                <section>
-                  <InputForm
-                    items={items}
-                    setItems={setItems}
-                    vehicles={vehicles}
-                    shops={shops}
-                    selectedItems={selectedItems}
-                    currentItem={currentItem}
-                    setCurrentItem={setCurrentItem}
-                    handleActiveTab={handleActiveTab} />
-                  </section>
-                  <div>
+              <section>
+                <>
+                  {!isFormHidden ? (
+                    <div className="pb-1">
+                      <button onClick={() => setIsFormHidden(true)} className="mb-1 btn btn-sm btn-secondary form-toggle-btn"><i className="bi bi-arrows-collapse"></i> Hide form</button>
+                      <InputForm
+                        items={items}
+                        setItems={setItems}
+                        vehicles={vehicles}
+                        shops={shops}
+                        selectedItems={selectedItems}
+                        currentItem={currentItem}
+                        setCurrentItem={setCurrentItem}
+                        handleActiveTab={handleActiveTab} />
+                    </div>
+                  ) : (
+                    <div className="pb-1">
+                      <button onClick={() => setIsFormHidden(false)} className="btn btn-sm btn-secondary form-toggle-btn"><i className="bi bi-plus-circle"></i> Add item</button>
+                    </div>
+                  )}
+                  </>
+                  <>
                     {items.length ? (
                         <ItemsList
                           items={items}
@@ -179,10 +189,10 @@ function App() {
                           setItemIsBeingEdited={setItemIsBeingEdited}
                         />
                     ) : (
-                      <p><i>Nothing here...</i></p>
+                      <p className="py-1"><i>Nothing here...</i></p>
                     )}
-                  </div>
-              </div>
+                  </>
+              </section>
             )}
             {activeTab === tabs.vehicles && (
               <section>

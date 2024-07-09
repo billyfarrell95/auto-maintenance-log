@@ -204,12 +204,51 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                     handleVehicleSort={handleVehicleSort}
                     editingItemId={editingItemId}
                     vehicles={vehicles}
-                    setSelectedItems={setSelectedItems} />
+                    setSelectedItems={setSelectedItems}
+                    focusedItemId={focusedItemId} />
 
                 {items.sort(sortByDate).map((item) => (
                     <div key={item.id}>
                         {item.vehicle.includes(vehicleSort) ? (
-                            <div className="data-item">
+                            <div>
+                                <div className="data-item small">
+                                    <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : undefined}
+                                        onClick={(e) => {handleItemClick(item.id, e)}} >
+                                            <div className={!focusedItemId ? "data-item__wrapper" : undefined}>
+                                                {!focusedItemId && (
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedItems.includes(item.id)}
+                                                        onClick={(e) => handleItemSelect(item.id, e)}
+                                                        disabled={itemIsBeingEdited}
+                                                        onChange={() => {}} />
+                                                )}
+                                                <>
+                                                    {focusedItemId === item.id ? (
+                                                        <>
+                                                            <ItemsListEdit
+                                                            editingItems={editingItems}
+                                                            setEditingItems={setEditingItems}
+                                                            setEditingItemId={setEditingItemId}
+                                                            setItemIsBeingEdited={setItemIsBeingEdited}
+                                                            item={item}
+                                                            vehicles={vehicles} />
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {!focusedItemId && (
+                                                                <ItemsListDisplay
+                                                                    selectedItems={selectedItems}
+                                                                    handleEdit={handleEdit}
+                                                                    item={item} />
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div className="data-item large">
                                 <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : undefined}
                                     onClick={(e) => {handleItemClick(item.id, e)}} >
                                         <div className="data-item__wrapper">
@@ -243,6 +282,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                         </div>
                                 </div>
                             </div>
+                        </div>
                         ) : (
                             null
                         )}

@@ -9,3 +9,16 @@
     min-height: 45px;
     align-items: center;
 }
+
+@media (hover: none) {
+    .toolbar-wrapper {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        padding-inline: 1.5rem;
+        z-index: 20;
+        border-top: 1px solid var(--clr-primary)
+    }
+}

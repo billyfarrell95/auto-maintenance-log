@@ -61,6 +61,10 @@ h2 {
     }
 }
 
+a:active {
+    color: var(--clr-primary)
+}
+
 /****** Global layout *****/
 section {
     padding-block: 1.5rem;
@@ -150,10 +154,25 @@ button:disabled {
 .align-self-flex-end {
     align-self: flex-end;
 }
+.gap-1 {
+    gap: 1rem;
+}
 
 /***** SPACING UTILITIES *****/
 .pb-1 {
     padding-bottom: 1rem;
+}
+
+.py-1 {
+    padding-block: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.my-1 {
+    margin-block: 1rem;
 }
 
 /***** TYPOGRAPHY ******/

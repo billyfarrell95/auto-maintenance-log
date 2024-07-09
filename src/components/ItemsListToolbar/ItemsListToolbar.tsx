@@ -13,10 +13,11 @@ interface ItemsListToolbarProps {
     editingItemId: string;
     vehicles: Vehicle[];
     setSelectedItems: Dispatch<React.SetStateAction<string[]>>;
+    focusedItemId: string | null;
 }
 
 
-function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, handleDeleteItems, handleSaveItem, vehicleSort, editingItemId, handleVehicleSort, vehicles, setSelectedItems }: ItemsListToolbarProps) {
+function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, handleDeleteItems, handleSaveItem, vehicleSort, editingItemId, handleVehicleSort, vehicles, setSelectedItems, focusedItemId }: ItemsListToolbarProps) {
 
     return (
         <>
@@ -42,9 +43,23 @@ function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, 
                         </div>
                     ) : (
                         <div className="toolbar-wrapper__group">
-                            <button onClick={() => setSelectedItems([])} className="btn btn-sm btn-secondary" disabled={itemIsBeingEdited}><i className="bi bi-x-lg"></i></button>
-                            <span>{selectedItems.length} selected</span>
-                            <button onClick={handleDeleteItems} className="btn btn-sm btn-danger" disabled={itemIsBeingEdited}>Delete selected</button>
+                            <button 
+                                onClick={() => setSelectedItems([])} 
+                                className="btn btn-sm btn-secondary" 
+                                disabled={itemIsBeingEdited}>
+                                <i className="bi bi-x-lg"></i>
+                            </button>
+                            <button 
+                                onClick={handleDeleteItems} 
+                                className="btn btn-sm btn-danger" 
+                                disabled={itemIsBeingEdited}>
+                                {!focusedItemId ? (
+                                    <>Delete selected</>
+                                ) : (
+                                    <>Delete item</>
+                                )}
+                            </button>
+                            {!focusedItemId && (<span>{selectedItems.length} selected</span>)}
                         </div>
                     )}
                     </>
