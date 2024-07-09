@@ -97,7 +97,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const handleSaveItem = async (e: FormEvent, id: string) => {
         if (editingItemId && auth.currentUser) {
             e.stopPropagation();
-            console.log("saving")
             e.preventDefault();
             setItemIsBeingEdited(false);
             const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
@@ -110,6 +109,14 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             // @todo: itemToUpload can't be type of Item/why does itemToUpload need a type?
             await updateDoc(itemsDocRef, itemToUpload as { [value: string]: any });
             // await updateDoc(itemsDocRef, itemToUpload);
+            setEditingItemId("");
+            setEditingItems([]);
+        } else if (editingItemId && !auth.currentUser) {
+            e.stopPropagation();
+            e.preventDefault();
+            setItemIsBeingEdited(false);
+            const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
+            setItems(updatedItems);
             setEditingItemId("");
             setEditingItems([]);
         }
@@ -135,9 +142,14 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const handleDeleteItems = async () => {
         const newArr = items.filter(item => !selectedItems.includes(item.id));
         setItems(newArr);
-        selectedItems.forEach(itemId => {
-            deleteFromDb(itemId)
-        })
+        if (auth.currentUser) {
+            selectedItems.forEach(itemId => {
+                deleteFromDb(itemId)
+            })
+            console.log("deleting items from db")
+        } else {
+            console.log("deleting items from demo")
+        }
         setSelectedItems([]);
     };
 

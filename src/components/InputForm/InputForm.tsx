@@ -39,6 +39,9 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                     const itemsCollectionRef = collection(userDocRef, 'items');
                     // Create doc with custom ID (for reference when editing or deleting)
                     await setDoc(doc(itemsCollectionRef, trimmedItem.id), trimmedItem);
+                    console.log("adding item to db...")
+                } else {
+                    console.log("adding demo item")
                 }
                 setItems([...items, trimmedItem]);
                 setCurrentItem({ ...initialValues });

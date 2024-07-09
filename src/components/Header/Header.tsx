@@ -11,7 +11,6 @@ function Header() {
 
     return (
         <header className="main-header">
-            
             {auth.currentUser ? (
                 <>
                     <h1><a href="/app">Auto Maintenance Log</a></h1>

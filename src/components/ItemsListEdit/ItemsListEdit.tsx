@@ -16,13 +16,11 @@ interface ItemsListEditProps {
 function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
-        console.log(name, value)
         let updatedValue = value;
 
         if (name.startsWith('mileage')) {
             updatedValue = formatMileage(value);
         }
-
 
         const updatedItems = editingItems.map(item => 
             item.id === id ? { ...item, [name.split('-')[0]]: updatedValue } : item

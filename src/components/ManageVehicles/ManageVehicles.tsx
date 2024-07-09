@@ -41,6 +41,9 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                     const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
                     await addDoc(vehiclesCollectionRef, newVehicleTrimmed)
+                    console.log("adding vehicle to db")
+                } else {
+                    console.log("adding vehicle to demo")
                 }
             } catch (error) {
                 console.error("Error adding new vehicle to db", error)
@@ -67,6 +70,9 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
                 querySnapshot.forEach((doc: any) => {
                     deleteDoc(doc.ref);
                 });
+                console.log("deleting vehicle frmo db")
+            } else {
+                console.log("deleting vehicle from demo")
             }
         } catch (error) {
             console.error("Error deleting vehicle from db", error)

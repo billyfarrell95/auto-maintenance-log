@@ -48,7 +48,8 @@ function App() {
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
   const [isFormHidden, setIsFormHidden] = useState(false);
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate();
 
   const checkIfUserExists = async () => {
     try {
@@ -89,19 +90,20 @@ function App() {
       if (user && auth.currentUser) {
         setUser(true)
         checkIfUserExists()
+        setLoading(false)
       } else {
         navigate("/login")
         setUser(false)
       } 
     })
-  }, [user])
+  }, [])
 
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
 
   useEffect(() => {
-    if (auth?.currentUser?.uid) {
+    if (auth?.currentUser?.uid && user) {
       const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
       const itemsCollectionRef = collection(userDocRef, 'items');
       const shopsCollectionRef = collection(userDocRef, 'shops');
@@ -114,7 +116,9 @@ function App() {
             id: doc.id,
             ...doc.data()
           });
+          
         });
+        console.log("adding items on user change")
         setItems(itemsData);
       });
       onSnapshot(shopsCollectionRef, (querySnap) => {
@@ -126,6 +130,7 @@ function App() {
             ...doc.data()
           });
         });
+        console.log("adding shops on user change")
         setShops(shopsData);
       });
       onSnapshot(vehiclesCollectionRef, (querySnap) => {
@@ -137,76 +142,87 @@ function App() {
             ...doc.data()
           });
         });
+        console.log("adding vehicles on user change")
         setVehicles(vehiclesData);
       });
     }
   }, [user]);  
+
+  useEffect(() => {
+    console.log("USER STATE UPDATED")
+  }, [user])
   
   return (
     <>
-      <div>
-          <Header />
-          <main className="main-wrapper">
-            {isUserNew ? (<p className="pb-1">Welcome, {auth?.currentUser?.displayName}!</p>) : (<p className="pb-1">Welcome back, {auth?.currentUser?.displayName}!</p>)}
-            <div className="tabs-wrapper">
-              <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
-              <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
-              <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
-            </div>
-            {activeTab === tabs.log && (
-              <section>
+      {!loading ? (
+        <div>
+        <Header />
+        <main className="main-wrapper">
+          {isUserNew ? (<p className="pb-1">Welcome, {auth?.currentUser?.displayName}!</p>) : (<p className="pb-1">Welcome back, {auth?.currentUser?.displayName}!</p>)}
+          <div className="tabs-wrapper">
+            <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
+            <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
+            <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
+          </div>
+          {activeTab === tabs.log && (
+            <section>
+              <>
+                {!isFormHidden ? (
+                  <div className="pb-1">
+                    <button onClick={() => setIsFormHidden(true)} className="mb-1 btn btn-sm btn-secondary form-toggle-btn"><i className="bi bi-arrows-collapse"></i> Hide form</button>
+                    <InputForm
+                      items={items}
+                      setItems={setItems}
+                      vehicles={vehicles}
+                      shops={shops}
+                      selectedItems={selectedItems}
+                      currentItem={currentItem}
+                      setCurrentItem={setCurrentItem}
+                      handleActiveTab={handleActiveTab} />
+                  </div>
+                ) : (
+                  <div className="pb-1">
+                    <button onClick={() => setIsFormHidden(false)} className="btn btn-sm btn-secondary form-toggle-btn"><i className="bi bi-plus-circle"></i> Add item</button>
+                  </div>
+                )}
+                </>
                 <>
-                  {!isFormHidden ? (
-                    <div className="pb-1">
-                      <button onClick={() => setIsFormHidden(true)} className="mb-1 btn btn-sm btn-secondary form-toggle-btn"><i className="bi bi-arrows-collapse"></i> Hide form</button>
-                      <InputForm
+                  {items.length ? (
+                      <ItemsList
                         items={items}
                         setItems={setItems}
                         vehicles={vehicles}
-                        shops={shops}
+                        focusedItemId={focusedItemId}
+                        setFocusedItemId={setFocusedItemId}
+                        setSelectedItems={setSelectedItems}
                         selectedItems={selectedItems}
-                        currentItem={currentItem}
-                        setCurrentItem={setCurrentItem}
-                        handleActiveTab={handleActiveTab} />
-                    </div>
+                        itemIsBeingEdited={itemIsBeingEdited}
+                        setItemIsBeingEdited={setItemIsBeingEdited}
+                      />
                   ) : (
-                    <div className="pb-1">
-                      <button onClick={() => setIsFormHidden(false)} className="btn btn-sm btn-secondary form-toggle-btn"><i className="bi bi-plus-circle"></i> Add item</button>
-                    </div>
+                    <p className="py-1"><i>Nothing here...</i></p>
                   )}
-                  </>
-                  <>
-                    {items.length ? (
-                        <ItemsList
-                          items={items}
-                          setItems={setItems}
-                          vehicles={vehicles}
-                          focusedItemId={focusedItemId}
-                          setFocusedItemId={setFocusedItemId}
-                          setSelectedItems={setSelectedItems}
-                          selectedItems={selectedItems}
-                          itemIsBeingEdited={itemIsBeingEdited}
-                          setItemIsBeingEdited={setItemIsBeingEdited}
-                        />
-                    ) : (
-                      <p className="py-1"><i>Nothing here...</i></p>
-                    )}
-                  </>
-              </section>
-            )}
-            {activeTab === tabs.vehicles && (
-              <section>
-                <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
-              </section>
-            )}
-          
-            {activeTab === tabs.shops && (
-              <section>
-                <ManageShops shops={shops} setShops={setShops} />
-              </section>
-            )}
-          </main>
-        </div>
+                </>
+            </section>
+          )}
+          {activeTab === tabs.vehicles && (
+            <section>
+              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
+            </section>
+          )}
+        
+          {activeTab === tabs.shops && (
+            <section>
+              <ManageShops shops={shops} setShops={setShops} />
+            </section>
+          )}
+        </main>
+      </div>
+      ) : (
+        <main className="main-wrapper">
+          Loading...
+        </main>
+      )}
     </>
   );
 }

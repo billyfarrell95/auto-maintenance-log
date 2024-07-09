@@ -40,7 +40,10 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                 if (auth.currentUser) {
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                     const shopsCollectionRef = collection(userDocRef, 'shops');
-                    await addDoc(shopsCollectionRef, newShopTrimmed)
+                    await addDoc(shopsCollectionRef, newShopTrimmed);
+                    console.log("adding shop to db")
+                } else {
+                    console.log("adding shop to demo")
                 }
             } catch (error) {
                 console.error("Error adding new shop to db", error)
@@ -67,6 +70,9 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                 querySnapshot.forEach((doc: any) => {
                     deleteDoc(doc.ref);
                 });
+                console.log("deleting shop from db")
+            } else {
+                console.log("deleting shop from demo")
             }
         } catch (error) {
             console.error("Error deleting shop from db", error)
