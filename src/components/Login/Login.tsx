@@ -5,7 +5,6 @@ import 'firebaseui/dist/firebaseui.css';
 import auth from '../../firebase/firebase';
 import "./Login.css";
 import { useNavigate } from 'react-router-dom';
-import Header from '../Header/Header';
 
 function Login() {
     const navigate = useNavigate()
@@ -18,8 +17,7 @@ function Login() {
 
         ui.start('#firebaseui-auth-container', {
             callbacks: {
-                signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-                    // Action if the user is authenticated successfully
+                signInSuccessWithAuthResult: () => {
                     return true;
                 },
                 uiShown: function() {
@@ -43,7 +41,6 @@ function Login() {
     }, []);
     return (
         <>
-            {/* <Header /> */}
             <main className="main-wrapper">
                 <div className="login">
                     <h1>Login</h1>

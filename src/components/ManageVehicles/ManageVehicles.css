@@ -7,10 +7,6 @@
 .vehicles-form input, .vehicles-form label {
     display: block;
 }
-/* 
-.vehicles-list-wrapper {
-    padding-block: 1.5rem;
-} */
 
 .vehicles-list-wrapper__list {
     list-style-type: none;

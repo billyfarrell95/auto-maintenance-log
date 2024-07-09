@@ -28,15 +28,12 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
             <div className="data-item__display-wrapper small">
                 <div className={handleDefineClasses(item)}>
                     <div className="item">
-                        {/* <div><label>Date</label></div> */}
                         <span className="data-item__data"><i className="bi bi-calendar-check"></i> {formatDate(item.date)}</span>
                     </div>
                     <div className="item">
-                        {/* <div><label>Vehicle</label></div> */}
                         <span className="data-item__data"><i className="bi bi-car-front-fill"></i> {item.vehicle}</span>
                     </div>
                     <div className="item">
-                        {/* <div><label>Description</label></div> */}
                         <span className="data-item__data"><i className="bi bi-sticky"></i> {item.description}</span>
                     </div>
                 </div>

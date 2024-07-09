@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-// import './App.css'
+import { useState } from 'react'
 import ItemsList from '../ItemsList/ItemsList';
 import InputForm from '../InputForm/InputForm';
 import { Item, Shop, Vehicle} from '../../types';
@@ -10,9 +9,6 @@ import { datePickerCurrentDate } from '../../utils/formatters';
 import Header from '../Header/Header';
 import testVehicles from '../../data/testVehicles';
 import testShops from '../../data/testShops';
-// import { useNavigate } from 'react-router-dom';
-// import { collection, query, where, getDocs, doc, setDoc, onSnapshot } from 'firebase/firestore';
-
 export const initialValues: Item = {
   id: "",
   date: datePickerCurrentDate(),
@@ -31,8 +27,6 @@ export const tabs = {
 }
 
 function DemoApp() {
-//   const [user, setUser] = useState(false);
-  const [isUserNew, setIsUserNew] = useState(Boolean);
   const [items, setItems] = useState<Item[]>(testData);
   const [vehicles, setVehicles] = useState<Vehicle[]>(testVehicles);
   const [shops, setShops] = useState<Shop[]>(testShops);
@@ -42,101 +36,10 @@ function DemoApp() {
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
   const [isFormHidden, setIsFormHidden] = useState(false);
-//   const [loading, setLoading] = useState(true);
-//   const navigate = useNavigate();
-
-//   const checkIfUserExists = async () => {
-//     try {
-//         const collectionRef = collection(db, "users");
-//         const q = query(collectionRef, where('userId', 'in', [auth?.currentUser?.uid]));
-
-//         const docSnap = await getDocs(q)
-//         if (docSnap.empty) {
-//           setIsUserNew(true)
-//           uploadNewUser()
-//         } else {
-//           setIsUserNew(false)
-//         }
-//     } catch (error) {
-//         console.error("Error checking if user exists", error)
-//     }
-// }
-
-//   const uploadNewUser = async () => {
-//     if (auth.currentUser?.uid) {
-//       const newUserUpload = {
-//           userId: auth?.currentUser?.uid,
-//           email: auth?.currentUser?.email,
-//           name: auth?.currentUser?.displayName,
-//       }
-      
-//       try {
-//           const userRef = doc(db, "users", auth?.currentUser?.uid)
-//           await setDoc(userRef, newUserUpload);
-//       } catch (error) {
-//           console.error("Error uploading new user", error)
-//       }
-//     }
-// }
-
-//   useEffect(() => {
-//     const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
-//       if (user && auth.currentUser) {
-//         setUser(true)
-//         checkIfUserExists()
-//         setLoading(false)
-//       } else {
-//         navigate("/login")
-//         setUser(false)
-//       } 
-//     })
-//   }, [user])
 
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
   }
-
-//   useEffect(() => {
-//     if (auth?.currentUser?.uid) {
-//       const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
-//       const itemsCollectionRef = collection(userDocRef, 'items');
-//       const shopsCollectionRef = collection(userDocRef, 'shops');
-//       const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
-//       onSnapshot(itemsCollectionRef, (querySnap) => {
-//         const itemsData: Item[] = [];
-//         // @todo: define type for "doc"
-//         querySnap.forEach((doc: any) => {
-//           itemsData.push({
-//             id: doc.id,
-//             ...doc.data()
-//           });
-//         });
-//         setItems(itemsData);
-//       });
-//       onSnapshot(shopsCollectionRef, (querySnap) => {
-//         const shopsData: Shop[] = [];
-//         // @todo: define type for "doc"
-//         querySnap.forEach((doc: any) => {
-//           shopsData.push({
-//             id: doc.id,
-//             ...doc.data()
-//           });
-//         });
-//         setShops(shopsData);
-//       });
-//       onSnapshot(vehiclesCollectionRef, (querySnap) => {
-//         const vehiclesData: Vehicle[] = [];
-//         // @todo: define type for "doc"
-//         querySnap.forEach((doc: any) => {
-//           vehiclesData.push({
-//             id: doc.id,
-//             ...doc.data()
-//           });
-//         });
-//         setVehicles(vehiclesData);
-//       });
-//     }
-//   }, [user]);  
   
   return (
     <>

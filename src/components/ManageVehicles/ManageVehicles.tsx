@@ -3,7 +3,7 @@ import { Vehicle } from "../../types";
 import "./ManageVehicles.css";
 import auth from "../../firebase/firebase";
 import { doc, collection, addDoc, query, where, deleteDoc, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebase"
+import { db } from "../../firebase/firebase";
 
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
@@ -34,23 +34,18 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
             name: newVehicle.name.trim(),
             id: crypto.randomUUID()
         }
-        // @todo: improve validation against duplicate names
         if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
             try {
                 if (auth.currentUser) {
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                     const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
                     await addDoc(vehiclesCollectionRef, newVehicleTrimmed)
-                    console.log("adding vehicle to db")
-                } else {
-                    console.log("adding vehicle to demo")
                 }
             } catch (error) {
                 console.error("Error adding new vehicle to db", error)
             }
             setVehicles([...vehicles, newVehicleTrimmed]);
         } else {
-            // @todo: input validation when vehicle name has been used
             alert('Vehicle name already used.');
         }
         setNewVehicle({...initialValues});
@@ -66,13 +61,9 @@ function ManageVehicles({ vehicles, setVehicles }: ManageVehiclesProps) {
                 const q = query(vehiclesCollectionRef, where("id", "==", id))
 
                 const querySnapshot = await getDocs(q);
-                // @todo: define type for "doc"
-                querySnapshot.forEach((doc: any) => {
+                querySnapshot.forEach((doc) => {
                     deleteDoc(doc.ref);
                 });
-                console.log("deleting vehicle frmo db")
-            } else {
-                console.log("deleting vehicle from demo")
             }
         } catch (error) {
             console.error("Error deleting vehicle from db", error)

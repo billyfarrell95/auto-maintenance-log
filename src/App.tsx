@@ -3,18 +3,15 @@ import './App.css'
 import ItemsList from './components/ItemsList/ItemsList';
 import InputForm from './components/InputForm/InputForm';
 import { Item, Shop, Vehicle } from './types';
-// import testData from './data/testData';
 import ManageShops from './components/ManageShops/ManageShops';
 import ManageVehicles from './components/ManageVehicles/ManageVehicles';
 import { datePickerCurrentDate } from './utils/formatters';
 import Header from './components/Header/Header';
-// import testVehicles from "./data/testVehicles";
-// import testShops from "./data/testShops";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import auth from './firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/firebase';
-import { collection, query, where, getDocs, doc, setDoc, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
 
 export const initialValues: Item = {
   id: "",
@@ -39,9 +36,6 @@ function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
-  // const [items, setItems] = useState<Item[]>(testData);
-  // const [vehicles, setVehicles] = useState<Vehicle[]>(testVehicles);
-  // const [shops, setShops] = useState<Shop[]>(testShops);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(tabs.log);
@@ -96,7 +90,9 @@ function App() {
         setUser(false)
       } 
     })
-  }, [])
+
+    return () => unsubscribe();
+  }, [user])
 
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab)
@@ -108,50 +104,62 @@ function App() {
       const itemsCollectionRef = collection(userDocRef, 'items');
       const shopsCollectionRef = collection(userDocRef, 'shops');
       const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
-      onSnapshot(itemsCollectionRef, (querySnap) => {
-        const itemsData: Item[] = [];
-        // @todo: define type for "doc"
-        querySnap.forEach((doc: any) => {
-          itemsData.push({
-            id: doc.id,
-            ...doc.data()
-          });
+
+      const fetchUserData = async () => {
+        try {
           
-        });
-        console.log("adding items on user change")
-        setItems(itemsData);
-      });
-      onSnapshot(shopsCollectionRef, (querySnap) => {
-        const shopsData: Shop[] = [];
-        // @todo: define type for "doc"
-        querySnap.forEach((doc: any) => {
-          shopsData.push({
-            id: doc.id,
-            ...doc.data()
+          const itemsSnapshot = await getDocs(itemsCollectionRef);
+          const shopsSnapshot = await getDocs(shopsCollectionRef);
+          const vehiclesSnapshot = await getDocs(vehiclesCollectionRef);
+          let itemsData: Item[] = [];
+          let shopsData: Shop[] = [];
+          let vehiclesData: Vehicle[] = [];
+      
+          itemsSnapshot.forEach(doc => {
+            const data = doc.data();
+            const item: Item = {
+              id: doc.id,
+              date: data.date,
+              vehicle: data.vehicle,
+              cost: data.cost,
+              description: data.description,
+              shop: data.shop,
+              mileage: data.mileage,
+              memo: data.memo,
+            };
+            itemsData.push(item);
           });
-        });
-        console.log("adding shops on user change")
-        setShops(shopsData);
-      });
-      onSnapshot(vehiclesCollectionRef, (querySnap) => {
-        const vehiclesData: Vehicle[] = [];
-        // @todo: define type for "doc"
-        querySnap.forEach((doc: any) => {
-          vehiclesData.push({
-            id: doc.id,
-            ...doc.data()
+
+          shopsSnapshot.forEach(doc => {
+            const data = doc.data();
+            const shop: Shop = {
+              id: doc.id,
+              name: data.name
+            };
+            shopsData.push(shop);
           });
-        });
-        console.log("adding vehicles on user change")
-        setVehicles(vehiclesData);
-      });
+
+          vehiclesSnapshot.forEach(doc => {
+            const data = doc.data();
+            const vehicle: Vehicle = {
+              id: doc.id,
+              name: data.name
+            };
+            vehiclesData.push(vehicle);
+          });
+      
+          setItems(itemsData);
+          setShops(shopsData);
+          setVehicles(vehiclesData);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchUserData()
     }
   }, [user]);  
 
-  useEffect(() => {
-    console.log("USER STATE UPDATED")
-  }, [user])
-  
   return (
     <>
       {!loading ? (

@@ -1,15 +1,15 @@
 import auth from "../../firebase/firebase";
 import { collection, doc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useState } from "react";
 import { deleteDoc } from "firebase/firestore";
 import Header from "../Header/Header";
+import { CollectionReference } from "firebase/firestore";
 
 function SettingsPage() {
     const [isDeleting, setIsDeleting] = useState(false);
     const [hasDeletedAccount, setHasDeleteAccount] = useState(false)
-    // const navigate = useNavigate()
     const confirmDeleteAccount = async () => {
         if (auth.currentUser) {
             setHasDeleteAccount(true)
@@ -28,8 +28,8 @@ function SettingsPage() {
             auth.signOut()
         }
     }
-    // @todo: defined types for collectionRef
-    const deleteCollectionDocs = async (collectionRef: any) => {
+
+    const deleteCollectionDocs = async (collectionRef: CollectionReference ) => {
         const snapshot = await getDocs(collectionRef);
         snapshot.forEach((doc) => {
             deleteDoc(doc.ref);
@@ -37,7 +37,7 @@ function SettingsPage() {
     }
     return (
         <>
-            {auth.currentUser ? (
+            {auth?.currentUser?.uid ? (
                 <>
                     <Header />
                     <main className="main-wrapper">

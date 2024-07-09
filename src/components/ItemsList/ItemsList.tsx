@@ -101,14 +101,12 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setItemIsBeingEdited(false);
             const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
             const itemToUpload = updatedItems.find(item => item.id === id);
+            console.log("ITEM TO UPLOAD", itemToUpload)
             setItems(updatedItems);
-           
             const userDocRef = doc(db, "users", auth?.currentUser?.uid);
             const itemsCollectionRef = collection(userDocRef, "items");
-            const itemsDocRef = doc(itemsCollectionRef, id)
-            // @todo: itemToUpload can't be type of Item/why does itemToUpload need a type?
-            await updateDoc(itemsDocRef, itemToUpload as { [value: string]: any });
-            // await updateDoc(itemsDocRef, itemToUpload);
+            const itemsDocRef = doc(itemsCollectionRef, id)             
+            await updateDoc(itemsDocRef, itemToUpload as Partial<Item>);
             setEditingItemId("");
             setEditingItems([]);
         } else if (editingItemId && !auth.currentUser) {
@@ -146,9 +144,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             selectedItems.forEach(itemId => {
                 deleteFromDb(itemId)
             })
-            console.log("deleting items from db")
-        } else {
-            console.log("deleting items from demo")
         }
         setSelectedItems([]);
     };
