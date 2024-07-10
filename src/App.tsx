@@ -200,6 +200,7 @@ function App() {
                         items={items}
                         setItems={setItems}
                         vehicles={vehicles}
+                        shops={shops}
                         focusedItemId={focusedItemId}
                         setFocusedItemId={setFocusedItemId}
                         setSelectedItems={setSelectedItems}
@@ -215,7 +216,7 @@ function App() {
           )}
           {activeTab === tabs.vehicles && (
             <section>
-              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
+              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} items={items} setItems={setItems} />
             </section>
           )}
         

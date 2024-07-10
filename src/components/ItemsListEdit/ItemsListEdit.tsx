@@ -1,7 +1,7 @@
 import ItemsListInput from "../ItemListInput";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { formatMileage } from "../../utils/formatters";
-import { Item, Vehicle } from "../../types";
+import { Item, Vehicle, Shop } from "../../types";
 import CurrencyInput from "react-currency-input-field";
 
 interface ItemsListEditProps {
@@ -10,10 +10,11 @@ interface ItemsListEditProps {
     item: Item;
     setEditingItemId: Dispatch<SetStateAction<string>>;
     setItemIsBeingEdited: Dispatch<SetStateAction<boolean>>;
-    vehicles: Vehicle[]
+    vehicles: Vehicle[],
+    shops: Shop[]
 }
 
-function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited }: ItemsListEditProps) {
+function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, setItemIsBeingEdited, shops, vehicles }: ItemsListEditProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>, id: string) => {
         const { name, value } = e.target;
         let updatedValue = value;
@@ -36,6 +37,12 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
 
     const handleFocus = (e: ChangeEvent<HTMLInputElement> , id: string) => {
         e.target.select()
+        e.stopPropagation()
+        setEditingItemId(id);
+        setItemIsBeingEdited(true)
+    }
+
+    const handleSelectFocus = (e: ChangeEvent<HTMLSelectElement>, id: string) => {
         e.stopPropagation()
         setEditingItemId(id);
         setItemIsBeingEdited(true)
@@ -74,7 +81,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     inputMode="numeric"
                     name="mileage"
                     placeholder="Mileage" />
-                <ItemsListInput
+                {/* <ItemsListInput
                     itemId={item.id}
                     handleChange={handleChange}
                     setEditingItemId={setEditingItemId}
@@ -83,17 +90,23 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     type="text"
                     inputMode="text"
                     name="vehicle"
-                    placeholder="Vehicle" />
-                <ItemsListInput
-                    itemId={item.id}
-                    handleChange={handleChange}
-                    setEditingItemId={setEditingItemId}
-                    setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.shop || "") : (item.shop)}
-                    type="text"
-                    inputMode="text"
-                    name="shop"
-                    placeholder="Shop" />
+                    placeholder="Vehicle" /> */}
+                <div className="data-item__display">
+                    <select id="vehicles-select" name="vehicle" defaultValue={item.vehicle} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
+                        <option value="">-- select vehicle --</option>
+                        {vehicles && vehicles.map((vehicle) => (
+                            <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="data-item__display">
+                    <select id="shops-select" name="shop" defaultValue={item.shop} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
+                        <option value="">-- select shop --</option>
+                        {shops && shops.map((shop) => (
+                            <option key={shop.id} value={shop.name}>{shop.name}</option>
+                        ))}
+                    </select>
+                </div>
                 <div className="data-item__display">
                     <label>Cost</label>
                     <CurrencyInput

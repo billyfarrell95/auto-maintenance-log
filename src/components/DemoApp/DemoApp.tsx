@@ -85,8 +85,8 @@ function DemoApp() {
                         setSelectedItems={setSelectedItems}
                         selectedItems={selectedItems}
                         itemIsBeingEdited={itemIsBeingEdited}
-                        setItemIsBeingEdited={setItemIsBeingEdited}
-                      />
+                        setItemIsBeingEdited={setItemIsBeingEdited} 
+                        shops={shops} />
                   ) : (
                     <p className="py-1"><i>Nothing here...</i></p>
                   )}

@@ -1,5 +1,5 @@
 import { useEffect, useState, MouseEvent, KeyboardEvent, FormEvent, Dispatch, SetStateAction, ChangeEvent } from "react";
-import { Item, Vehicle } from "../../types";
+import { Item, Vehicle, Shop } from "../../types";
 import "./ItemList.css"
 import ItemsListHeader from "../ItemsListHeader/ItemsListHeader";
 import { CHECKBOX_STATES } from "../Checkbox";
@@ -13,6 +13,7 @@ interface ItemsListProps {
     items: Item[];
     selectedItems: string[];
     vehicles: Vehicle[];
+    shops: Shop[];
     setItems: Dispatch<SetStateAction<Item[]>>;
     setSelectedItems: Dispatch<React.SetStateAction<string[]>>;
     itemIsBeingEdited: boolean;
@@ -21,7 +22,7 @@ interface ItemsListProps {
     setFocusedItemId: Dispatch<SetStateAction<string | null>>;
 }
 
-function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId, vehicles }: ItemsListProps) {
+function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBeingEdited, setItemIsBeingEdited, focusedItemId, setFocusedItemId, vehicles, shops }: ItemsListProps) {
     const [editingItems, setEditingItems] = useState<Item[]>([]);
     const [editingItemId, setEditingItemId] = useState("")
     const [checked, setChecked] = useState(CHECKBOX_STATES.Empty);
@@ -140,10 +141,14 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
     const handleDeleteItems = async () => {
         const newArr = items.filter(item => !selectedItems.includes(item.id));
         setItems(newArr);
-        if (auth.currentUser) {
-            selectedItems.forEach(itemId => {
-                deleteFromDb(itemId)
-            })
+        try {
+            if (auth.currentUser) {
+                selectedItems.forEach(itemId => {
+                    deleteFromDb(itemId)
+                })
+            }
+        } catch (error) {
+            console.error("Error deleting log item from db", error)
         }
         setSelectedItems([]);
     };
@@ -239,7 +244,8 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                                             setEditingItemId={setEditingItemId}
                                                             setItemIsBeingEdited={setItemIsBeingEdited}
                                                             item={item}
-                                                            vehicles={vehicles} />
+                                                            vehicles={vehicles}
+                                                            shops={shops} />
                                                         </>
                                                     ) : (
                                                         <>
@@ -275,7 +281,8 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
                                                         setEditingItemId={setEditingItemId}
                                                         setItemIsBeingEdited={setItemIsBeingEdited}
                                                         item={item}
-                                                        vehicles={vehicles} />
+                                                        vehicles={vehicles}
+                                                        shops={shops} />
                                                     </>
                                                 ) : (
                                                     <>

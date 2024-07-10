@@ -51,6 +51,7 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
         setNewShop({...initialValues});
     }
 
+    // @todo: shops aren't deleted from db
     const handleDeleteShop = async (id: string) => {
         const updatedShops = shops.filter((shop, _) => shop.id !== id);
         setShops(updatedShops)
