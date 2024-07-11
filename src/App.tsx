@@ -133,7 +133,7 @@ function App() {
           shopsSnapshot.forEach(doc => {
             const data = doc.data();
             const shop: Shop = {
-              id: doc.id,
+              id: doc.data().id,
               name: data.name
             };
             shopsData.push(shop);
@@ -142,12 +142,11 @@ function App() {
           vehiclesSnapshot.forEach(doc => {
             const data = doc.data();
             const vehicle: Vehicle = {
-              id: doc.id,
+              id: doc.data().id,
               name: data.name
             };
             vehiclesData.push(vehicle);
           });
-      
           setItems(itemsData);
           setShops(shopsData);
           setVehicles(vehiclesData);
@@ -162,7 +161,7 @@ function App() {
 
   return (
     <>
-      {!loading ? (
+      {!loading && items !== undefined ? (
         <div>
         <Header />
         <main className="main-wrapper">

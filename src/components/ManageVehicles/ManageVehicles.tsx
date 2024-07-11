@@ -55,7 +55,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems }: ManageVehicl
         setNewVehicle({...initialValues});
     }
 
-    // @todo: vehicles aren't deleted from db
     const handleDeleteVehicle = async (id: string) => {
         const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id !== id);
         setVehicles(updatedVehicles)
@@ -63,7 +62,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems }: ManageVehicl
             if (auth.currentUser) {
                 const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                 const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
-                const q = query(vehiclesCollectionRef, where("id", "==", id))
+                const q = query(vehiclesCollectionRef, where("id", "==", id));
 
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {

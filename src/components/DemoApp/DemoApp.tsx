@@ -95,7 +95,7 @@ function DemoApp() {
           )}
           {activeTab === tabs.vehicles && (
             <section>
-              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} />
+              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} items={items} setItems={setItems} />
             </section>
           )}
         

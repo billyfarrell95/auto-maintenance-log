@@ -102,7 +102,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             setItemIsBeingEdited(false);
             const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
             const itemToUpload = updatedItems.find(item => item.id === id);
-            console.log("ITEM TO UPLOAD", itemToUpload)
             setItems(updatedItems);
             const userDocRef = doc(db, "users", auth?.currentUser?.uid);
             const itemsCollectionRef = collection(userDocRef, "items");
