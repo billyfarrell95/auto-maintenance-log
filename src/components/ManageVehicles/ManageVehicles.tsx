@@ -3,7 +3,7 @@ import { Vehicle, Item } from "../../types";
 import "./ManageVehicles.css";
 import { Dispatch, SetStateAction } from "react";
 import auth from "../../firebase/firebase";
-import { doc, collection, addDoc, query, where, deleteDoc, getDocs } from "firebase/firestore";
+import { doc, collection, addDoc, query, where, deleteDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { deleteItemFromDb } from "../../api/api";
 
@@ -12,6 +12,8 @@ interface ManageVehiclesProps {
     setVehicles: React.Dispatch<React.SetStateAction<Vehicle[]>>;
     items: Item[],
     setItems: Dispatch<SetStateAction<Item[]>>;
+    archivedItems: Item[],
+    setArchivedItems: Dispatch<SetStateAction<Item[]>>;
 }
 
 const initialValues: Vehicle = {
@@ -19,7 +21,7 @@ const initialValues: Vehicle = {
     name: ""
 };
 
-function ManageVehicles({ vehicles, setVehicles, items, setItems }: ManageVehiclesProps) {
+function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems, setArchivedItems }: ManageVehiclesProps) {
     const [newVehicle, setNewVehicle] = useState<Vehicle>({ ...initialValues });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,10 +82,36 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems }: ManageVehicl
         const itemsToDelete = items.filter((item) => item.vehicle == currentVehicle?.name);
         const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
         setItems(newArr);
+        setArchivedItems(itemsToDelete);
         try {
             if (auth.currentUser) {
                 itemsToDelete.forEach(item => {
                     deleteItemFromDb(item.id)
+                })
+            }
+        } catch (error) {
+            console.error("Error deleting items that were assigned to deleted vehicle", error)
+        }
+    };
+    
+    const handleArchiveItems = async (vehicleId: string) => {
+        const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
+        const itemsToArchive = items.filter((item) => item.vehicle == currentVehicle?.name);
+        const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
+        setItems(newArr);
+        setArchivedItems(itemsToArchive);
+        try {
+            if (auth.currentUser) {
+                // Delete items from items collection
+                itemsToArchive.forEach(item => {
+                    deleteItemFromDb(item.id)
+                })
+
+                // Save items to archivedItems collection
+                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                const archivedCollectionRef = collection(userDocRef, 'archivedItems');
+                itemsToArchive.forEach(item => {
+                    setDoc(doc(archivedCollectionRef, item.id), item);
                 })
             }
         } catch (error) {
@@ -113,6 +141,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems }: ManageVehicl
                                 <div>
                                     {/* @todo: add confirmation before deleting */}
                                     <button onClick={() => handleDeleteVehicle(vehicle.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i></button>
+                                    <button onClick={() => handleArchiveItems(vehicle.id)}>Archive</button>
                                 </div>
                             </li>
                         ))}

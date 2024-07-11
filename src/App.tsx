@@ -34,6 +34,7 @@ function App() {
   const [user, setUser] = useState(false);
   const [isUserNew, setIsUserNew] = useState(Boolean);
   const [items, setItems] = useState<Item[]>([]);
+  const [archivedItems, setArchivedItems] = useState<Item[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -102,6 +103,7 @@ function App() {
     if (auth?.currentUser?.uid && user) {
       const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
       const itemsCollectionRef = collection(userDocRef, 'items');
+      const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
       const shopsCollectionRef = collection(userDocRef, 'shops');
       const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
 
@@ -109,9 +111,11 @@ function App() {
         try {
           
           const itemsSnapshot = await getDocs(itemsCollectionRef);
+          const archivedItemsSnapshot = await getDocs(archivedItemsCollectionRef);
           const shopsSnapshot = await getDocs(shopsCollectionRef);
           const vehiclesSnapshot = await getDocs(vehiclesCollectionRef);
           let itemsData: Item[] = [];
+          let archivedItemsData: Item[] = [];
           let shopsData: Shop[] = [];
           let vehiclesData: Vehicle[] = [];
       
@@ -128,6 +132,21 @@ function App() {
               memo: data.memo,
             };
             itemsData.push(item);
+          });
+          
+          archivedItemsSnapshot.forEach(doc => {
+            const data = doc.data();
+            const item: Item = {
+              id: doc.id,
+              date: data.date,
+              vehicle: data.vehicle,
+              cost: data.cost,
+              description: data.description,
+              shop: data.shop,
+              mileage: data.mileage,
+              memo: data.memo,
+            };
+            archivedItemsData.push(item);
           });
 
           shopsSnapshot.forEach(doc => {
@@ -148,6 +167,7 @@ function App() {
             vehiclesData.push(vehicle);
           });
           setItems(itemsData);
+          setArchivedItems(archivedItemsData);
           setShops(shopsData);
           setVehicles(vehiclesData);
         } catch (error) {
@@ -158,6 +178,10 @@ function App() {
       fetchUserData()
     }
   }, [user]);  
+
+  useEffect(() => {
+    console.log("archived items:", archivedItems)
+  }, [archivedItems])
 
   return (
     <>
@@ -215,7 +239,7 @@ function App() {
           )}
           {activeTab === tabs.vehicles && (
             <section>
-              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} items={items} setItems={setItems} />
+              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} items={items} setItems={setItems} archivedItems={archivedItems} setArchivedItems={setArchivedItems} />
             </section>
           )}
         
