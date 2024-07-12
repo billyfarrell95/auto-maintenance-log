@@ -154,6 +154,11 @@ button:disabled {
 .align-self-flex-end {
     align-self: flex-end;
 }
+
+.gap-05 {
+    gap: 0.5rem;
+}
+
 .gap-1 {
     gap: 1rem;
 }
@@ -178,4 +183,24 @@ button:disabled {
 /***** TYPOGRAPHY ******/
 .fs-small {
     font-size: 0.875rem;
+}
+
+/****** UI Elements ********/
+.spinner {
+    display: inline-block;
+    height: 0.9rem;
+    width: 0.9rem;
+    border-radius: 50%;
+    border : 3px solid #ccc;
+    border-top-color : var(--clr-primary);
+    animation : spin 1s linear infinite;
+}
+    
+@keyframes spin{
+    0%{
+        transform : rotate(0deg);
+    }
+    100%{
+        transform : rotate(360deg);
+    }
 }

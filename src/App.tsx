@@ -122,7 +122,7 @@ function App() {
           itemsSnapshot.forEach(doc => {
             const data = doc.data();
             const item: Item = {
-              id: doc.id,
+              id: data.id,
               date: data.date,
               vehicle: data.vehicle,
               cost: data.cost,
@@ -137,7 +137,7 @@ function App() {
           archivedItemsSnapshot.forEach(doc => {
             const data = doc.data();
             const item: Item = {
-              id: doc.id,
+              id: data.id,
               date: data.date,
               vehicle: data.vehicle,
               cost: data.cost,
@@ -152,7 +152,7 @@ function App() {
           shopsSnapshot.forEach(doc => {
             const data = doc.data();
             const shop: Shop = {
-              id: doc.data().id,
+              id: data.id,
               name: data.name
             };
             shopsData.push(shop);
@@ -161,8 +161,9 @@ function App() {
           vehiclesSnapshot.forEach(doc => {
             const data = doc.data();
             const vehicle: Vehicle = {
-              id: doc.data().id,
-              name: data.name
+              id: data.id,
+              name: data.name,
+              archived: data.archived
             };
             vehiclesData.push(vehicle);
           });

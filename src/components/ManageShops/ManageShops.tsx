@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import { Shop } from "../../types";
 import "./ManageShops.css";
 import auth from "../../firebase/firebase";
-import { doc, collection, addDoc, query, where, deleteDoc, getDocs } from "firebase/firestore";
+import { doc, collection, addDoc, query, where, deleteDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 interface ManageShopsProps {
@@ -39,7 +39,8 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                 if (auth.currentUser) {
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                     const shopsCollectionRef = collection(userDocRef, 'shops');
-                    await addDoc(shopsCollectionRef, newShopTrimmed);
+                    // setDoc rather than addDoc so that Doc can have custom ID (shop ID)
+                    await setDoc(doc(shopsCollectionRef, newShopTrimmed.id), newShopTrimmed);
                 }
             } catch (error) {
                 console.error("Error adding new shop to db", error)
@@ -51,7 +52,6 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
         setNewShop({...initialValues});
     }
 
-    // @todo: shops aren't deleted from db
     const handleDeleteShop = async (id: string) => {
         const updatedShops = shops.filter((shop, _) => shop.id !== id);
         setShops(updatedShops)

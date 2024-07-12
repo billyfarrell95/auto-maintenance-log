@@ -102,7 +102,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             </div>
             <div className="input-form__input-wrapper">
                 <select id="shops-select" name="shop" onChange={handleChange}>
-                    <option value="n/a">-- select shop --</option>
+                    <option value="n/a">-- none --</option>
                     {shops.map((shop) => (
                         <option key={shop.id} value={shop.name}>{shop.name}</option>
                     ))}

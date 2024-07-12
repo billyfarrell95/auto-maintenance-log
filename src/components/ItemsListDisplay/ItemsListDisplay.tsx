@@ -57,7 +57,7 @@ function ItemsListDisplay({ selectedItems, handleEdit, item }: ItemsListDisplayP
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     <label>Shop</label>
-                    <span className="data-item__data">{item.shop || "n/a"}</span>
+                    <span className="data-item__data">{item.shop || "none"}</span>
                 </div>
                 <div onClick={(e) => handleDisplayItemClick(item, e)} className={handleDefineClasses(item)}>
                     <label>Cost</label>
