@@ -46,7 +46,6 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 console.error("Error adding new item to db", error)
             }
         }
-        
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
@@ -93,7 +92,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 <input type="text" inputMode="numeric" name="mileage" placeholder="Mileage" value={currentItem.mileage} onChange={handleMileageChange} required />
             </div>
             <div className="input-form__input-wrapper">
-                <select id="vehicles-select" disabled={!vehicles.length} name="vehicle" onChange={handleChange} required>
+                <select id="vehicles-select" disabled={!vehicles.length} name="vehicle" value={currentItem.vehicle} onChange={handleChange} required>
                     <option value="">-- select vehicle --</option>
                     {vehicles.map((vehicle) => (
                         <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
@@ -101,8 +100,8 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                 </select>
             </div>
             <div className="input-form__input-wrapper">
-                <select id="shops-select" name="shop" onChange={handleChange}>
-                    <option value="n/a">-- none --</option>
+                <select id="shops-select" name="shop" value={currentItem.shop} onChange={handleChange}>
+                    <option value="n/a">-- select shop --</option>
                     {shops.map((shop) => (
                         <option key={shop.id} value={shop.name}>{shop.name}</option>
                     ))}

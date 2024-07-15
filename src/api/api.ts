@@ -13,6 +13,37 @@ export const deleteItemFromDb = async (id: string) => {
     }
 }
 
+export const deleteVehicleFromDb = async (vehicleId: string) => {
+    if (auth.currentUser) {
+        const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+        const vehiclesCollectionRef = collection(userDocRef, "vehicles");
+        const vehicleDocRef = doc(vehiclesCollectionRef, vehicleId)
+        await deleteDoc(vehicleDocRef);
+    }
+}
+
+export const deleteArchivedVehicleFromDb = async (vehicleId: string) => {
+    if (auth.currentUser) {
+        const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+        const vehiclesCollectionRef = collection(userDocRef, "archivedVehicles");
+        const vehicleDocRef = doc(vehiclesCollectionRef, vehicleId)
+        await deleteDoc(vehicleDocRef);
+    }
+}
+
+export const deleteArchivedItemsFromDb = async (id: string) => {
+    try {
+        if (auth.currentUser) {
+            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+            const itemsCollectionRef = collection(userDocRef, "archivedItems");
+            const itemsDocRef = doc(itemsCollectionRef, id)
+            await deleteDoc(itemsDocRef);
+        }
+    } catch (error) {
+        console.error("error deleting archived item from DB")
+    }
+    
+}
 
 export const updateVehiclesFromDb = async (snapshot: QuerySnapshot<DocumentData, DocumentData>) => {
     let vehiclesData: Vehicle[] = [];

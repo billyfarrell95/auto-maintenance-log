@@ -36,6 +36,7 @@ function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [archivedItems, setArchivedItems] = useState<Item[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [archivedVehicles, setArchivedVehicles] = useState<Vehicle[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
@@ -106,6 +107,7 @@ function App() {
       const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
       const shopsCollectionRef = collection(userDocRef, 'shops');
       const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
+      const archivedVehiclesCollectionRef = collection(userDocRef, 'archivedVehicles');
 
       const fetchUserData = async () => {
         try {
@@ -114,10 +116,12 @@ function App() {
           const archivedItemsSnapshot = await getDocs(archivedItemsCollectionRef);
           const shopsSnapshot = await getDocs(shopsCollectionRef);
           const vehiclesSnapshot = await getDocs(vehiclesCollectionRef);
+          const archivedVehiclesSnapshpt = await getDocs(archivedVehiclesCollectionRef);
           let itemsData: Item[] = [];
           let archivedItemsData: Item[] = [];
           let shopsData: Shop[] = [];
           let vehiclesData: Vehicle[] = [];
+          let archivedVehiclesData: Vehicle[] = [];
       
           itemsSnapshot.forEach(doc => {
             const data = doc.data();
@@ -167,10 +171,21 @@ function App() {
             };
             vehiclesData.push(vehicle);
           });
+          
+          archivedVehiclesSnapshpt.forEach(doc => {
+            const data = doc.data();
+            const vehicle: Vehicle = {
+              id: data.id,
+              name: data.name,
+              archived: data.archived
+            };
+            archivedVehiclesData.push(vehicle);
+          });
           setItems(itemsData);
           setArchivedItems(archivedItemsData);
           setShops(shopsData);
           setVehicles(vehiclesData);
+          setArchivedVehicles(archivedVehiclesData);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -179,10 +194,6 @@ function App() {
       fetchUserData()
     }
   }, [user]);  
-
-  useEffect(() => {
-    console.log("archived items:", archivedItems)
-  }, [archivedItems])
 
   return (
     <>
@@ -240,7 +251,15 @@ function App() {
           )}
           {activeTab === tabs.vehicles && (
             <section>
-              <ManageVehicles vehicles={vehicles} setVehicles={setVehicles} items={items} setItems={setItems} archivedItems={archivedItems} setArchivedItems={setArchivedItems} />
+              <ManageVehicles 
+                vehicles={vehicles} 
+                setVehicles={setVehicles} 
+                items={items} 
+                setItems={setItems} 
+                archivedItems={archivedItems} 
+                setArchivedItems={setArchivedItems}
+                archivedVehicles={archivedVehicles}
+                setArchivedVehicles={setArchivedVehicles} />
             </section>
           )}
         

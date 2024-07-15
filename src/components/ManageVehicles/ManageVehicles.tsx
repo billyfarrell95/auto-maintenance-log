@@ -5,12 +5,14 @@ import { Dispatch, SetStateAction } from "react";
 import auth from "../../firebase/firebase";
 import { doc, collection, query, where, deleteDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { deleteItemFromDb } from "../../api/api";
+import { deleteItemFromDb, deleteArchivedItemsFromDb, deleteVehicleFromDb, deleteArchivedVehicleFromDb } from "../../api/api";
 import { updateVehiclesFromDb } from "../../api/api";
 
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
+    archivedVehicles: Vehicle[];
     setVehicles: React.Dispatch<React.SetStateAction<Vehicle[]>>;
+    setArchivedVehicles: React.Dispatch<React.SetStateAction<Vehicle[]>>;
     items: Item[],
     setItems: Dispatch<SetStateAction<Item[]>>;
     archivedItems: Item[],
@@ -23,10 +25,13 @@ const initialValues: Vehicle = {
     archived: false,
 };
 
-function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems, setArchivedItems }: ManageVehiclesProps) {
+function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems, setArchivedItems, archivedVehicles, setArchivedVehicles }: ManageVehiclesProps) {
     const [newVehicle, setNewVehicle] = useState<Vehicle>({ ...initialValues });
+    const [archivePreviewVehicleId, setArchivePreviewVehicleId] = useState("");
+    const [archiveItemsPreview, setArchivedItemsPreview] = useState<Item[]>([]);
+    const [archivePreviewVisible, setArchivePreviewVisible] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [confirmedDelete, setConfirmedDelete] = useState(false);
+    // const [confirmedDelete, setConfirmedDelete] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -65,17 +70,10 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
 
     const handleDeleteVehicle = async (id: string) => {
         const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id !== id);
-        setVehicles(updatedVehicles)
         try {
             if (auth.currentUser) {
-                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-                const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
-                const q = query(vehiclesCollectionRef, where("id", "==", id));
-
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    deleteDoc(doc.ref);
-                });
+                setVehicles(updatedVehicles)
+                deleteArchivedVehicleFromDb(id)
                 handleDeleteAssociatedItems(id);
             }
         } catch (error) {
@@ -84,17 +82,19 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     }
 
     const handleDeleteAssociatedItems = async (vehicleId: string) => {
-        const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
-        const itemsToDelete = items.filter((item) => item.vehicle == currentVehicle?.name);
+        const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
+        const itemsToDelete = archivedItems.filter((item) => item.vehicle == currentVehicle?.name);
         const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
         setItems(newArr);
         setArchivedItems(itemsToDelete);
         try {
             if (auth.currentUser) {
-
                 itemsToDelete.forEach(item => {
-                    deleteItemFromDb(item.id)
+                    deleteArchivedItemsFromDb(item.id)
                 })
+                setArchivePreviewVehicleId("");
+                setArchivedItemsPreview([]);
+                setArchivePreviewVisible(false);
             }
         } catch (error) {
             console.error("Error deleting items that were assigned to deleted vehicle", error)
@@ -104,30 +104,32 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     const handleArchiveItems = async (vehicleId: string) => {
         setLoading(true)
         const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
+        const updatedVehicles = vehicles.filter((vehicles, _) => vehicles.id !== vehicleId);
         const itemsToArchive = items.filter((item) => item.vehicle == currentVehicle?.name);
         const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
         setItems(newArr);
         setArchivedItems(itemsToArchive);
         try {
             if (auth.currentUser) {
+                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
+                const archivedVehiclesCollectionRef = collection(userDocRef, 'archivedVehicles')
                 // Delete items from items collection
                 itemsToArchive.forEach(item => {
                     deleteItemFromDb(item.id)
                 })
 
+                deleteVehicleFromDb(vehicleId);
+                setDoc(doc(archivedVehiclesCollectionRef, vehicleId), currentVehicle);
                 // Save items to archivedItems collection
-                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-                const archivedCollectionRef = collection(userDocRef, 'archivedItems');
                 itemsToArchive.forEach(item => {
-                    setDoc(doc(archivedCollectionRef, item.id), item);
+                    setDoc(doc(archivedItemsCollectionRef, item.id), item);
                 })
 
-                const vehiclesCollectionRef = collection(userDocRef, "vehicles");
-                const vehicleDocRef = doc(vehiclesCollectionRef, vehicleId)             
-                await updateDoc(vehicleDocRef, {archived: true});
-                const vehiclesSnapshot = await getDocs(vehiclesCollectionRef);
+                const vehiclesSnapshot = await getDocs(archivedVehiclesCollectionRef);
                 const vehiclesData = await updateVehiclesFromDb(vehiclesSnapshot)
-                setVehicles(vehiclesData);
+                setArchivedVehicles(vehiclesData);
+                setVehicles(updatedVehicles)
                 setLoading(false)
             }
         } catch (error) {
@@ -135,14 +137,15 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
         }
     };
 
-    const viewDeletionPreview = async (vehicleId: string) => {
+    const viewArchivePreview = async (vehicleId: string) => {
+        setArchivePreviewVisible(true)
         if (auth.currentUser) {
             const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-            const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
+            const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
             const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
             const q = query(archivedItemsCollectionRef, where("vehicle", "==", currentVehicle?.name));
             const querySnapshot = await getDocs(q);
-            let itemsToDelete: Item[] = [];
+            let archivePreview: Item[] = [];
             querySnapshot.forEach((doc) => {
                 const data = doc.data()
                 const item: Item = {
@@ -155,17 +158,18 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                     mileage: data.mileage,
                     memo: data.memo,
                 };
-                itemsToDelete.push(item)
+                archivePreview.push(item)
             });
-            
-            console.log("Items to delete", itemsToDelete)
+            setArchivedItemsPreview(archivePreview);
+            setArchivePreviewVehicleId(vehicleId);
         }
     }
 
-    const recoverArchivedItems = async (vehicleId: string) => {
+    const recoverArchivedItem = async (vehicleId: string) => {
         if (auth.currentUser) {
             const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-            const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
+            const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
+            const itemsCollectionRef = collection(userDocRef, 'items');
             const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
             const q = query(archivedItemsCollectionRef, where("vehicle", "==", currentVehicle?.name));
             const querySnapshot = await getDocs(q);
@@ -184,11 +188,45 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                 };
                 itemsToRecover.push(item)
             });
-            
-            console.log("Items to recover", itemsToRecover)
+            const updatedItems = [
+                ...items,
+                ...itemsToRecover
+            ];
+
+            itemsToRecover.forEach(item => {
+                deleteArchivedItemsFromDb(item.id)
+            })
+
+            deleteArchivedVehicleFromDb(vehicleId)
+
+            // Save items to archivedItems collection
+            updatedItems.forEach(item => {
+                setDoc(doc(itemsCollectionRef, item.id), item, {merge: true});
+            })
+
+            const vehiclesCollectionRef = collection(userDocRef, "vehicles");
+            const vehicleDocRef = doc(vehiclesCollectionRef, vehicleId)             
+            await setDoc(vehicleDocRef, currentVehicle);
+            setItems(updatedItems);
+
+            const updatedVehicles = vehicles.map(vehicle => {
+                if (vehicle.id === vehicleId) {
+                    return {
+                        ...vehicle,
+                        archived: false
+                    };
+                }
+                return vehicle;
+            });
+            setVehicles(updatedVehicles);
+            setArchivePreviewVehicleId("");
+            setArchivedItemsPreview([]);
+            setArchivePreviewVisible(false)
         }
     }
     
+    // @todo: vehicles/archivedVehicles state isn't updated when performing actions (UI isn't updated)
+
     return (
         <>
             <h2>Manage your vehicles</h2>
@@ -200,65 +238,76 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                 </div>
                 <div className="align-self-flex-end"><button type="submit" className="btn btn-primary">Add</button></div>
             </form>
-            <h3>Your vehicles:</h3>
-            {vehicles.length > 0 && (
+            <h3>Your vehicles</h3>
+            {vehicles.length > 0 ? (
                 <div>
                     <div className="vehicles-list-wrapper pb-1">
                         <ul role="list" className="vehicles-list-wrapper__list">
                         {vehicles.map((vehicle) => (
                             <div key={vehicle.id}>
-                                {vehicle.archived == false && (
-                                    <li key={vehicle.id} className="vehicles-list-wrapper__item">
-                                    {vehicle.name}
-                                    <div className="d-flex gap-05">
-                                        <button onClick={() => handleArchiveItems(vehicle.id)} className="btn btn-secondary btn-sm">
-                                            {loading ? (
-                                                <div className="spinner"></div> 
-                                            ) : (
-                                                <i className="bi bi-archive"></i>
-                                            )}
-                                            <span> Archive</span>
-                                        </button>
-                                        <p className="fs-small"><i className="bi bi-info-circle"></i> NUMBER items will be archived</p>
+                                <li key={vehicle.id}>
+                                    <div className="vehicles-list-wrapper__item">
+                                        {vehicle.name}
+                                        <div className="gap-05">
+                                            <button onClick={() => handleArchiveItems(vehicle.id)} className="btn btn-secondary btn-sm">
+                                                {loading ? (
+                                                    <div className="spinner"></div>
+                                                ) : (
+                                                    <i className="bi bi-archive"></i>
+                                                )}
+                                                <span> Archive</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </li>
-                                )}
                             </div>
                         ))}
                         </ul>
                     </div>
                 </div>
-            )}
+            ) : (<p className="fs-small">No saved vehicles</p>)}
 
+            {archivedVehicles.length > 0 && (
                 <div className="vehicles-list-wrapper py-1">
-                    <h3>Archived vehicles</h3>
-                    <ul role="list" className="vehicles-list-wrapper__list">
-                    {vehicles.map((vehicle) => (
-                        <div key={vehicle.id}>
-                            {vehicle.archived == true && (
-                                <li key={vehicle.id} className="vehicles-list-wrapper__item">
-                                    {vehicle.name}
-                                    <div>
-                                        {/* @todo: add confirmation before deleting */}
-                                        {!confirmedDelete ? (
-                                            <button onClick={() => setConfirmedDelete(true)} className="btn btn-sm btn-secondary"><i className="bi bi-trash3"></i> Delete</button>
-                                        ) : (
-                                            <div>
-                                                <button onClick={() => handleDeleteVehicle(vehicle.id)} className="btn btn-sm btn-outline-danger"><i className="bi bi-trash3"></i> Confirm delete</button>
-                                                <button onClick={() => setConfirmedDelete(false)} className="btn btn-sm btn-secondary">Cancel</button>
-                                            </div>
-                                        )}
-                                        
-                                    </div>
-                                    <p className="fs-small"><i className="bi bi-info-circle"></i> NUMBER of associated items will also be deleted. </p>
-                                    <button onClick={() => viewDeletionPreview(vehicle.id)} className="btn btn-sm btn-secondary">Preview delete</button>
-                                    <button onClick={() => recoverArchivedItems(vehicle.id)} className="btn btn-sm btn-secondary">Recover</button>
-                                </li>
-                            )}
+                <h3>Archived vehicles</h3>
+                <ul role="list" className="vehicles-list-wrapper__list">
+                {archivedVehicles.map((vehicle) => (
+                    <div key={vehicle.id}>
+                        <li key={vehicle.id} className="vehicles-list-wrapper__item">
+                            {vehicle.name}
+                            <button onClick={() => viewArchivePreview(vehicle.id)} className="btn btn-sm btn-secondary">Manage</button>
+                        </li>
+                    </div>
+                ))}
+                </ul>
+            </div>
+            )}
+            <div>
+                {archivePreviewVisible && (
+                    <>
+                        {archiveItemsPreview.length > 0 && (
+                            <>
+                            {archiveItemsPreview.map((item) => (
+                                <ul key={item.id}>
+                                    <li>{item.date}</li>
+                                    <li>{item.description}</li>
+                                    <li>{item.mileage}</li>
+                                    <li>{item.vehicle}</li>
+                                    <li>{item.shop}</li>
+                                    <li>{item.cost}</li>
+                                    <li>{item.memo}</li>
+                                </ul>
+                            ))}
+                            </>
+                        )}
+                        <div className="d-flex gap-1">
+                            <button onClick={() => handleDeleteVehicle(archivePreviewVehicleId)} className="btn btn-sm btn-danger">Delete</button>
+                            <button onClick={() => recoverArchivedItem(archivePreviewVehicleId)} className="btn btn-sm btn-secondary">Recover</button>
                         </div>
-                    ))}
-                    </ul>
-                </div>
+                    </>
+                )}
+                
+            </div>
         </>
     )
 }
