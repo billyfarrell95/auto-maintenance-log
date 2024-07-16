@@ -1,4 +1,5 @@
-import testVehicles from "../data/testVehicles"
+import testVehicles from "../data/testVehicles";
+import testShops from "./testShops";
 
 const testData = [
   {
@@ -7,7 +8,7 @@ const testData = [
       vehicle: testVehicles[2].name,
       cost: "52.00",
       description: "Oil Change",
-      shop: "Shop name 123",
+      shop: testShops[0].name,
       mileage: "135,000",
       memo: "Checked and topped off all fluids"
   },
@@ -17,7 +18,7 @@ const testData = [
       vehicle: testVehicles[0].name,
       cost: "45.00",
       description: "Tire rotation",
-      shop: "Shop name 123",
+      shop: testShops[2].name,
       mileage: "134,500",
       memo: "Front tires showing signs of wear"
   },
@@ -27,7 +28,7 @@ const testData = [
       vehicle: testVehicles[1].name,
       cost: "243.00",
       description: "New brakes",
-      shop: "Shop name 123",
+      shop: testShops[1].name,
       mileage: "110,000",
       memo: "Brake pads and rotors replaced"
   },
@@ -37,7 +38,7 @@ const testData = [
       vehicle: testVehicles[0].name,
       cost: "123.00",
       description: "Coolant flush",
-      shop: "Shop name 789",
+      shop: testShops[1].name,
       mileage: "115,000",
       memo: "Coolant system inspected for leaks"
   },
@@ -47,7 +48,7 @@ const testData = [
       vehicle: testVehicles[2].name,
       cost: "40.12",
       description: "Air filter replacement",
-      shop: "Shop name 456",
+      shop: testShops[0].name,
       mileage: "131,000",
       memo: "Air intake cleaned"
   },
@@ -57,7 +58,7 @@ const testData = [
       vehicle: testVehicles[1].name,
       cost: "1254.23",
       description: "Spark plug replacement",
-      shop: "Shop name 789",
+      shop: testShops[1].name,
       mileage: "112,500",
       memo: "Performed engine tune-up"
   }

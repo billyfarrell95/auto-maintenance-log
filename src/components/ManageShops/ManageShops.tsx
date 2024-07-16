@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import { Shop } from "../../types";
 import "./ManageShops.css";
 import auth from "../../firebase/firebase";
-import { doc, collection, addDoc, query, where, deleteDoc, getDocs, setDoc } from "firebase/firestore";
+import { doc, collection, query, where, deleteDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 interface ManageShopsProps {
