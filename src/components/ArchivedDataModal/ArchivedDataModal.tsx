@@ -15,14 +15,23 @@ function ArchivedDataModal() {
         setModalIsOpen(false)
     };
 
-    useEffect(() => {
-        // @todo remove class when using "esc" to close modal
-        document.body.classList.toggle("overflow-hidden");
+    const handleCloseModal = (e: React.KeyboardEvent) => {
+      if (e.key === "Escape" && modalIsOpen) {
+        closeModal();
+      }
+    }
+
+    useEffect(() => {    
+        if (modalIsOpen) {
+          document.body.classList.add("overflow-hidden");
+        } else {
+          document.body.classList.remove("overflow-hidden");
+        }
     }, [modalIsOpen])
     return (
         <>
           <button onClick={openModal}>Open Modal</button>
-          <dialog ref={dialogRef} className="modal">
+          <dialog ref={dialogRef} onKeyDown={(e) => handleCloseModal(e)}>
             <button className="close-button" onClick={closeModal}>
               &times;
             </button>
