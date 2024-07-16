@@ -96,7 +96,6 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                         ))}
                         </ul>
                     </div>
-                    <p className="fs-small">Note: deleting shops will not remove them from your maintenance log, only from forms, filters, and this list.</p>
                 </div>
             ) : (
                 <div className="shops-list-wrapper">

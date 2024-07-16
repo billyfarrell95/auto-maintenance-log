@@ -6,8 +6,8 @@ import { CHECKBOX_STATES } from "../Checkbox";
 import ItemsListDisplay from "../ItemsListDisplay/ItemsListDisplay";
 import ItemsListEdit from "../ItemsListEdit/ItemsListEdit";
 import ItemsListToolbar from "../../components/ItemsListToolbar/ItemsListToolbar"
-import auth, { db } from "../../firebase/firebase";
-import { doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
+import auth from "../../firebase/firebase";
+import { updateItemInDb, deleteItemFromDb } from "../../api/api";
 
 interface ItemsListProps {
     items: Item[];
@@ -103,10 +103,9 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
             const itemToUpload = updatedItems.find(item => item.id === id);
             setItems(updatedItems);
-            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-            const itemsCollectionRef = collection(userDocRef, "items");
-            const itemsDocRef = doc(itemsCollectionRef, id)             
-            await updateDoc(itemsDocRef, itemToUpload as Partial<Item>);
+            if (itemToUpload) {
+                updateItemInDb(itemToUpload, id)
+            }
             setEditingItemId("");
             setEditingItems([]);
         } else if (editingItemId && !auth.currentUser) {
@@ -143,7 +142,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         try {
             if (auth.currentUser) {
                 selectedItems.forEach(itemId => {
-                    deleteFromDb(itemId)
+                    deleteItemFromDb(itemId)
                 })
             }
         } catch (error) {
@@ -151,16 +150,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         }
         setSelectedItems([]);
     };
-
-    const deleteFromDb = async (id: string) => {
-        if (auth.currentUser) {
-            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-            const itemsCollectionRef = collection(userDocRef, "items");
-            
-            const itemsDocRef = doc(itemsCollectionRef, id)
-            await deleteDoc(itemsDocRef);
-        }
-    }
 
     const handleVehicleSort = (e: ChangeEvent<HTMLSelectElement>) => {
         setVehicleSort(e.target.value)

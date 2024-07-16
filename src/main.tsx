@@ -7,7 +7,7 @@ import Home from './components/Home/Home.tsx'
 import SettingsPage from './components/SettingsPage/SettingsPage.tsx'
 import Terms from './components/Terms/Terms.tsx'
 import Privacy from './components/Privacy/Privacy.tsx'
-import DemoApp from './components/DemoApp/DemoApp.tsx'
+// import DemoApp from './components/DemoApp/DemoApp.tsx'
 
 const router = createBrowserRouter([
   {
@@ -34,10 +34,10 @@ const router = createBrowserRouter([
     path: "privacy",
     element: <Privacy />
   },
-  {
-    path: "demo",
-    element: <DemoApp />
-  }
+  // {
+  //   path: "demo",
+  //   element: <DemoApp />
+  // }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

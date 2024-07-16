@@ -81,16 +81,6 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     inputMode="numeric"
                     name="mileage"
                     placeholder="Mileage" />
-                {/* <ItemsListInput
-                    itemId={item.id}
-                    handleChange={handleChange}
-                    setEditingItemId={setEditingItemId}
-                    setItemIsBeingEdited={setItemIsBeingEdited}
-                    value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.vehicle || "") : (item.vehicle)}
-                    type="text"
-                    inputMode="text"
-                    name="vehicle"
-                    placeholder="Vehicle" /> */}
                 <div className="data-item__display">
                     <select id="vehicles-select" name="vehicle" defaultValue={item.vehicle} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
                         {vehicles && vehicles.map((vehicle) => (
@@ -100,7 +90,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                 </div>
                 <div className="data-item__display">
                     <select id="shops-select" name="shop" defaultValue={item.shop} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
-                        <option value="">none</option>
+                        <option value="">{item.shop}</option>
                         {shops && shops.map((shop) => (
                             <option key={shop.id} value={shop.name}>{shop.name}</option>
                         ))}

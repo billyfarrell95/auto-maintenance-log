@@ -5,9 +5,7 @@ import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
 import { maintenanceDescriptions } from "../../data/data";
 import { initialValues } from "../../App";
-import { doc, collection, setDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
-import auth from "../../firebase/firebase";
+import { addNewItemToDb } from "../../api/api";
 
 interface InputFormProps {
     items: Item[];
@@ -28,18 +26,13 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             cost: currentItem.cost.trim(),
             vehicle: currentItem.vehicle.trim(),
             description: currentItem.description.trim(),
-            shop: currentItem.shop.trim(),
+            shop: currentItem.shop.trim() || "none",
             mileage: currentItem.mileage.trim(),
             memo: currentItem.memo.trim(),
         };
         if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo || trimmedItem.vehicle) {
             try {
-                if (auth.currentUser) {
-                    const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-                    const itemsCollectionRef = collection(userDocRef, 'items');
-                    // Create doc with custom ID (for reference when editing or deleting)
-                    await setDoc(doc(itemsCollectionRef, trimmedItem.id), trimmedItem);
-                }
+                addNewItemToDb(trimmedItem)
                 setItems([...items, trimmedItem]);
                 setCurrentItem({ ...initialValues });
             } catch (error) {

@@ -245,7 +245,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                                 <li key={vehicle.id}>
                                     <div className="vehicles-list-wrapper__item">
                                         {vehicle.name}
-                                        <div className="gap-05">
+                                        <div className="d-flex gap-05">
                                             <button onClick={() => handleArchiveItems(vehicle.id)} className="btn btn-secondary btn-sm">
                                                 {loading ? (
                                                     <div className="spinner"></div>
