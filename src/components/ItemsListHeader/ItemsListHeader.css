@@ -1,11 +1,16 @@
 .data-header {
     border-bottom: 1px solid var(--clr-primary-light);
+    position: sticky;
+    top: 65px;
+    height: 40px;
+    background-color: white;
+    z-index: 10;
 }
 
 .data-header {
     display: none;
     padding-inline: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-block: 0.5rem;
     font-weight: bold;
 }
 

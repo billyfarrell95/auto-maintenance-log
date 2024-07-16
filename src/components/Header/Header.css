@@ -4,6 +4,11 @@
     align-items: center;
     border-bottom: 1px solid var(--clr-primary);
     padding-block: 1rem;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    height: 65px;
+    z-index: 10;
 }
 
 .main-header h1 {
