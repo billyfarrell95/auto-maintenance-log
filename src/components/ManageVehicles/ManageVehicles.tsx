@@ -3,7 +3,7 @@ import { Vehicle, Item } from "../../types";
 import "./ManageVehicles.css";
 import { Dispatch, SetStateAction } from "react";
 import auth from "../../firebase/firebase";
-import { doc, collection, query, where, deleteDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { doc, collection, query, where, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { deleteItemFromDb, deleteArchivedItemsFromDb, deleteVehicleFromDb, deleteArchivedVehicleFromDb } from "../../api/api";
 import { updateVehiclesFromDb } from "../../api/api";
@@ -69,10 +69,10 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     }
 
     const handleDeleteVehicle = async (id: string) => {
-        const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id !== id);
+        const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id == id);
         try {
             if (auth.currentUser) {
-                setVehicles(updatedVehicles)
+                setArchivedVehicles(updatedVehicles)
                 deleteArchivedVehicleFromDb(id)
                 handleDeleteAssociatedItems(id);
             }
@@ -209,23 +209,20 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             await setDoc(vehicleDocRef, currentVehicle);
             setItems(updatedItems);
 
-            const updatedVehicles = vehicles.map(vehicle => {
-                if (vehicle.id === vehicleId) {
-                    return {
-                        ...vehicle,
-                        archived: false
-                    };
-                }
-                return vehicle;
-            });
+            const updatedArchivedVehicles = archivedVehicles.filter((vehicle, _) => vehicle.id !== vehicleId);
+            const updatedVehicles = [
+                ...vehicles,
+                ...archivedVehicles.filter((vehicle, _) => vehicle.id === vehicleId)
+            ];
+
+            
+            setArchivedVehicles(updatedArchivedVehicles);
             setVehicles(updatedVehicles);
             setArchivePreviewVehicleId("");
             setArchivedItemsPreview([]);
             setArchivePreviewVisible(false)
         }
     }
-    
-    // @todo: vehicles/archivedVehicles state isn't updated when performing actions (UI isn't updated)
 
     return (
         <>
