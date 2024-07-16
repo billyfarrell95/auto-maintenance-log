@@ -31,7 +31,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     const [archiveItemsPreview, setArchivedItemsPreview] = useState<Item[]>([]);
     const [archivePreviewVisible, setArchivePreviewVisible] = useState(false)
     const [loading, setLoading] = useState(false);
-    // const [confirmedDelete, setConfirmedDelete] = useState(false);
+    const [itemBeingArchived, setItemBeingArchived] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -69,7 +69,9 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     }
 
     const handleDeleteVehicle = async (id: string) => {
-        const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id == id);
+        const updatedVehicles = [
+            ...archivedVehicles.filter((vehicle, _) => vehicle.id !== id)
+        ];
         try {
             if (auth.currentUser) {
                 setArchivedVehicles(updatedVehicles)
@@ -103,6 +105,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     
     const handleArchiveItems = async (vehicleId: string) => {
         setLoading(true)
+        setItemBeingArchived(vehicleId)
         const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
         const updatedVehicles = vehicles.filter((vehicles, _) => vehicles.id !== vehicleId);
         const itemsToArchive = items.filter((item) => item.vehicle == currentVehicle?.name);
@@ -215,7 +218,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                 ...archivedVehicles.filter((vehicle, _) => vehicle.id === vehicleId)
             ];
 
-            
             setArchivedVehicles(updatedArchivedVehicles);
             setVehicles(updatedVehicles);
             setArchivePreviewVehicleId("");
@@ -247,7 +249,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                                         {vehicle.name}
                                         <div className="d-flex gap-05">
                                             <button onClick={() => handleArchiveItems(vehicle.id)} className="btn btn-secondary btn-sm">
-                                                {loading ? (
+                                                {loading && itemBeingArchived === vehicle.id ? (
                                                     <div className="spinner"></div>
                                                 ) : (
                                                     <i className="bi bi-archive"></i>
@@ -272,7 +274,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                     <div key={vehicle.id}>
                         <li key={vehicle.id} className="vehicles-list-wrapper__item">
                             {vehicle.name}
-                            <button onClick={() => viewArchivePreview(vehicle.id)} className="btn btn-sm btn-secondary">Manage</button>
+                            <button onClick={() => viewArchivePreview(vehicle.id)} className="btn btn-sm btn-secondary"><i className="bi bi-database-fill-gear"></i> Manage</button>
                         </li>
                     </div>
                 ))}
@@ -298,8 +300,8 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                             </>
                         )}
                         <div className="d-flex gap-1">
-                            <button onClick={() => handleDeleteVehicle(archivePreviewVehicleId)} className="btn btn-sm btn-danger">Delete</button>
-                            <button onClick={() => recoverArchivedItem(archivePreviewVehicleId)} className="btn btn-sm btn-secondary">Recover</button>
+                            <button onClick={() => handleDeleteVehicle(archivePreviewVehicleId)} className="btn btn-sm btn-danger"><i className="bi bi-trash3"></i> Delete</button>
+                            <button onClick={() => recoverArchivedItem(archivePreviewVehicleId)} className="btn btn-sm btn-secondary"><i className="bi bi-arrow-counterclockwise"></i> Recover</button>
                         </div>
                     </>
                 )}

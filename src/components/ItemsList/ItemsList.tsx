@@ -187,11 +187,11 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
         <>
             {items.length && (
                 <ItemsListHeader
-                 checked={checked} 
-                 handleChange={handleCheckboxChange} 
-                 itemIsBeingEdited={itemIsBeingEdited}
-                 sortItemsDescending={sortItemsDescending}
-                 setSortItemsDescending={setSortItemsDescending} />
+                    checked={checked} 
+                    handleChange={handleCheckboxChange} 
+                    itemIsBeingEdited={itemIsBeingEdited}
+                    sortItemsDescending={sortItemsDescending}
+                    setSortItemsDescending={setSortItemsDescending} />
             )}
             <div className="data-items">
                 <ItemsListToolbar 

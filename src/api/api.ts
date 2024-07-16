@@ -62,7 +62,6 @@ export const updateVehiclesFromDb = async (snapshot: QuerySnapshot<DocumentData,
 
 export const addNewItemToDb = async (trimmedItem: Item) => {
     if (auth.currentUser) {
-        console.log("running")
         const userDocRef = doc(db, "users", auth?.currentUser?.uid);
         const itemsCollectionRef = collection(userDocRef, 'items');
         // Create doc with custom ID (for reference when editing or deleting)

@@ -22,14 +22,13 @@ export const formatMileage = (value: string) => {
 }
 
 export const formatCost = (value: string) => {
-    const options = {
+    const options: Intl.NumberFormatOptions = {
         style: 'currency', 
         currency: "USD",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      };
+    };
     if (value) {
         return parseFloat(value).toLocaleString("en-US", options)
     }
-    
 }

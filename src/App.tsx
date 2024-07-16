@@ -221,7 +221,8 @@ function App() {
                       selectedItems={selectedItems}
                       currentItem={currentItem}
                       setCurrentItem={setCurrentItem}
-                      handleActiveTab={handleActiveTab} />
+                      handleActiveTab={handleActiveTab}
+                      tabs={tabs} />
                   </div>
                 ) : (
                   <div className="pb-1">

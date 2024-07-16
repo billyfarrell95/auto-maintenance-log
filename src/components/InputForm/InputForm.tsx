@@ -16,9 +16,10 @@ interface InputFormProps {
     setCurrentItem: Dispatch<SetStateAction<Item>>;
     selectedItems: string[];
     handleActiveTab: (tab: string) => void; 
+    tabs: { log: string; vehicles: string; shops: string; },
 }
 
-function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem }: InputFormProps) {
+function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem, handleActiveTab, tabs }: InputFormProps) {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedItem = {
@@ -91,6 +92,9 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                         <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
                     ))}
                 </select>
+                {!vehicles.length && (
+                    <button className="btn-small btn-link fs-small text-left" onClick={() => handleActiveTab(tabs.vehicles)}>Add a vehicle</button>
+                )}
             </div>
             <div className="input-form__input-wrapper">
                 <select id="shops-select" name="shop" value={currentItem.shop} onChange={handleChange}>
