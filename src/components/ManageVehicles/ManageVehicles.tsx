@@ -7,6 +7,7 @@ import { doc, collection, query, where, getDocs, setDoc } from "firebase/firesto
 import { db } from "../../firebase/firebase";
 import { deleteItemFromDb, deleteArchivedItemsFromDb, deleteVehicleFromDb, deleteArchivedVehicleFromDb } from "../../api/api";
 import { updateVehiclesFromDb } from "../../api/api";
+import ArchivedDataModal from "../ArchivedDataModal/ArchivedDataModal";
 
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
@@ -284,6 +285,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             <div>
                 {archivePreviewVisible && (
                     <>
+                        <ArchivedDataModal />
                         {archiveItemsPreview.length > 0 && (
                             <>
                             {archiveItemsPreview.map((item) => (
