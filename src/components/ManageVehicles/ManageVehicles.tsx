@@ -29,8 +29,7 @@ const initialValues: Vehicle = {
 function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems, setArchivedItems, archivedVehicles, setArchivedVehicles }: ManageVehiclesProps) {
     const [newVehicle, setNewVehicle] = useState<Vehicle>({ ...initialValues });
     const [archivePreviewVehicleId, setArchivePreviewVehicleId] = useState("");
-    const [archiveItemsPreview, setArchivedItemsPreview] = useState<Item[]>([]);
-    const [archivePreviewVisible, setArchivePreviewVisible] = useState(false)
+    const [archivedItemsPreview, setArchivedItemsPreview] = useState<Item[]>([]);
     const [loading, setLoading] = useState(false);
     const [itemBeingArchived, setItemBeingArchived] = useState("");
 
@@ -68,41 +67,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
         }
         setNewVehicle({...initialValues});
     }
-
-    const handleDeleteVehicle = async (id: string) => {
-        const updatedVehicles = [
-            ...archivedVehicles.filter((vehicle, _) => vehicle.id !== id)
-        ];
-        try {
-            if (auth.currentUser) {
-                setArchivedVehicles(updatedVehicles)
-                deleteArchivedVehicleFromDb(id)
-                handleDeleteAssociatedItems(id);
-            }
-        } catch (error) {
-            console.error("Error deleting vehicle from db", error)
-        }
-    }
-
-    const handleDeleteAssociatedItems = async (vehicleId: string) => {
-        const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
-        const itemsToDelete = archivedItems.filter((item) => item.vehicle == currentVehicle?.name);
-        const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
-        setItems(newArr);
-        setArchivedItems(itemsToDelete);
-        try {
-            if (auth.currentUser) {
-                itemsToDelete.forEach(item => {
-                    deleteArchivedItemsFromDb(item.id)
-                })
-                setArchivePreviewVehicleId("");
-                setArchivedItemsPreview([]);
-                setArchivePreviewVisible(false);
-            }
-        } catch (error) {
-            console.error("Error deleting items that were assigned to deleted vehicle", error)
-        }
-    };
     
     const handleArchiveItems = async (vehicleId: string) => {
         setLoading(true)
@@ -142,7 +106,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     };
 
     const viewArchivePreview = async (vehicleId: string) => {
-        setArchivePreviewVisible(true)
         if (auth.currentUser) {
             const userDocRef = doc(db, "users", auth?.currentUser?.uid);
             const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
@@ -223,14 +186,48 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             setVehicles(updatedVehicles);
             setArchivePreviewVehicleId("");
             setArchivedItemsPreview([]);
-            setArchivePreviewVisible(false)
         }
     }
+
+    const handleDeleteVehicle = async (id: string) => {
+        try {
+            if (auth.currentUser) {
+                
+                const updatedVehicles = [
+                    ...archivedVehicles.filter((vehicle, _) => vehicle.id !== id)
+                ];
+                
+                await deleteArchivedVehicleFromDb(id);
+                await handleDeleteAssociatedItems(id);
+                setArchivedVehicles(updatedVehicles);
+            }
+        } catch (error) {
+            console.error("Error deleting vehicle from db", error)
+        }
+    }
+
+    const handleDeleteAssociatedItems = async (vehicleId: string) => {
+        const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
+        const itemsToDelete = archivedItems.filter((item) => item.vehicle == currentVehicle?.name);
+        const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
+        try {
+            if (auth.currentUser) {
+                itemsToDelete.forEach(item => {
+                    deleteArchivedItemsFromDb(item.id)
+                })
+                setArchivePreviewVehicleId("");
+                setArchivedItemsPreview([]);
+                setItems(newArr);
+                setArchivedItems(itemsToDelete);
+            }
+        } catch (error) {
+            console.error("Error deleting items that were assigned to deleted vehicle", error)
+        }
+    };
 
     return (
         <>
             <h2>Manage your vehicles</h2>
-            <p>Add vehicles for quick access when adding maintenance items.</p>
             <form onSubmit={(e) => {handleSubmit(e)}} className="vehicles-form">
                 <div>
                     <label htmlFor="addVehicle">Add a vehicle</label>
@@ -275,40 +272,22 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                     <div key={vehicle.id}>
                         <li key={vehicle.id} className="vehicles-list-wrapper__item">
                             {vehicle.name}
-                            <button onClick={() => viewArchivePreview(vehicle.id)} className="btn btn-sm btn-secondary"><i className="bi bi-database-fill-gear"></i> Manage</button>
+                            <ArchivedDataModal
+                                archivedItemsPreview={archivedItemsPreview}
+                                viewArchivePreview={viewArchivePreview}
+                                setArchivedItemsPreview={setArchivedItemsPreview}
+                                vehicleId={vehicle.id}
+                                handleDeleteVehicle={handleDeleteVehicle}
+                                recoverArchivedItem={recoverArchivedItem}
+                                archivePreviewVehicleId={archivePreviewVehicleId}
+                                vehicleName={vehicle.name}
+                             />
                         </li>
                     </div>
                 ))}
                 </ul>
             </div>
             )}
-            <div>
-                {archivePreviewVisible && (
-                    <>
-                        <ArchivedDataModal />
-                        {archiveItemsPreview.length > 0 && (
-                            <>
-                            {archiveItemsPreview.map((item) => (
-                                <ul key={item.id}>
-                                    <li>{item.date}</li>
-                                    <li>{item.description}</li>
-                                    <li>{item.mileage}</li>
-                                    <li>{item.vehicle}</li>
-                                    <li>{item.shop}</li>
-                                    <li>{item.cost}</li>
-                                    <li>{item.memo}</li>
-                                </ul>
-                            ))}
-                            </>
-                        )}
-                        <div className="d-flex gap-1">
-                            <button onClick={() => handleDeleteVehicle(archivePreviewVehicleId)} className="btn btn-sm btn-danger"><i className="bi bi-trash3"></i> Delete</button>
-                            <button onClick={() => recoverArchivedItem(archivePreviewVehicleId)} className="btn btn-sm btn-secondary"><i className="bi bi-arrow-counterclockwise"></i> Recover</button>
-                        </div>
-                    </>
-                )}
-                
-            </div>
         </>
     )
 }

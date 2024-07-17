@@ -122,6 +122,12 @@ button:disabled {
     color: var(--clr-danger)
 }
 
+.btn-danger:disabled:hover {
+    background-color: var(--clr-danger);
+    border: 1px solid var(--clr-danger);
+    color: white;
+}
+
 .btn-outline-danger {
     background-color: transparent;
     color: var(--clr-danger);
@@ -169,6 +175,11 @@ button:disabled {
 .d-flex {
     display: flex;
 }
+
+.justify-space-between {
+    justify-content: space-between;
+}
+
 .align-self-flex-end {
     align-self: flex-end;
 }
@@ -198,9 +209,13 @@ button:disabled {
     margin-block: 1rem;
 }
 
-/***** TYPOGRAPHY ******/
+/***** TYPOGRAPHY UTILITIES ******/
 .fs-small {
     font-size: 0.875rem;
+}
+
+.fw-bold {
+    font-weight: bold;
 }
 
 .text-left {

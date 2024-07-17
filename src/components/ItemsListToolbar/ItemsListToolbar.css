@@ -1,10 +1,12 @@
-.toolbar-wrapper {
-    border-bottom: 1px solid var(--clr-primary-light);
-    padding-block: 1rem;
-    position: sticky;
-    top: 105px;
-    background-color: white;
-    z-index: 10;
+@media (hover: hover) {
+    .toolbar-wrapper {
+        border-bottom: 1px solid var(--clr-primary-light);
+        padding-block: 1rem;
+        position: sticky;
+        top: 105px;
+        background-color: white;
+        z-index: 10;
+    }
 }
 
 .toolbar-wrapper__group {
@@ -16,6 +18,7 @@
 
 @media (hover: none) {
     .toolbar-wrapper {
+        padding-block: 1rem;
         position: fixed;
         bottom: 0;
         left: 0;
