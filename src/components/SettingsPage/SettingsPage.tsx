@@ -11,12 +11,12 @@ import { datePickerCurrentDate } from "../../utils/formatters";
 
 function SettingsPage() {
     const [isDeleting, setIsDeleting] = useState(false);
-    const [hasDeletedAccount, setHasDeleteAccount] = useState(false);
+    const [hasDeletedAccount, setHasDeletedAccount] = useState(false);
     const [dataObjectUrl, setDataObjectUrl] = useState("");
 
     const confirmDeleteAccount = async () => {
         if (auth.currentUser) {
-            setHasDeleteAccount(true)
+            setHasDeletedAccount(true)
             const userRef = doc(db, "users", auth?.currentUser?.uid);
             const itemsRef = collection(userRef, "items");
             const vehiclesRef = collection(userRef, "vehicles");
@@ -35,7 +35,7 @@ function SettingsPage() {
 
     const generateDownloadLink = async () => {
         try {
-            if (auth.currentUser) {
+            if (auth.currentUser?.uid) {
                 setDataObjectUrl("")
                 const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
                 const itemsCollectionRef = collection(userDocRef, 'items');
@@ -159,7 +159,7 @@ function SettingsPage() {
                     </main>
                 </>
             ) : (
-                <Navigate to="/" />
+                <Navigate to="/app" />
             )}
         </>
     )
