@@ -5,8 +5,6 @@ import auth from "../../firebase/firebase";
 import { doc, collection, query, where, deleteDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
-// @todo setup to work with demo
-
 interface ManageShopsProps {
     shops: Shop[];
     setShops: React.Dispatch<React.SetStateAction<Shop[]>>;
@@ -56,7 +54,6 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
 
     const handleDeleteShop = async (id: string) => {
         const updatedShops = shops.filter((shop, _) => shop.id !== id);
-        setShops(updatedShops)
         try {
             if (auth.currentUser) {
                 const userDocRef = doc(db, "users", auth?.currentUser?.uid);
@@ -71,6 +68,7 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
         } catch (error) {
             console.error("Error deleting shop from db", error)
         }
+        setShops(updatedShops)
     }
 
     return (
