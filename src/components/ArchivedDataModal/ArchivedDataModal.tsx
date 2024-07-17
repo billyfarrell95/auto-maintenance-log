@@ -104,7 +104,8 @@ function ArchivedDataModal({ vehicleName, archivedItemsPreview, viewArchivePrevi
               <h2>Vehicle name: {vehicleName}</h2>
               <div>
                   <div className="mb-1">
-                    <p className="pb-1">This vehicle and associated items will be recovered back to your log.</p>
+                    <h3>Recover</h3>
+                    <p className="pb-1"><i className="bi bi-info-circle"></i> This vehicle and the log items shown below will be recovered to your maintenance log.</p>
                     <button onClick={(e) => handleRecoverButtonClick(e)} className="btn btn-sm btn-secondary">
                       {recoverLoading === true ? (
                         <div className="spinner"></div>
@@ -115,7 +116,8 @@ function ArchivedDataModal({ vehicleName, archivedItemsPreview, viewArchivePrevi
                     </button>
                   </div>
                   <div>
-                    <p className="pb-1">This vehicle and associated items will be permanently deleted.</p>
+                    <h3>Delete</h3>
+                    <p className="pb-1"><i className="bi bi-info-circle"></i> This vehicle and the log items shown below will be permanently deleted.</p>
                     <div className="d-flex gap-1">
                       <input type="text" placeholder="delete" onChange={(e) => handleDeleteConfChange(e)} />
                       <button onClick={(e) => handleDeleteButtonClick(e)} className="btn btn-sm btn-danger" disabled={!deleteConfirmed}>

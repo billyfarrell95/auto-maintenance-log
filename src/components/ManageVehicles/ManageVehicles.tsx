@@ -52,7 +52,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             id: crypto.randomUUID(),
             archived: false
         }
-        if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
+        if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase()) && !archivedVehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
             try {
                 if (auth.currentUser) {
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);

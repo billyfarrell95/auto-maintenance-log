@@ -83,7 +83,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
-      if (user && auth.currentUser) {
+      if (user) {
         setUser(true)
         checkIfUserExists()
         setLoading(false)

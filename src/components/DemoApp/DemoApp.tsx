@@ -1,5 +1,5 @@
 import '../../App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ItemsList from '../ItemsList/ItemsList';
 import InputForm from '../InputForm/InputForm';
 import testVehicles from '../../data/testVehicles';
@@ -31,27 +31,33 @@ export const tabs = {
 }
 
 function DemoApp() {
-
-    const navigate = useNavigate()
-    auth.onAuthStateChanged(user => {
-        user ? navigate('/app'): undefined
-    })
-    const [items, setItems] = useState<Item[]>(testData);
-    const [archivedItems, setArchivedItems] = useState<Item[]>([]);
-    const [vehicles, setVehicles] = useState<Vehicle[]>(testVehicles);
-    const [archivedVehicles, setArchivedVehicles] = useState<Vehicle[]>([]);
-    const [shops, setShops] = useState<Shop[]>(testShops);
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
-    const [activeTab, setActiveTab] = useState(tabs.log);
-    const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
-    const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
-    const [isFormHidden, setIsFormHidden] = useState(false);
+  const navigate = useNavigate();
+  const [items, setItems] = useState<Item[]>(testData);
+  const [archivedItems, setArchivedItems] = useState<Item[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>(testVehicles);
+  const [archivedVehicles, setArchivedVehicles] = useState<Vehicle[]>([]);
+  const [shops, setShops] = useState<Shop[]>(testShops);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState(tabs.log);
+  const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
+  const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
+  const [isFormHidden, setIsFormHidden] = useState(false);
 
 
-    const handleActiveTab = (tab: string) => {
-        setActiveTab(tab)
-    }
+  const handleActiveTab = (tab: string) => {
+      setActiveTab(tab)
+  }
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigate('/app');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [])
 
   return (
     <>

@@ -8,9 +8,16 @@ import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const navigate = useNavigate()
-    auth.onAuthStateChanged(user => {
-        user ? navigate('/app'): undefined
-    })
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+          if (user) {
+            navigate('/app');
+          }
+        });
+    
+        return () => unsubscribe();
+      }, [])
     
     useEffect(() => {
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);

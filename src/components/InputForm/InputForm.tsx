@@ -126,7 +126,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
             </div>       
             <div className="input-form__input-wrapper">
                 <label htmlFor="memo">Memo</label>
-                <input type="text" name="memo" placeholder="Memo" value={currentItem.memo} onChange={handleChange} />
+                <input type="text" name="memo" placeholder="Memo" id="memo" value={currentItem.memo} onChange={handleChange} />
             </div>       
             <div className="input-form__input-wrapper align-self-flex-end">
                 <button type="submit" className="btn btn-primary" disabled={selectedItems.length > 0}>Add</button>
