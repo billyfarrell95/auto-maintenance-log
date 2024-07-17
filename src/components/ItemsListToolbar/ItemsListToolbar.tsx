@@ -16,7 +16,6 @@ interface ItemsListToolbarProps {
     focusedItemId: string | null;
 }
 
-
 function ItemsListToolbar({ selectedItems, itemIsBeingEdited, handleCancelEdit, handleDeleteItems, handleSaveItem, vehicleSort, editingItemId, handleVehicleSort, vehicles, setSelectedItems, focusedItemId }: ItemsListToolbarProps) {
 
     return (

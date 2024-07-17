@@ -8,5 +8,8 @@ export const maintenanceDescriptions = [
     "Air filter replacement",
     "New brakes",
     "Engine tune-up",
-    "New brakes/rotors"
-]
+    "New brakes/rotors",
+    "Brake service",
+    "Transmission service",
+    "Wiper blade replacement"
+  ];  

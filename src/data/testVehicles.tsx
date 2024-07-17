@@ -1,19 +1,14 @@
 const testVehicles = [
     {
         id: crypto.randomUUID(),
-        name: "Vehicle One",
+        name: "Camry",
         archived: false,
     },
     {
         id: crypto.randomUUID(),
-        name: "Vehicle Two",
+        name: "F-150",
         archived: false,
-    },
-    {
-        id: crypto.randomUUID(),
-        name: "Vehicle Three",
-        archived: false,
-    },
+    }
 ]
 
 export default testVehicles

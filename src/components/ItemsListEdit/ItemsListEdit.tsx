@@ -90,7 +90,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                 </div>
                 <div className="data-item__display">
                     <select id="shops-select" name="shop" defaultValue={item.shop} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
-                        <option value="">{item.shop}</option>
+                        <option value="">-- select --</option>
                         {shops && shops.map((shop) => (
                             <option key={shop.id} value={shop.name}>{shop.name}</option>
                         ))}

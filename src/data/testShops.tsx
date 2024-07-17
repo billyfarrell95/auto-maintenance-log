@@ -1,16 +1,16 @@
 const testShops = [
     {
         id: crypto.randomUUID(),
-        name: "Shop One",
+        name: "Express Oil",
     },
     {
         id: crypto.randomUUID(),
-        name: "Shop Two",
+        name: "Auto Whiz",
     },
     {
         id: crypto.randomUUID(),
-        name: "Shop Three",
-    },
+        name: "Home",
+    }
 ]
 
 export default testShops

@@ -9,6 +9,8 @@ import { deleteItemFromDb, deleteArchivedItemsFromDb, deleteVehicleFromDb, delet
 import { updateVehiclesFromDb } from "../../api/api";
 import ArchivedDataModal from "../ArchivedDataModal/ArchivedDataModal";
 
+// @todo setup to work with demo
+
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
     archivedVehicles: Vehicle[];

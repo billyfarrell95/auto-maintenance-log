@@ -5,6 +5,8 @@ import auth from "../../firebase/firebase";
 import { doc, collection, query, where, deleteDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
+// @todo setup to work with demo
+
 interface ManageShopsProps {
     shops: Shop[];
     setShops: React.Dispatch<React.SetStateAction<Shop[]>>;
@@ -82,6 +84,7 @@ function ManageShops({ shops, setShops }: ManageShopsProps) {
                 </div>
                 <div className="align-self-flex-end"><button type="submit" className="btn btn-primary">Add</button></div>
             </form>
+            <p className="fs-small pb-1">Deleting shops removes the option to use them in forms, but the shop name remains associated with the maintenance item.</p>
             {shops.length > 0 ? (
                 <div>
                     <div className="shops-list-wrapper pb-1">

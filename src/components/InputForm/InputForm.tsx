@@ -3,7 +3,7 @@ import { Item, Shop, Vehicle } from "../../types";
 import { formatMileage } from "../../utils/formatters";
 import CurrencyInput from "react-currency-input-field";
 import "./InputForm.css";
-import { maintenanceDescriptions } from "../../data/data";
+import { maintenanceDescriptions } from "../../data/maintenanceDescriptions";
 import { initialValues } from "../../App";
 import { addNewItemToDb } from "../../api/api";
 
