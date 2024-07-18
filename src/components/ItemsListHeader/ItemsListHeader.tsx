@@ -2,7 +2,6 @@ import Checkbox from "../Checkbox";
 import { CHECKBOX_STATES } from "../Checkbox";
 import "./ItemsListHeader.css";
 import { SetStateAction, Dispatch } from "react";
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 interface ItemsListHeaderProps {
     checked: CHECKBOX_STATES

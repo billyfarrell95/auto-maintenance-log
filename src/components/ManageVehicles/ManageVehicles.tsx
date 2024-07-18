@@ -9,8 +9,6 @@ import { deleteItemFromDb, deleteArchivedItemsFromDb, deleteVehicleFromDb, delet
 import { updateVehiclesFromDb } from "../../api/api";
 import ArchivedDataModal from "../ArchivedDataModal/ArchivedDataModal";
 
-// @todo setup to work with demo
-
 interface ManageVehiclesProps {
     vehicles: Vehicle[];
     archivedVehicles: Vehicle[];
@@ -54,9 +52,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
         }
         if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase()) && !archivedVehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
             try {
-                console.log("running")
                 if (auth.currentUser) {
-                    console.log("db things")
                     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                     const vehiclesCollectionRef = collection(userDocRef, 'vehicles');
                     // setDoc rather than addDoc so that Doc can have custom ID (vehicle ID)
@@ -65,7 +61,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             } catch (error) {
                 console.error("Error adding new vehicle to db", error)
             }
-            console.log("settings...")
             setVehicles([...vehicles, newVehicleTrimmed]);
         } else {
             alert('Vehicle name already used.');
@@ -88,9 +83,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
         setItems(newArr);
         setArchivedItems(itemsToArchive);
         try {
-            console.log("running")
             if (auth.currentUser) {
-                console.log("db things")
                 const userDocRef = doc(db, "users", auth?.currentUser?.uid);
                 const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
                 const archivedVehiclesCollectionRef = collection(userDocRef, 'archivedVehicles')
@@ -108,12 +101,10 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
 
                 const vehiclesSnapshot = await getDocs(archivedVehiclesCollectionRef);
                 const vehiclesData = await updateVehiclesFromDb(vehiclesSnapshot)
-                // @todo possibly can use updatedArchivedVehicles here rather than pulling down?
                 setArchivedVehicles(vehiclesData);
                 setVehicles(updatedVehicles)
                 setLoading(false)
             } else {
-                console.log("local save")
                 setArchivedVehicles(updatedArchivedVehicles);
                 setVehicles(updatedVehicles)
             }
@@ -148,7 +139,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             setArchivePreviewVehicleId(vehicleId);
         }
     }
-    // @todo: left off setting up archive functionality for DemoApp
+
     const recoverArchivedItem = async (vehicleId: string) => {
         if (auth.currentUser) {
             const userDocRef = doc(db, "users", auth?.currentUser?.uid);
@@ -176,7 +167,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                 ...items,
                 ...itemsToRecover
             ];
-
             itemsToRecover.forEach(item => {
                 deleteArchivedItemsFromDb(item.id)
             })

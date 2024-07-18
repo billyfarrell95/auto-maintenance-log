@@ -12,6 +12,7 @@ import auth from './firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase/firebase';
 import { collection, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export const initialValues: Item = {
   id: "",
@@ -111,7 +112,6 @@ function App() {
 
       const fetchUserData = async () => {
         try {
-          
           const itemsSnapshot = await getDocs(itemsCollectionRef);
           const archivedItemsSnapshot = await getDocs(archivedItemsCollectionRef);
           const shopsSnapshot = await getDocs(shopsCollectionRef);

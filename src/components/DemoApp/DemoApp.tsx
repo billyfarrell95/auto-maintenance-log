@@ -2,9 +2,9 @@ import '../../App.css';
 import { useEffect, useState } from 'react';
 import ItemsList from '../ItemsList/ItemsList';
 import InputForm from '../InputForm/InputForm';
-import testVehicles from '../../data/testVehicles';
-import testShops from '../../data/testShops';
-import testData from '../../data/testData';
+import demoVehicles from '../../data/demoVehicles';
+import demoShops from '../../data/demoShops';
+import demoItems from '../../data/demoItems';
 import { Item, Shop, Vehicle } from '../../types';
 import ManageShops from '../ManageShops/ManageShops';
 import ManageVehicles from '../ManageVehicles/ManageVehicles';
@@ -32,11 +32,11 @@ export const tabs = {
 
 function DemoApp() {
   const navigate = useNavigate();
-  const [items, setItems] = useState<Item[]>(testData);
+  const [items, setItems] = useState<Item[]>(demoItems);
   const [archivedItems, setArchivedItems] = useState<Item[]>([]);
-  const [vehicles, setVehicles] = useState<Vehicle[]>(testVehicles);
+  const [vehicles, setVehicles] = useState<Vehicle[]>(demoVehicles);
   const [archivedVehicles, setArchivedVehicles] = useState<Vehicle[]>([]);
-  const [shops, setShops] = useState<Shop[]>(testShops);
+  const [shops, setShops] = useState<Shop[]>(demoShops);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [focusedItemId, setFocusedItemId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(tabs.log);
@@ -67,8 +67,8 @@ function DemoApp() {
           <p className="pb-1">Welcome, Demo User!</p>
           <div className="tabs-wrapper">
             <button onClick={() => {handleActiveTab(tabs.log)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.log ? ("active") : null}`}><i className="bi bi-card-text"></i> {tabs.log}</button>
-            <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`}><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
-            <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`}><i className="bi bi-shop-window"></i> {tabs.shops}</button>
+            <button onClick={() => {handleActiveTab(tabs.vehicles)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.vehicles ? ("active") : null}`} disabled><i className="bi bi-car-front-fill"></i> {tabs.vehicles}</button>
+            <button onClick={() => {handleActiveTab(tabs.shops)}} className={`tabs-wrapper__tab-btn ${activeTab  === tabs.shops ? ("active") : null}`} disabled><i className="bi bi-shop-window"></i> {tabs.shops}</button>
           </div>
           {activeTab === tabs.log && (
             <section>

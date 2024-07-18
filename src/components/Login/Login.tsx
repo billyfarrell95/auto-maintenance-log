@@ -28,13 +28,12 @@ function Login() {
                     return true;
                 },
                 uiShown: function() {
-                    // This is what should happen when the form is full loaded. In this example, I hide the loader element.
                     document.getElementById('loader')!.style.display = 'none';
                 }
             },
             signInFlow: 'popup',
-            signInSuccessUrl: '/app', // This is where should redirect if the sign in is successful.
-            signInOptions: [ // This array contains all the ways an user can authenticate in your application.
+            signInSuccessUrl: '/app',
+            signInOptions: [
                 {
                     provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                     requireDisplayName: false,

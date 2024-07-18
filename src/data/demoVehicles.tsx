@@ -1,4 +1,4 @@
-const testVehicles = [
+const demoVehicles = [
     {
         id: crypto.randomUUID(),
         name: "Camry",
@@ -11,4 +11,4 @@ const testVehicles = [
     }
 ]
 
-export default testVehicles
+export default demoVehicles;

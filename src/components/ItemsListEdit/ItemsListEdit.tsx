@@ -1,4 +1,4 @@
-import ItemsListInput from "../ItemListInput";
+import ItemsListInput from "../ItemsListInput";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { formatMileage } from "../../utils/formatters";
 import { Item, Vehicle, Shop } from "../../types";
