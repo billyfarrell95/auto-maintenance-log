@@ -1,0 +1,37 @@
+.archived-modal {
+    height: 100vh;
+    width: calc(100% - 2rem);
+    max-width: 1200px;
+    font-weight: 400;
+}
+
+.archived-modal__close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.archived-modal__content-wrapper {
+    margin-block: 1.6rem;
+}
+
+.archived-modal__items-wrapper {
+    overflow-x: scroll;
+}
+
+.archived-modal__items-list {
+    padding-block: 0.5rem;
+    padding-inline: 0;
+    list-style: none;
+    margin: 0;
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.archived-modal__items-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 200px;
+}

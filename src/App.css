@@ -1,0 +1,44 @@
+.main-wrapper {
+    padding-block: 1.5rem;
+}
+
+.tab-btn {
+    font-size: 0.875rem;
+}
+
+.tabs-wrapper {
+    border-bottom: 1px solid var(--clr-light-gray);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tabs-wrapper__tab-btn {
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    border-bottom: 1px solid var(--clr-light-gray);
+    background: transparent;
+    color: var(--clr-primary);
+    font-weight: 600;
+    transition: 0.3s all;
+    background-color: var(--clr-primary-hover);
+}
+
+.tabs-wrapper__tab-btn:not(.active):hover {
+    background-color: var(--clr-primary-hover);
+}
+
+.tabs-wrapper__tab-btn.active {
+    background-color: var(--clr-primary);
+    border-bottom: 1px solid var(--clr-primary);
+    color: white;
+}
+
+.tabs-wrapper__tab-btn:hover {
+    border-bottom: 1px solid var(--clr-primary);
+}
+
+.form-toggle-btn {
+    width: 110px;
+}

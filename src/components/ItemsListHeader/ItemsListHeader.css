@@ -1,0 +1,33 @@
+@media screen and (min-width: 1600px) {
+    .data-header {
+        border-bottom: 1px solid var(--clr-primary-light);
+        position: sticky;
+        top: 65px;
+        height: 40px;
+        background-color: white;
+        z-index: 10;
+    }    
+}
+
+.data-header {
+    display: none;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 1600px) {
+    .data-header {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+}
+
+.data-header__items {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    padding-block: 0.2rem;
+}

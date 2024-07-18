@@ -1,0 +1,243 @@
+:root {
+    --clr-dark: #222222;
+    --clr-primary: #29339B;
+    --clr-primary-hover: #29339B20;
+    --clr-primary-light: #29339B50;
+    --clr-light-gray: #e1e1e1;
+    --clr-danger: #ea2323;
+}
+
+body, * {
+    font-family: "Open Sans", sans-serif;
+}
+
+body.overflow-hidden {
+    overflow: hidden;
+}
+
+input:disabled {
+    cursor: default;
+}
+
+input[type=text],
+input[type=number],
+input[type=date],
+select {
+  font-size: 1rem;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5);
+}
+
+input, select {
+    padding: 0.5rem;
+    border: 1px solid var(--clr-primary-light);
+}
+
+form label, label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+button {
+    cursor: pointer;
+    border: none; 
+}
+
+/****** Typography *******/
+
+h1,h2,h3,h4,h5,h6 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: var(--clr-primary);
+}
+
+h2 {
+    font-size: 1.1rem;
+}
+
+@media screen and (min-width: 1200px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+}
+
+a:active {
+    color: var(--clr-primary)
+}
+
+/****** Global layout *****/
+section {
+    padding-block: 1.5rem;
+}
+.app-wrapper {
+    max-width: calc(100vw - 3rem);
+    margin-inline: auto;
+}
+
+/******* Buttons ********/
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.btn {
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    transition: 0.2s all;
+}
+
+.btn-sm {
+    padding-block: 0.3rem;
+    font-size: 0.875rem;
+}
+
+.btn-icon {
+    padding: 0;
+}
+
+.btn-primary, .btn-primary:disabled:hover {
+    background-color: var(--clr-primary);
+    border: 1px solid var(--clr-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--clr-primary);
+}
+
+.btn-danger {
+    background-color: var(--clr-danger);
+    border: 1px solid var(--clr-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: white;
+    color: var(--clr-danger)
+}
+
+.btn-danger:disabled:hover {
+    background-color: var(--clr-danger);
+    border: 1px solid var(--clr-danger);
+    color: white;
+}
+
+.btn-outline-danger {
+    background-color: transparent;
+    color: var(--clr-danger);
+    border: 1px solid var(--clr-danger);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--clr-danger);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: white;
+    border: 1px solid var(--clr-primary);
+    color: var(--clr-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--clr-primary-hover);
+}
+
+.btn-transparent {
+    background-color: transparent;
+    padding: 0;
+}
+
+.btn-transparent:hover {
+    background-color: var(--clr-primary-hover);
+}
+
+.btn-link {
+    background-color: transparent;
+    padding: 0;
+    text-decoration: underline;
+    color: var(--clr-primary)
+}
+
+.btn-link:hover {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+
+/***** LAYOUT UTILITIES *****/
+.d-flex {
+    display: flex;
+}
+
+.justify-space-between {
+    justify-content: space-between;
+}
+
+.align-self-flex-end {
+    align-self: flex-end;
+}
+
+.gap-05 {
+    gap: 0.5rem;
+}
+
+.gap-1 {
+    gap: 1rem;
+}
+
+/***** SPACING UTILITIES *****/
+.pb-1 {
+    padding-bottom: 1rem;
+}
+
+.py-1 {
+    padding-block: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.my-1 {
+    margin-block: 1rem;
+}
+
+/***** TYPOGRAPHY UTILITIES ******/
+.fs-small {
+    font-size: 0.875rem;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+.text-left {
+    text-align: left;
+}
+
+/****** UI Elements ********/
+.spinner {
+    display: inline-block;
+    height: 0.9rem;
+    width: 0.9rem;
+    border-radius: 50%;
+    border : 3px solid #ccc;
+    border-top-color : var(--clr-primary);
+    animation : spin 1s linear infinite;
+}
+    
+@keyframes spin{
+    0%{
+        transform : rotate(0deg);
+    }
+    100%{
+        transform : rotate(360deg);
+    }
+}

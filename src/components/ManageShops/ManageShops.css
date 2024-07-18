@@ -1,0 +1,27 @@
+.shops-form {
+    display: flex;
+    gap: 0.5rem;
+    padding-block: 1rem;
+}
+
+.shops-form input, .shops-form label {
+    display: block;
+}
+
+.shops-list-wrapper__list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    padding-block: 2rem;
+    color: var(--clr-primary);
+}
+
+.shops-list-wrapper__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--clr-primary-light);
+}

@@ -1,0 +1,135 @@
+.data-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+@media (hover: hover) {
+    .data-item.small {
+        display: none;
+    }
+}
+
+@media (hover: none) {
+    .data-item.large {
+        display: none;
+    }
+
+    .data-items {
+        padding-bottom: 80px;
+    }
+}
+
+.data-item__display-wrapper {
+    border-top: 1px solid transparent;
+}
+
+.data-item__selected, .data-item__selected:hover {
+    background-color: var(--clr-primary-hover);
+}
+
+.data-item form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+@media (hover: none) {
+    .data-item__display {
+        padding: 0.75rem;
+        display: grid;
+    }
+}
+
+@media (hover: hover) {
+    .data-item__display {
+        padding: 0.25rem;
+        display: grid;
+    }
+}
+
+.data-item__display-default {
+    cursor: pointer;
+}
+
+.data-item, .data-item label {
+    cursor: pointer;
+    transition: 0.2s all;
+}
+
+.data-item__wrapper {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+    min-height: 75px;
+    align-items: center;
+    border-bottom: 1px solid var(--clr-primary-light);
+}
+
+.data-item__data {
+    text-wrap: nowrap;
+    overflow-x: hidden;
+}
+
+.data-item__display-wrapper label, .data-item__display label {
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--clr-primary);
+}
+
+.data-item__display-wrapper.large {
+    display: none;
+}
+
+@media (hover: hover) {
+    .data-item__input-wrapper input:hover, .data-item__input-wrapper select:hover {
+        border: 1px solid var(--clr-primary-light);
+    }
+    .data-item:hover {
+        background-color: #f7f7f7;
+    }
+}
+
+.data-item__display-wrapper.small, .data-item__input-wrapper * {
+    width: 100%;
+    display: grid;
+}
+
+.data-item__display-wrapper, .data-item__input-wrapper {
+    width: 100%;
+    display: grid;
+}
+
+@media screen and (max-width: 600px) {
+    .data-item__display-wrapper {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .data-item__display-wrapper.large, .data-item__input-wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .data-item__display-wrapper.small {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .data-item__display label {
+        display: none;
+    }
+    .data-item__display-wrapper.large, .data-item__input-wrapper {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+.data-item input[type=checkbox]{
+    width: auto;
+}
+
+.data-item select {
+    cursor: pointer;
+}

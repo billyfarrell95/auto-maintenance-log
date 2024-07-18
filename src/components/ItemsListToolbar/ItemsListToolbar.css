@@ -1,0 +1,42 @@
+@media (hover: hover) and (max-width: 1600px) {
+    .toolbar-wrapper {
+        border-bottom: 1px solid var(--clr-primary-light);
+        padding-block: 1rem;
+        position: sticky;
+        top: 65px;
+        background-color: white;
+        z-index: 10;
+    }
+}
+
+@media (hover: hover) and (min-width: 1600px) {
+    .toolbar-wrapper {
+        border-bottom: 1px solid var(--clr-primary-light);
+        padding-block: 1rem;
+        position: sticky;
+        top: 105px;
+        background-color: white;
+        z-index: 10;
+    }
+}
+
+.toolbar-wrapper__group {
+    display: flex;
+    gap: 1rem;
+    min-height: 45px;
+    align-items: center;
+}
+
+@media (hover: none) {
+    .toolbar-wrapper {
+        padding-block: 1rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        padding-inline: 1.5rem;
+        z-index: 20;
+        border-top: 1px solid var(--clr-primary)
+    }
+}
