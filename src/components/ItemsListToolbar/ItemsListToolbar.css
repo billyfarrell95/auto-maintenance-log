@@ -1,4 +1,15 @@
-@media (hover: hover) {
+@media (hover: hover) and (max-width: 1600px) {
+    .toolbar-wrapper {
+        border-bottom: 1px solid var(--clr-primary-light);
+        padding-block: 1rem;
+        position: sticky;
+        top: 65px;
+        background-color: white;
+        z-index: 10;
+    }
+}
+
+@media (hover: hover) and (min-width: 1600px) {
     .toolbar-wrapper {
         border-bottom: 1px solid var(--clr-primary-light);
         padding-block: 1rem;

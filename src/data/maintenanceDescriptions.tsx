@@ -1,15 +1,16 @@
 export const maintenanceDescriptions = [
-    "Oil change",
-    "Wheel alignment/balance",
-    "Tire rotation",
-    "New battery",
-    "Coolant flush",
-    "Spark plug replacement",
-    "Air filter replacement",
-    "New brakes",
-    "Engine tune-up",
-    "New brakes/rotors",
-    "Brake service",
-    "Transmission service",
-    "Wiper blade replacement"
-  ];  
+  "A/C recharge",
+  "Air filter replacement",
+  "Battery replacement",
+  "Coolant flush",
+  "Engine tune-up",
+  "New brake pads",
+  "New brakes/rotors",
+  "New tires",
+  "Oil/filter change",
+  "Spark plug replacement",
+  "Tire rotation",
+  "Transmission service",
+  "Wheel alignment/balance",
+  "Wiper blade replacement"
+];

@@ -82,6 +82,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     name="mileage"
                     placeholder="Mileage" />
                 <div className="data-item__display">
+                    <label htmlFor="vehicles-select">Vehicle</label>
                     <select id="vehicles-select" name="vehicle" defaultValue={item.vehicle} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
                         {vehicles && vehicles.map((vehicle) => (
                             <option key={vehicle.id} value={vehicle.name}>{vehicle.name}</option>
@@ -89,6 +90,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                     </select>
                 </div>
                 <div className="data-item__display">
+                <label htmlFor="shops-select">Shop</label>
                     <select id="shops-select" name="shop" defaultValue={item.shop} onChange={(e) => handleChange(e, item.id)} onFocus={(e) => handleSelectFocus(e, item.id)} required>
                         <option value="">-- select --</option>
                         {shops && shops.map((shop) => (

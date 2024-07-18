@@ -3,7 +3,7 @@ import { Vehicle, Item } from "../../types";
 import "./ManageVehicles.css";
 import { Dispatch, SetStateAction } from "react";
 import auth from "../../firebase/firebase";
-import { doc, collection, query, where, getDocs, setDoc } from "firebase/firestore";
+import { doc, collection, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { deleteItemFromDb, deleteArchivedItemsFromDb, deleteVehicleFromDb, deleteArchivedVehicleFromDb } from "../../api/api";
 import { updateVehiclesFromDb } from "../../api/api";
@@ -71,15 +71,18 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
         setItemBeingArchived(vehicleId)
         const currentVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
         const updatedVehicles = vehicles.filter((vehicle, _) => vehicle.id !== vehicleId);
-
         const updatedArchivedVehicles = [
             ...archivedVehicles,
             ...vehicles.filter((vehicle, _) => vehicle.id == vehicleId)
         ]
         const itemsToArchive = items.filter((item) => item.vehicle == currentVehicle?.name);
+        const updatedArchivedItems = [
+            ...archivedItems,
+            ...itemsToArchive
+        ]
         const newArr = items.filter(item => item.vehicle !== currentVehicle?.name);
         setItems(newArr);
-        setArchivedItems(itemsToArchive);
+        setArchivedItems(updatedArchivedItems);
         try {
             if (auth.currentUser) {
                 const userDocRef = doc(db, "users", auth?.currentUser?.uid);
@@ -105,6 +108,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             } else {
                 setArchivedVehicles(updatedArchivedVehicles);
                 setVehicles(updatedVehicles)
+                setLoading(false)
             }
         } catch (error) {
             console.error("Error archiving", error)
@@ -112,100 +116,63 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
     };
 
     const viewArchivePreview = async (vehicleId: string) => {
-        if (auth.currentUser) {
-            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-            const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
-            const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
-            const q = query(archivedItemsCollectionRef, where("vehicle", "==", currentVehicle?.name));
-            const querySnapshot = await getDocs(q);
-            let archivePreview: Item[] = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data()
-                const item: Item = {
-                    id: data.id,
-                    date: data.date,
-                    vehicle: data.vehicle,
-                    cost: data.cost,
-                    description: data.description,
-                    shop: data.shop,
-                    mileage: data.mileage,
-                    memo: data.memo,
-                };
-                archivePreview.push(item)
-            });
-            setArchivedItemsPreview(archivePreview);
-            setArchivePreviewVehicleId(vehicleId);
-        }
+        const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
+        const archivePreview = archivedItems.filter((item) => item.vehicle === currentVehicle?.name);
+        setArchivedItemsPreview(archivePreview);
+        setArchivePreviewVehicleId(vehicleId);
     }
 
     const recoverArchivedItem = async (vehicleId: string) => {
-        if (auth.currentUser) {
-            const userDocRef = doc(db, "users", auth?.currentUser?.uid);
-            const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
-            const itemsCollectionRef = collection(userDocRef, 'items');
-            const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
-            const q = query(archivedItemsCollectionRef, where("vehicle", "==", currentVehicle?.name));
-            const querySnapshot = await getDocs(q);
-            let itemsToRecover: Item[] = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data()
-                const item: Item = {
-                    id: data.id,
-                    date: data.date,
-                    vehicle: data.vehicle,
-                    cost: data.cost,
-                    description: data.description,
-                    shop: data.shop,
-                    mileage: data.mileage,
-                    memo: data.memo,
-                };
-                itemsToRecover.push(item)
-            });
-            const updatedItems = [
-                ...items,
-                ...itemsToRecover
-            ];
-            itemsToRecover.forEach(item => {
-                deleteArchivedItemsFromDb(item.id)
-            })
-
-            deleteArchivedVehicleFromDb(vehicleId)
-
-            // Save items to archivedItems collection
-            updatedItems.forEach(item => {
-                setDoc(doc(itemsCollectionRef, item.id), item, {merge: true});
-            })
-
-            const vehiclesCollectionRef = collection(userDocRef, "vehicles");
-            const vehicleDocRef = doc(vehiclesCollectionRef, vehicleId)             
-            await setDoc(vehicleDocRef, currentVehicle);
+        const currentVehicle = archivedVehicles.find((vehicle) => vehicle.id === vehicleId);
+        const itemsToRecover = archivedItems.filter((item) => item.vehicle === currentVehicle?.name);
+        const updatedItems = [
+            ...items,
+            ...itemsToRecover
+        ];
+        const updatedArchivedVehicles = archivedVehicles.filter((vehicle, _) => vehicle.id !== vehicleId);
+        const updatedVehicles = [
+            ...vehicles,
+            ...archivedVehicles.filter((vehicle, _) => vehicle.id === vehicleId)
+        ];
+        try {
+            if (auth.currentUser) {
+                const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+                const itemsCollectionRef = collection(userDocRef, 'items');
+                itemsToRecover.forEach(item => {
+                    deleteArchivedItemsFromDb(item.id)
+                })
+    
+                deleteArchivedVehicleFromDb(vehicleId)
+    
+                // Save items to archivedItems collection
+                updatedItems.forEach(item => {
+                    setDoc(doc(itemsCollectionRef, item.id), item, {merge: true});
+                })
+    
+                const vehiclesCollectionRef = collection(userDocRef, "vehicles");
+                const vehicleDocRef = doc(vehiclesCollectionRef, vehicleId)             
+                await setDoc(vehicleDocRef, currentVehicle);
+            }
             setItems(updatedItems);
-
-            const updatedArchivedVehicles = archivedVehicles.filter((vehicle, _) => vehicle.id !== vehicleId);
-            const updatedVehicles = [
-                ...vehicles,
-                ...archivedVehicles.filter((vehicle, _) => vehicle.id === vehicleId)
-            ];
-
             setArchivedVehicles(updatedArchivedVehicles);
             setVehicles(updatedVehicles);
             setArchivePreviewVehicleId("");
             setArchivedItemsPreview([]);
+        } catch (error) {
+            console.error("Error recovering archived item", error)
         }
     }
 
     const handleDeleteVehicle = async (id: string) => {
+        const updatedVehicles = [
+            ...archivedVehicles.filter((vehicle, _) => vehicle.id !== id)
+        ];
         try {
             if (auth.currentUser) {
-                
-                const updatedVehicles = [
-                    ...archivedVehicles.filter((vehicle, _) => vehicle.id !== id)
-                ];
-                
                 await deleteArchivedVehicleFromDb(id);
                 await handleDeleteAssociatedItems(id);
-                setArchivedVehicles(updatedVehicles);
             }
+            setArchivedVehicles(updatedVehicles);
         } catch (error) {
             console.error("Error deleting vehicle from db", error)
         }
@@ -220,13 +187,13 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                 itemsToDelete.forEach(item => {
                     deleteArchivedItemsFromDb(item.id)
                 })
-                setArchivePreviewVehicleId("");
-                setArchivedItemsPreview([]);
-                setItems(newArr);
-                setArchivedItems(itemsToDelete);
             }
+            setArchivePreviewVehicleId("");
+            setArchivedItemsPreview([]);
+            setItems(newArr);
+            setArchivedItems(itemsToDelete);
         } catch (error) {
-            console.error("Error deleting items that were assigned to deleted vehicle", error)
+            console.error("Error deleting associated items", error)
         }
     };
 
@@ -247,7 +214,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                         <ul role="list" className="vehicles-list-wrapper__list">
                         {vehicles.map((vehicle) => (
                             <div key={vehicle.id}>
-                                <li key={vehicle.id}>
+                                <li>
                                     <div className="vehicles-list-wrapper__item">
                                         {vehicle.name}
                                         <div className="d-flex gap-05">
@@ -275,7 +242,7 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
                 <ul role="list" className="vehicles-list-wrapper__list">
                 {archivedVehicles.map((vehicle) => (
                     <div key={vehicle.id}>
-                        <li key={vehicle.id} className="vehicles-list-wrapper__item">
+                        <li className="vehicles-list-wrapper__item">
                             {vehicle.name}
                             <ArchivedDataModal
                                 archivedItemsPreview={archivedItemsPreview}

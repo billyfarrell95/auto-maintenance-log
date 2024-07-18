@@ -2,7 +2,7 @@ import auth from "../../firebase/firebase";
 import { collection, doc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { deleteDoc, } from "firebase/firestore";
 import Header from "../Header/Header";
 import { CollectionReference } from "firebase/firestore";
@@ -13,6 +13,63 @@ function SettingsPage() {
     const [isDeleting, setIsDeleting] = useState(false);
     const [hasDeletedAccount, setHasDeletedAccount] = useState(false);
     const [dataObjectUrl, setDataObjectUrl] = useState("");
+    const [generateLinkLoading, setGenerateLinkLoading] = useState(false);
+    const [userHasLogData, setUserHasLogData] = useState(false);
+
+    useEffect(() => {
+        if (auth?.currentUser) {
+          const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
+          const itemsCollectionRef = collection(userDocRef, 'items');
+          const archivedItemsCollectionRef = collection(userDocRef, 'archivedItems');
+    
+          const fetchUserData = async () => {
+            try {
+              const itemsSnapshot = await getDocs(itemsCollectionRef);
+              const archivedItemsSnapshot = await getDocs(archivedItemsCollectionRef);
+              let itemsData: Item[] = [];
+              let archivedItemsData: Item[] = [];
+          
+              itemsSnapshot.forEach(doc => {
+                const data = doc.data();
+                const item: Item = {
+                  id: data.id,
+                  date: data.date,
+                  vehicle: data.vehicle,
+                  cost: data.cost,
+                  description: data.description,
+                  shop: data.shop,
+                  mileage: data.mileage,
+                  memo: data.memo,
+                };
+                itemsData.push(item);
+              });
+              
+              archivedItemsSnapshot.forEach(doc => {
+                const data = doc.data();
+                const item: Item = {
+                  id: data.id,
+                  date: data.date,
+                  vehicle: data.vehicle,
+                  cost: data.cost,
+                  description: data.description,
+                  shop: data.shop,
+                  mileage: data.mileage,
+                  memo: data.memo,
+                };
+                archivedItemsData.push(item);
+              });
+    
+              if (itemsData.length || archivedItemsData.length) {
+                setUserHasLogData(true)
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          };
+    
+          fetchUserData()
+        }
+      }, []);  
 
     const confirmDeleteAccount = async () => {
         if (auth.currentUser) {
@@ -36,6 +93,7 @@ function SettingsPage() {
     const generateDownloadLink = async () => {
         try {
             if (auth.currentUser?.uid) {
+                setGenerateLinkLoading(true)
                 setDataObjectUrl("")
                 const userDocRef = doc(db, 'users', auth?.currentUser?.uid);
                 const itemsCollectionRef = collection(userDocRef, 'items');
@@ -101,6 +159,8 @@ function SettingsPage() {
                 if (objUrl) {
                     setDataObjectUrl(objUrl)
                 }
+
+                setGenerateLinkLoading(false)
             }
         } catch(error) {
             console.error("Error generating using data download")
@@ -148,12 +208,20 @@ function SettingsPage() {
                         <section>
                             <h3>Download your data (CSV)</h3>
                             <p className="pb-1">Download all of your maintenance log items. This includes current items and archived items.</p>
-
-                            <button className="btn btn-primary mb-1" onClick={generateDownloadLink}>Generate download link</button>
-                            {dataObjectUrl !== "" && (
+                            <button className="btn btn-primary mb-1" onClick={generateDownloadLink} disabled={!userHasLogData}>Generate download link</button>
+                            {!userHasLogData && (
+                                <p><i className="bi bi-info-circle"></i> Data download will be available once you add items to your maintenance log.</p>
+                            )}
+                            {dataObjectUrl !== "" ? (
                                 <div>
                                     <a href={dataObjectUrl} download={datePickerCurrentDate()+"-auto-maintenance-log"+"-"+auth.currentUser.uid}><i className="bi bi-cloud-download"></i> Download (CSV)</a>
                                 </div>
+                            ) : (
+                                <>
+                                    {generateLinkLoading === true && (
+                                        <div>Loading...</div>
+                                    )}
+                                </>
                             )}
                         </section>
                     </main>
