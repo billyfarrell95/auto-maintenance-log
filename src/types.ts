@@ -17,5 +17,4 @@ export interface Shop {
 export interface Vehicle {
   id: string,
   name: string,
-  archived: boolean
 }

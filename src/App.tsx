@@ -167,7 +167,6 @@ function App() {
             const vehicle: Vehicle = {
               id: data.id,
               name: data.name,
-              archived: data.archived
             };
             vehiclesData.push(vehicle);
           });
@@ -177,7 +176,6 @@ function App() {
             const vehicle: Vehicle = {
               id: data.id,
               name: data.name,
-              archived: data.archived
             };
             archivedVehiclesData.push(vehicle);
           });

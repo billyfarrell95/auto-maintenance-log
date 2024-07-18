@@ -23,7 +23,6 @@ interface ManageVehiclesProps {
 const initialValues: Vehicle = {
     id: "",
     name: "",
-    archived: false,
 };
 
 function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems, setArchivedItems, archivedVehicles, setArchivedVehicles }: ManageVehiclesProps) {
@@ -48,7 +47,6 @@ function ManageVehicles({ vehicles, setVehicles, items, setItems, archivedItems,
             ...newVehicle,
             name: newVehicle.name.trim(),
             id: crypto.randomUUID(),
-            archived: false
         }
         if (newVehicleTrimmed.name && !vehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase()) && !archivedVehicles.some(e => e.name.toLowerCase() === newVehicleTrimmed.name.toLowerCase())) {
             try {

@@ -52,7 +52,6 @@ export const updateVehiclesFromDb = async (snapshot: QuerySnapshot<DocumentData,
         const vehicle: Vehicle = {
             id: data.id,
             name: data.name,
-            archived: data.archived
         };
         vehiclesData.push(vehicle);
     });
