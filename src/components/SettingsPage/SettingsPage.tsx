@@ -61,6 +61,8 @@ function SettingsPage() {
     
               if (itemsData.length || archivedItemsData.length) {
                 setUserHasLogData(true)
+              } else {
+                setUserHasLogData(false)
               }
             } catch (error) {
               console.error('Error fetching data:', error);
@@ -209,9 +211,6 @@ function SettingsPage() {
                             <h3>Download your data (CSV)</h3>
                             <p className="pb-1">Download all of your maintenance log items. This includes current items and archived items.</p>
                             <button className="btn btn-primary mb-1" onClick={generateDownloadLink} disabled={!userHasLogData}>Generate download link</button>
-                            {!userHasLogData && (
-                                <p><i className="bi bi-info-circle"></i> Data download will be available once you add items to your maintenance log.</p>
-                            )}
                             {dataObjectUrl !== "" ? (
                                 <div>
                                     <a href={dataObjectUrl} download={datePickerCurrentDate()+"-auto-maintenance-log"+"-"+auth.currentUser.uid}><i className="bi bi-cloud-download"></i> Download (CSV)</a>
