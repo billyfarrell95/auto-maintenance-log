@@ -114,7 +114,7 @@ function SettingsPage() {
                     cost: data.cost,
                     description: data.description,
                     shop: data.shop,
-                    mileage: data.mileage,
+                    mileage: `"${data.mileage}"`,
                     memo: data.memo,
                     };
                     itemsData.push(item);
@@ -129,7 +129,7 @@ function SettingsPage() {
                         cost: data.cost,
                         description: data.description,
                         shop: data.shop,
-                        mileage: data.mileage,
+                        mileage: `"${data.mileage}"`,
                         memo: data.memo,
                     };
                     archivedItemsData.push(item);
