@@ -104,7 +104,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                         id={`cost-${item.id}`}
                         name={`cost-${item.id}`}
                         placeholder="Enter cost"
-                        inputMode="numeric"
+                        inputMode="decimal"
                         value={editingItems.length ? (editingItems.find(editedItem => editedItem.id === item.id)?.cost || "") : (item.cost)}
                         prefix="$"
                         decimalsLimit={2}

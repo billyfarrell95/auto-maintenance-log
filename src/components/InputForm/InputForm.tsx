@@ -117,7 +117,7 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
                     id="cost"
                     placeholder="Enter cost"
                     value={currentItem.cost}
-                    inputMode="numeric"
+                    inputMode="decimal"
                     prefix="$"
                     decimalsLimit={2}
                     onValueChange={handleCostChange}
