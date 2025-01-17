@@ -66,10 +66,10 @@
     border-bottom: 1px solid var(--clr-primary-light);
 }
 
-.data-item__data {
+/* .data-item__data {
     text-wrap: nowrap;
     overflow-x: hidden;
-}
+} */
 
 .data-item__display-wrapper label, .data-item__display label {
     font-weight: 400;
