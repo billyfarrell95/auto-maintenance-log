@@ -6,6 +6,7 @@ import "./InputForm.css";
 import { maintenanceDescriptions } from "../../data/maintenanceDescriptions";
 import { initialValues } from "../../App";
 import { addNewItemToDb } from "../../api/api";
+import { trimInput } from "../../utils/trimInput/trimInput";
 
 interface InputFormProps {
     items: Item[];
@@ -22,16 +23,9 @@ interface InputFormProps {
 function InputForm({ items, vehicles, shops, setItems, selectedItems, currentItem, setCurrentItem, handleActiveTab, tabs }: InputFormProps) {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const trimmedItem = {
-            ...currentItem,
-            cost: currentItem.cost.trim(),
-            vehicle: currentItem.vehicle.trim(),
-            description: currentItem.description.trim(),
-            shop: currentItem.shop.trim() || "none",
-            mileage: currentItem.mileage.trim(),
-            memo: currentItem.memo.trim(),
-        };
-        if (trimmedItem.cost || trimmedItem.description || trimmedItem.shop || trimmedItem.mileage || trimmedItem.memo || trimmedItem.vehicle) {
+        const trimmedItem = trimInput(currentItem);
+        if (trimmedItem.cost && trimmedItem.description && trimmedItem.mileage && trimmedItem.shop) {
+            console.log(trimmedItem)
             try {
                 addNewItemToDb(trimmedItem)
                 setItems([...items, trimmedItem]);
