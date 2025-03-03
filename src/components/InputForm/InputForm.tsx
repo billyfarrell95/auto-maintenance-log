@@ -25,7 +25,6 @@ function InputForm({ items, vehicles, shops, setItems, selectedItems, currentIte
         e.preventDefault();
         const trimmedItem = trimInput(currentItem);
         if (trimmedItem.cost && trimmedItem.description && trimmedItem.mileage && trimmedItem.shop) {
-            console.log(trimmedItem)
             try {
                 addNewItemToDb(trimmedItem)
                 setItems([...items, trimmedItem]);

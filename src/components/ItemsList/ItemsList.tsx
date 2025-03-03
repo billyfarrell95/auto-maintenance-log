@@ -8,6 +8,7 @@ import ItemsListEdit from "../ItemsListEdit/ItemsListEdit";
 import ItemsListToolbar from "../../components/ItemsListToolbar/ItemsListToolbar"
 import auth from "../../firebase/firebase";
 import { updateItemInDb, deleteItemFromDb } from "../../api/api";
+import { trimInput } from "../../utils/trimInput/trimInput";
 
 interface ItemsListProps {
     items: Item[];
@@ -100,11 +101,21 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
             e.stopPropagation();
             e.preventDefault();
             setItemIsBeingEdited(false);
-            const updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
+            let updatedItems = items.map(item => item.id === id ? editingItems.find(editedItem => editedItem.id === id) || item : item);
+            let trimmedUpdatedItems = updatedItems.map(item => {
+                return trimInput(item)
+            })
             const itemToUpload = updatedItems.find(item => item.id === id);
-            setItems(updatedItems);
+            setItems(trimmedUpdatedItems);
             if (itemToUpload) {
-                updateItemInDb(itemToUpload, id)
+                const trimmedItem = trimInput(itemToUpload);
+                if (trimmedItem.cost && trimmedItem.description && trimmedItem.mileage && trimmedItem.shop) {
+                    try {
+                        updateItemInDb(trimmedItem, id)
+                    } catch (error) {
+                        console.error("Error updating item in DB", error)
+                    }
+                }
             }
             setEditingItemId("");
             setEditingItems([]);
