@@ -2,6 +2,7 @@ import auth from "../../firebase/firebase";
 import { collection, doc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { deleteDoc, } from "firebase/firestore";
 import Header from "../Header/Header";
@@ -72,9 +73,10 @@ function SettingsPage() {
           fetchUserData()
         }
       }, []);  
-
+    const navigate = useNavigate();
     const confirmDeleteAccount = async () => {
         if (auth.currentUser) {
+            
             setHasDeletedAccount(true)
             const userRef = doc(db, "users", auth?.currentUser?.uid);
             const itemsRef = collection(userRef, "items");
@@ -88,7 +90,11 @@ function SettingsPage() {
             auth.currentUser.delete();
 
             await deleteDoc(userRef);
-            auth.signOut()
+            auth.signOut();
+            setTimeout(() => {
+                navigate('/');
+            }, 3000);
+            
         }
     }
 
@@ -201,7 +207,7 @@ function SettingsPage() {
                                 </>
                             ) : (
                                 <>
-                                    <p>Your account has been deleted.</p>
+                                    <p>Your account has been deleted. Redirecting to home...</p>
                                     <a href="/">Home</a>
                                 </>
                             )}

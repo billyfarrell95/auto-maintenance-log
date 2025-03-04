@@ -1,3 +1,23 @@
-.login h1 {
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-wrapper h1 {
     text-align: center;
+}
+
+.login-wrapper__google-btn {
+    display: flex;
+    gap: 0.5rem;
+    background-color: white;
+    padding-inline: 1rem;
+    padding-block: 0.75rem;
+    outline: 1px solid var(--clr-primary);
+    border-radius: 0.5rem;
+}
+
+.login-wrapper__google-btn:hover {
+    outline: 2px solid var(--clr-primary);
 }

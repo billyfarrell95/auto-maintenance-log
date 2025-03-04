@@ -58,8 +58,7 @@ function ItemsListEdit({ editingItems, setEditingItems, item, setEditingItemId, 
                         value={editingItems.find(editedItem => editedItem.id === item.id)?.date || item.date}
                         name={`date-${item.id}`}
                         onChange={(e) => handleChange(e, item.id)}
-                        onFocus={(e) => handleFocus(e, item.id)}
-                        onClick={(e) => console.log(e)} />
+                        onFocus={(e) => handleFocus(e, item.id)} />
                 </div>
                 <ItemsListInput
                     itemId={item.id}
