@@ -44,7 +44,7 @@ function App() {
   const [activeTab, setActiveTab] = useState(tabs.log);
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
-  const [isFormHidden, setIsFormHidden] = useState(false);
+  const [isFormHidden, setIsFormHidden] = useState(true);
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
 
