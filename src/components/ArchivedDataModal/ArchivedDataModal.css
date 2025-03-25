@@ -1,6 +1,9 @@
 .archived-modal {
     height: 100vh;
     width: calc(100% - 2rem);
+    height: calc(100% - 2rem);
+    padding: 2rem;
+    margin: auto;
     max-width: 1200px;
     font-weight: 400;
 }
