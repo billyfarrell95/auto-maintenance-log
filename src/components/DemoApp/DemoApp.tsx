@@ -42,7 +42,7 @@ function DemoApp() {
   const [activeTab, setActiveTab] = useState(tabs.log);
   const [itemIsBeingEdited, setItemIsBeingEdited] = useState(false);
   const [currentItem, setCurrentItem] = useState<Item>({ ...initialValues});
-  const [isFormHidden, setIsFormHidden] = useState(false);
+  const [isFormHidden, setIsFormHidden] = useState(true);
 
 
   const handleActiveTab = (tab: string) => {
