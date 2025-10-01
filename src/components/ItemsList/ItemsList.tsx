@@ -220,7 +220,7 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
                 {items.sort(sortByDate).map((item) => (
                     <div key={item.id}>
-                        {item.vehicle.includes(vehicleSort) ? (
+                        {vehicleSort === "" || item.vehicle === vehicleSort ? (
                             <div>
                                 <div className="data-item small">
                                     <div className={selectedItems.includes(item.id) || focusedItemId === item.id ? "data-item__selected" : undefined}
