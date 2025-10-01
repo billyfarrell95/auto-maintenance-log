@@ -164,7 +164,6 @@ function ItemsList({ items, setItems, selectedItems, setSelectedItems, itemIsBei
 
     const handleVehicleSort = (e: ChangeEvent<HTMLSelectElement>) => {
         setVehicleSort(e.target.value)
-        console.log(e.target.value)
     }
 
     useEffect(() => {
